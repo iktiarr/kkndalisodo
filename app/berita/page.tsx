@@ -10,19 +10,25 @@ export default async function BeritaPage() {
   const beritaList = await getBeritaList();
 
   return (
-    <div className="space-y-8">
-      <div className="border-b border-slate-800 pb-6">
-        <h1 className="text-3xl font-extrabold text-white">Berita & Kegiatan Desa</h1>
-        <p className="text-slate-400 mt-2">
+    <div className="max-w-350 mx-auto space-y-12 py-10 px-4 sm:px-6">
+      <div className="text-center space-y-4 mb-16">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">Berita & Kegiatan</h1>
+        <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
           Informasi terbaru seputar agenda, pembangunan, dan kegiatan masyarakat Desa Dalisodo.
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {beritaList.map((item) => (
-          <BeritaCard key={item.id} item={item} />
-        ))}
-      </div>
+      {beritaList.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-slate-500">Belum ada berita yang diterbitkan.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {beritaList.map((item) => (
+            <BeritaCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
