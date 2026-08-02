@@ -1,6 +1,7 @@
 import { getBeritaById, formatTanggalWaktu } from "@/server/services/beritaService";
 import RichContentRenderer from "@/components/features/berita/RichContentRenderer";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface PageProps {
@@ -29,64 +30,53 @@ export default async function DetailBeritaPage({ params }: PageProps) {
   const formattedDate = formatTanggalWaktu(item.tanggalwaktu);
 
   return (
-    <article className="max-w-4xl mx-auto space-y-8 py-4">
-      {/* Back Button */}
-      <div>
+    <article className="max-w-4xl mx-auto py-12 px-4 sm:px-6">
+      <div className="mb-10">
         <Link
           href="/berita"
-          className="inline-flex items-center text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors gap-2 bg-slate-900/80 px-3.5 py-2 rounded-lg border border-slate-800"
+          className="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors group"
         >
-          ← Kembali ke Berita & Kegiatan
+          <span className="group-hover:-translate-x-1 transition-transform mr-2">←</span>
+          Kembali ke Berita
         </Link>
       </div>
 
-      {/* Header */}
-      <header className="space-y-4">
+      <header className="space-y-6 mb-10 text-center">
         {item.kategori && (
-          <span className="inline-block bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-500/20">
+          <span className="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-4 py-1.5 rounded-full border border-emerald-200 uppercase tracking-wide">
             {item.kategori}
           </span>
         )}
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
           {item.judul}
         </h1>
 
-        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 border-b border-slate-800 pb-6">
-          <span className="flex items-center gap-1.5">
-            <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            {formattedDate || item.tanggalwaktu}
-          </span>
+        <div className="flex items-center justify-center gap-3 text-sm text-gray-500 font-medium">
+          <time dateTime={item.tanggalwaktu}>{formattedDate || item.tanggalwaktu}</time>
           {item.penulis && (
             <>
-              <span>•</span>
-              <span className="flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                {item.penulis}
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+              <span>{item.penulis}</span>
             </>
           )}
         </div>
       </header>
 
-      {/* Cover Image */}
       {item.coverUrl && (
-        <div className="rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900 max-h-[480px]">
-          <img
+        <div className="relative w-full aspect-video md:aspect-21/9 mb-12 rounded-3xl overflow-hidden bg-gray-100 border border-gray-200 shadow-lg">
+          <Image
             src={item.coverUrl}
             alt={item.cover?.title || item.judul}
-            className="w-full h-full object-cover max-h-[480px]"
+            fill
+            priority
+            className="object-cover object-center"
           />
         </div>
       )}
 
-      {/* Article Body */}
-      <main className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div className="prose prose-emerald max-w-none prose-lg prose-p:leading-relaxed prose-p:text-gray-700 prose-headings:text-gray-900 prose-a:text-emerald-600 hover:prose-a:text-emerald-700 prose-img:rounded-2xl mx-auto">
         <RichContentRenderer content={item.isi} />
-      </main>
+      </div>
     </article>
   );
 }
