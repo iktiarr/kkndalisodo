@@ -24,7 +24,7 @@ export async function fetchContentful<T>(query: string, variables = {}): Promise
 
     const { data, errors } = await res.json();
     if (errors) {
-      console.error("Contentful GraphQL Errors:", errors);
+      console.error("Contentful GraphQL Errors:", JSON.stringify(errors, null, 2));
       return null;
     }
 
