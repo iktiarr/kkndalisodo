@@ -2,26 +2,70 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Yellow & Green Brand Combination Palette */
+  --color-giallo-vivo: #ffc000;
+  --color-giallo-ombra: #917300;
+  --color-emerald-dalisodo: #15803d;
+  --color-emerald-light: #22c55e;
+  --color-emerald-dark: #064e3b;
+  --color-carbony-black: #202020;
+  --color-pure-black: #000000;
+  --color-carbon-deep: #181818;
+  --color-pearl-white: #ffffff;
+  --color-marble-gray: #f5f5f5;
+  --color-graphite-border: #494949;
+  --color-steel-mid: #7d7d7d;
+  --color-ash-border: #969696;
+  --color-anvil: #313131;
+
+  /* Surfaces */
+  --surface-canvas-white: #ffffff;
+  --surface-marble: #f5f5f5;
+  --surface-carbony: #202020;
+  --surface-carbon-deep: #181818;
+  --surface-pure-black: #000000;
+
+  /* Typography */
+  --font-lambotype: 'Barlow Condensed', var(--font-geist-sans), sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-giallo: #ffc000;
+  --color-giallo-dark: #917300;
+  --color-emerald-dalisodo: #15803d;
+  --color-emerald-light: #22c55e;
+  --color-emerald-dark: #064e3b;
+  --color-carbony: #202020;
+  --color-carbon-deep: #181818;
+  --color-pure-black: #000000;
+  --color-marble: #f5f5f5;
+  --color-graphite: #494949;
+  --color-steel: #7d7d7d;
+  --color-ash: #969696;
+  --color-anvil: #313131;
+  
+  --font-lambo: 'Barlow Condensed', sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--surface-canvas-white);
+  color: var(--color-carbony-black);
+  font-family: var(--font-geist-sans), sans-serif;
+  letter-spacing: 0.01em;
 }
+
+/* Shape elements rounding specified by user: 8px */
+button, 
+.btn, 
+.badge, 
+.card,
+.shape-rounded {
+  border-radius: 8px;
+}
+
+.font-lambo {
+  font-family: var(--font-lambotype);
+  letter-spacing: 0.023em;
+  text-transform: uppercase;
+}
+

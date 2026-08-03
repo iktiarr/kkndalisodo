@@ -16,11 +16,21 @@ const MOCK_WISATA: WisataItem[] = [
     id: "2",
     slug: "wisata-hutan-pinus-dalisodo",
     judul: "Wisata Hutan Pinus Dalisodo",
-    kategori: ["Alam", "Hiburan"],
-    deskripsi: { nodeType: "document", data: {}, content: [{ nodeType: "paragraph", data: {}, content: [{ nodeType: "text", value: "Kawasan hutan pinus rindang cocok untuk camping dan tempat santai keluarga.", marks: [], data: {} }] }] },
+    kategori: ["Alam", "Rekreasi"],
+    deskripsi: { nodeType: "document", data: {}, content: [{ nodeType: "paragraph", data: {}, content: [{ nodeType: "text", value: "Kawasan hutan pinus rindang cocok untuk camping ground dan tempat santai keluarga di lereng Kawi.", marks: [], data: {} }] }] },
     thumbnailUrl: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
     galeriUrls: [],
-    lainnya: ["Camping Ground", "Spot Foto Skywalk", "Toilet"]
+    lainnya: ["Camping Ground", "Spot Foto Skywalk", "Toilet", "Kedai Kopi"]
+  },
+  {
+    id: "3",
+    slug: "agrowisata-kebun-kopi-dalisodo",
+    judul: "Agrowisata & Kebun Kopi Dalisodo",
+    kategori: ["Edukasi", "Budaya"],
+    deskripsi: { nodeType: "document", data: {}, content: [{ nodeType: "paragraph", data: {}, content: [{ nodeType: "text", value: "Pengalaman wisata edukasi pemetikan dan pengolahan biji kopi lokal khas Dalisodo secara tradisional.", marks: [], data: {} }] }] },
+    thumbnailUrl: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+    galeriUrls: [],
+    lainnya: ["Wisata Edukasi", "Icip Kopi Khas", "Pemandu Lokal"]
   }
 ];
 

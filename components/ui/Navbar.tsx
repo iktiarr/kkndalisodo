@@ -1,60 +1,159 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+
+  const navLinks = [
+    { href: "/", label: "BERANDA" },
+    { href: "/wisata", label: "WISATA DESA" },
+    { href: "/berita", label: "BERITA KEGIATAN" },
+    { href: "/profil", label: "PROFIL DESA" },
+  ];
+
+  // Detect scroll position to activate glassmorphism header
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 text-slate-800 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group shrink-0">
-          <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-white text-xl shadow-sm shrink-0">
-            D
+    <header
+      id="main-header"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 text-white ${
+        isScrolled
+          ? "bg-[#181818]/80 backdrop-blur-xl border-b border-white/10 shadow-2xl py-0"
+          : "bg-transparent border-b border-transparent py-2"
+      }`}
+    >
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between">
+        
+        {/* Top-Left: 2 Logos Side-by-Side (Logo Desa Dalisodo + Logo KKN 10) */}
+        <Link
+          id="navbar-brand-link"
+          href="/"
+          className="flex items-center gap-3.5 group shrink-0"
+          aria-label="Kembali ke Beranda Desa Dalisodo"
+        >
+          <div className="flex items-center gap-2">
+            {/* Logo 1: Circular Logo Desa Dalisodo */}
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-[#ffc000] transition-colors shadow-sm">
+              <Image
+                src="/assets/image/logo-dalisodo.svg"
+                alt="Logo Desa Dalisodo"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            {/* Logo 2: Circular Logo KKN 10 Dalisodo */}
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-[#ffc000] transition-colors shadow-sm">
+              <Image
+                src="/assets/image/Logo-kkn10.png"
+                alt="Logo KKN 10 Dalisodo"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
+
+          {/* Brand Name & Subtitle */}
           <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-wide block leading-none group-hover:text-emerald-600 transition-colors">
-              Desa Dalisodo
+            <span className="font-lambo font-bold text-base sm:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-[#ffc000] transition-colors">
+              DESA DALISODO
             </span>
-            <span className="text-xs text-slate-500 font-medium">Kec. Wagir, Kab. Malang</span>
+            <span className="font-lambo text-[10px] text-[#ffc000] tracking-[0.12em] font-semibold uppercase mt-1">
+              KKN 10 • WAGIR MALANG
+            </span>
           </div>
         </Link>
 
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-4 text-sm font-semibold">
-          <Link href="/" className="px-3 py-2 rounded-md hover:bg-slate-100 hover:text-emerald-600 transition">Beranda</Link>
-          <Link href="/wisata" className="px-3 py-2 rounded-md hover:bg-slate-100 hover:text-emerald-600 transition">Wisata Desa</Link>
-          <Link href="/berita" className="px-3 py-2 rounded-md hover:bg-slate-100 hover:text-emerald-600 transition">Berita Kegiatan</Link>
-          <Link href="/profil" className="px-3 py-2 rounded-md hover:bg-slate-100 hover:text-emerald-600 transition">Profil Desa</Link>
+        {/* Desktop Navigation Menu (LamboType Uppercase) */}
+        <nav
+          id="desktop-nav-menu"
+          aria-label="Navigasi Utama"
+          className="hidden md:flex items-center gap-2 lg:gap-6"
+        >
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`font-lambo text-xs sm:text-sm font-semibold tracking-[0.023em] uppercase px-4 py-2 rounded-[6px] transition-all duration-200 ${
+                  isActive
+                    ? "bg-[#ffc000] text-black font-bold shadow-md"
+                    : "text-slate-300 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Hamburger Button */}
-        <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md focus:outline-none transition-colors"
-          aria-label="Toggle Menu"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+        {/* Right Side: Hamburger Mobile Button */}
+        <div className="flex items-center gap-3">
+          <button
+            id="mobile-menu-toggle-btn"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-[8px] focus:outline-none transition-colors cursor-pointer border border-white/10"
+            aria-label={isMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md shadow-lg absolute w-full">
-          <nav className="flex flex-col px-4 pt-2 pb-4 space-y-1 font-semibold text-slate-800">
-            <Link onClick={() => setIsMenuOpen(false)} href="/" className="block px-3 py-3 rounded-md hover:bg-emerald-50 hover:text-emerald-600 transition">Beranda</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/wisata" className="block px-3 py-3 rounded-md hover:bg-emerald-50 hover:text-emerald-600 transition">Wisata Desa</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/berita" className="block px-3 py-3 rounded-md hover:bg-emerald-50 hover:text-emerald-600 transition">Berita Kegiatan</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/profil" className="block px-3 py-3 rounded-md hover:bg-emerald-50 hover:text-emerald-600 transition">Profil Desa</Link>
-          </nav>
-        </div>
+        <nav
+          id="mobile-nav-dropdown"
+          aria-label="Navigasi Seluler"
+          className="md:hidden border-t border-[#313131] bg-[#181818] px-6 py-4 space-y-2 shadow-2xl"
+        >
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                onClick={() => setIsMenuOpen(false)}
+                href={link.href}
+                className={`font-lambo block px-4 py-3 text-sm font-semibold tracking-[0.023em] uppercase rounded-[8px] transition-colors ${
+                  isActive
+                    ? "bg-[#ffc000] text-black font-bold"
+                    : "text-slate-200 hover:bg-white/10 hover:text-[#ffc000]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
       )}
     </header>
   );

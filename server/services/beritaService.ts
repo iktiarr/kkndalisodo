@@ -82,11 +82,26 @@ const MOCK_BERITA: BeritaItem[] = [
     isi: "Pendampingan branding dan pemasaran digital untuk pelaku usaha kecil di Desa Dalisodo. Dalam pelatihan ini, warga diajarkan pembuatan foto produk menarik, pendaftaran di e-commerce, serta manajemen promosi media sosial.",
     tanggalwaktu: "2026-07-28T13:30:00.000Z",
     kategori: "Pemberdayaan UMKM",
-    penulis: "Mahasiswa KKN",
+    penulis: "Mahasiswa KKN 10",
     coverUrl: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
     cover: {
       url: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
       title: "Pelatihan UMKM",
+    },
+  },
+  {
+    id: "3",
+    judul: "Pengembangan Potensi Wisata Air Terjun & Edukasi Lingkungan",
+    slug: "pengembangan-potensi-wisata-air-terjun",
+    ringkasan: "Pemetaan rute pemandangan alam dan pemasangan papan edukasi flora-fauna di sekitar kawasan wisata lereng Kawi.",
+    isi: "Pemetaan rute pemandangan alam dan pemasangan papan edukasi flora-fauna di sekitar kawasan wisata lereng Kawi. Program ini bertujuan meningkatkan daya tarik wisatawan sekaligus menjaga kelestarian ekosistem alam Dalisodo.",
+    tanggalwaktu: "2026-08-01T09:15:00.000Z",
+    kategori: "Potensi Wisata",
+    penulis: "Tim KKN 10 Dalisodo",
+    coverUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    cover: {
+      url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+      title: "Wisata Air Terjun",
     },
   },
 ];

@@ -1,61 +1,111 @@
 export default function ContactSection() {
   return (
-    <section className="space-y-4 md:space-y-6 pt-8 md:pt-12">
-      <div className="flex flex-col lg:flex-row gap-6 md:gap-8 bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200">
-        
-        {/* Contact Info */}
-        <div className="w-full lg:w-1/3 flex flex-col justify-center space-y-4 md:space-y-6">
-          <div>
-            <h2 className="text-xl md:text-2xl font-extrabold text-slate-900">Informasi Kontak</h2>
-            <p className="text-slate-500 mt-1 md:mt-2 text-xs md:text-sm leading-relaxed">
-              Jika Anda memiliki pertanyaan mengenai Desa Dalisodo, wisata, maupun pelayanan masyarakat, silakan hubungi kami.
-            </p>
-          </div>
-          
-          <div className="space-y-4 md:space-y-5">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-lg md:text-xl">
-                📍
-              </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm md:text-base">Alamat Balai Desa</h4>
-                <p className="text-slate-600 text-xs md:text-sm mt-0.5 md:mt-1 leading-relaxed">Jl. Raya Dalisodo No. 123, Kecamatan Wagir, Kabupaten Malang, Jawa Timur 65158</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-lg md:text-xl">
-                📞
-              </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm md:text-base">Telepon</h4>
-                <p className="text-slate-600 text-xs md:text-sm mt-0.5 md:mt-1">+62 812-3456-7890</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-lg md:text-xl">
-                ✉️
-              </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm md:text-base">Email</h4>
-                <p className="text-slate-600 text-xs md:text-sm mt-0.5 md:mt-1 break-all">layanan@dalisodo.desa.id</p>
-              </div>
-            </div>
-          </div>
+    <section
+      id="kontak"
+      aria-labelledby="kontak-heading"
+      className="w-full bg-[#ffffff] text-[#202020] py-16 sm:py-20 px-6 sm:px-12 lg:px-16 max-w-[1440px] mx-auto border-t border-[#f5f5f5]"
+    >
+      {/* Section Heading Block (Two-column row per DESIGN.md) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-[#202020] mb-8 sm:mb-12">
+        <div>
+          <span className="font-lambo text-xs tracking-[0.15em] text-[#15803d] font-bold uppercase block mb-1">
+            LAYANAN & LOKASI BALAI DESA
+          </span>
+          <h2
+            id="kontak-heading"
+            className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-[#202020]"
+          >
+            INFORMASI KONTAK
+          </h2>
         </div>
+        <p className="font-lambo text-xs sm:text-sm text-[#7d7d7d] uppercase tracking-[0.023em] max-w-sm">
+          SILAKAN HUBUNGI KAMI UNTUK INFORMASI PELAYANAN MASYARAKAT, POTENSI DESA, SERTA PROGRAM KKN 10.
+        </p>
+      </div>
 
-        {/* Map Embed */}
-        <div className="w-full lg:w-2/3 h-64 md:h-80 lg:h-auto lg:min-h-75 rounded-xl overflow-hidden bg-slate-200 relative border border-slate-100 mt-4 lg:mt-0">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15804.85521096782!2d112.51939105!3d-8.012558699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789db8e3bbca7b%3A0xc3b86dbb531cd8d4!2sDalisodo%2C%20Wagir%2C%20Malang%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
-            className="absolute inset-0 w-full h-full"
-            style={{ border: 0 }} 
-            allowFullScreen={false} 
-            loading="lazy" 
+      {/* Main Layout: Clean Open Editorial List + Map */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        
+        {/* Contact Info List (Left Column - 5 cols, Open & Elegant without heavy boxes) */}
+        <address className="not-italic lg:col-span-5 space-y-6">
+          
+          {/* Item 1: Alamat Balai Desa */}
+          <div className="flex items-start gap-4 pb-5 border-b border-[#f5f5f5] group">
+            <span className="text-xl text-[#ffc000] shrink-0 pt-0.5">📍</span>
+            <div className="space-y-1">
+              <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-[#202020] tracking-[0.023em] group-hover:text-[#917300] transition-colors">
+                ALAMAT BALAI DESA
+              </h3>
+              <p className="font-sans text-xs sm:text-sm text-[#7d7d7d] leading-relaxed">
+                Jl. Raya Dalisodo No. 123, Kecamatan Wagir, Kabupaten Malang, Jawa Timur 65158
+              </p>
+            </div>
+          </div>
+
+          {/* Item 2: Telepon & Hotline */}
+          <div className="flex items-start gap-4 pb-5 border-b border-[#f5f5f5] group">
+            <span className="text-xl text-[#ffc000] shrink-0 pt-0.5">📞</span>
+            <div className="space-y-1">
+              <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-[#202020] tracking-[0.023em] group-hover:text-[#917300] transition-colors">
+                TELEPON / HOTLINE
+              </h3>
+              <p className="font-lambo text-sm sm:text-base text-[#202020] tracking-[0.023em] font-bold">
+                +62 812-3456-7890
+              </p>
+              <span className="font-lambo text-[10px] text-[#917300] uppercase tracking-wider block">
+                PELAYANAN MASYARAKAT DESA
+              </span>
+            </div>
+          </div>
+
+          {/* Item 3: Email Resmi */}
+          <div className="flex items-start gap-4 pb-5 border-b border-[#f5f5f5] group">
+            <span className="text-xl text-[#ffc000] shrink-0 pt-0.5">✉️</span>
+            <div className="space-y-1">
+              <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-[#202020] tracking-[0.023em] group-hover:text-[#917300] transition-colors">
+                EMAIL RESMI
+              </h3>
+              <p className="font-sans text-xs sm:text-sm text-[#202020] font-semibold break-all">
+                layanan@dalisodo.desa.id
+              </p>
+              <span className="font-lambo text-[10px] text-[#917300] uppercase tracking-wider block">
+                TIM KKN 10 & PERANGKAT DESA
+              </span>
+            </div>
+          </div>
+
+          {/* Item 4: Jam Operasional Kantor */}
+          <div className="flex items-start gap-4 pt-1 group">
+            <span className="text-xl text-[#ffc000] shrink-0 pt-0.5">🕒</span>
+            <div className="space-y-1">
+              <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-[#202020] tracking-[0.023em] group-hover:text-[#917300] transition-colors">
+                JAM PELAYANAN BALAI DESA
+              </h3>
+              <p className="font-lambo text-xs sm:text-sm text-[#313131] uppercase tracking-wider font-semibold">
+                SENIN - JUMAT: 08:00 - 15:30 WIB
+              </p>
+              <span className="font-lambo text-[10px] text-[#7d7d7d] uppercase tracking-wider block">
+                SABTU, MINGGU & HARI LIBUR: TUTUP
+              </span>
+            </div>
+          </div>
+
+        </address>
+
+        {/* Map Embed Container (Right Column - 7 cols, Clean 8px Rounded) */}
+        <div className="lg:col-span-7 min-h-[380px] lg:min-h-[460px] rounded-[8px] overflow-hidden bg-[#202020] relative border border-[#969696]/20 shadow-sm">
+          <iframe
+            id="kontak-map-iframe"
+            title="Peta Lokasi Desa Dalisodo Wagir Malang"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15804.85521096782!2d112.51939105!3d-8.012558699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789db8e3bbca7b%3A0xc3b86dbb531cd8d4!2sDalisodo%2C%20Wagir%2C%20Malang%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+            className="absolute inset-0 w-full h-full filter contrast-[1.05] opacity-95"
+            style={{ border: 0 }}
+            allowFullScreen={false}
+            loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
+
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -14,8 +14,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow-condensed",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Desa Dalisodo | Website Resmi & Portal Wisata",
+  title: "Desa Dalisodo | Website Resmi & Portal Wisata KKN 10",
   description: "Portal resmi informasi wisata, berita kegiatan, dan profil Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.",
 };
 
@@ -27,11 +33,11 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f3f4f6] text-slate-900 min-h-screen flex flex-col justify-between`}
+        className={`${geistSans.variable} ${geistMono.variable} ${barlowCondensed.variable} antialiased bg-[#202020] text-white min-h-screen flex flex-col justify-between`}
       >
         <div>
           <Navbar />
-          <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+          <main className="w-full">
             {children}
           </main>
         </div>
