@@ -1,13 +1,12 @@
 export interface WisataItem {
   id: string;
-  nama: string;
   slug: string;
-  deskripsiSingkat: string;
-  deskripsiLengkap?: string;
-  kategori: string;
-  lokasi: string;
-  hargaTiket: string;
-  jamOperasional: string;
-  gambarUrl: string;
-  fasilitas?: string[];
+  judul: string;
+  kategori: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  deskripsi: any; // RichText JSON format from Contentful
+  thumbnailUrl: string;
+  galeriUrls: string[];
+  link?: string;
+  lainnya?: string[];
 }

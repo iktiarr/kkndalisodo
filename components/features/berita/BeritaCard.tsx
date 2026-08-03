@@ -4,27 +4,27 @@ import { BeritaItem } from "@/types/berita";
 
 export default function BeritaCard({ item }: { item: BeritaItem }) {
   return (
-    <article className="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg">
-      <Link href={`/berita/${item.id}`} className="block relative aspect-4/3 overflow-hidden bg-gray-100">
+    <article className="group flex flex-col bg-transparent">
+      <Link href={`/berita/${item.id}`} className="block relative aspect-video rounded-xl overflow-hidden bg-slate-200 mb-3">
         <Image
           src={item.coverUrl}
           alt={item.judul}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
+      </Link>
+      <div className="flex flex-col flex-1">
         {item.kategori && (
-          <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm">
+          <span className="text-red-600 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5">
             {item.kategori}
           </span>
         )}
-      </Link>
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="text-base font-bold text-gray-900 mb-2 leading-tight group-hover:text-emerald-600 transition-colors">
+        <h3 className="text-sm sm:text-lg font-bold text-slate-900 mb-1 sm:mb-1.5 leading-tight group-hover:text-emerald-600 transition-colors">
           <Link href={`/berita/${item.id}`} className="line-clamp-2">
             {item.judul}
           </Link>
         </h3>
-        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-2">
           {item.ringkasan}
         </p>
       </div>
