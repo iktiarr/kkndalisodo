@@ -1,32 +1,50 @@
+import Link from "next/link";
+import Image from "next/image";
 import { WisataItem } from "@/types/wisata";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getShortDescription = (richText: any) => {
+  if (!richText || !richText.content) return "";
+  let text = "";
+  for (const node of richText.content) {
+    if (node.nodeType === "paragraph" && node.content) {
+      for (const child of node.content) {
+        if (child.nodeType === "text" && child.value) {
+          text += child.value + " ";
+        }
+      }
+    }
+    if (text.length > 150) break;
+  }
+  return text.trim();
+};
 
 export default function WisataCard({ item }: { item: WisataItem }) {
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg hover:border-emerald-500/50 transition-all group flex flex-col">
-      <div className="h-48 bg-slate-800 overflow-hidden relative">
-        <img
-          src={item.gambarUrl}
-          alt={item.nama}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+    <article className="group flex flex-col bg-transparent">
+      <Link href={`/wisata/${item.slug || item.id}`} className="block relative aspect-video rounded-xl overflow-hidden bg-slate-200 mb-3">
+        <Image
+          src={item.thumbnailUrl}
+          alt={item.judul}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
-        <span className="absolute top-3 left-3 bg-emerald-950/80 text-emerald-300 text-xs font-semibold px-2.5 py-1 rounded-md border border-emerald-800 backdrop-blur-sm">
-          {item.kategori}
-        </span>
+      </Link>
+      <div className="flex flex-col flex-1">
+        {item.kategori && item.kategori.length > 0 && (
+          <span className="text-red-600 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5 line-clamp-1">
+            {item.kategori.join(", ")}
+          </span>
+        )}
+        <h3 className="text-sm sm:text-lg font-bold text-slate-900 mb-1 sm:mb-1.5 leading-tight group-hover:text-emerald-600 transition-colors">
+          <Link href={`/wisata/${item.slug || item.id}`} className="line-clamp-2">
+            {item.judul}
+          </Link>
+        </h3>
+        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-2">
+          {getShortDescription(item.deskripsi)}
+        </p>
       </div>
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-        <div>
-          <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
-            {item.nama}
-          </h3>
-          <p className="text-slate-400 text-sm mt-2 line-clamp-2 leading-relaxed">
-            {item.deskripsiSingkat}
-          </p>
-        </div>
-        <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-          <span>📍 {item.lokasi}</span>
-          <span className="font-semibold text-emerald-400">{item.hargaTiket}</span>
-        </div>
-      </div>
-    </div>
+    </article>
   );
 }

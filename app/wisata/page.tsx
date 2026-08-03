@@ -10,19 +10,25 @@ export default async function WisataPage() {
   const wisataList = await getWisataList();
 
   return (
-    <div className="space-y-8">
-      <div className="border-b border-slate-800 pb-6">
-        <h1 className="text-3xl font-extrabold text-white">Wisata Desa Dalisodo</h1>
-        <p className="text-slate-400 mt-2">
+    <div className="max-w-350 mx-auto space-y-12 py-10 px-4 sm:px-6">
+      <div className="text-center space-y-4 mb-16">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">Wisata Desa Dalisodo</h1>
+        <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
           Jelajahi berbagai keindahan alam dan tempat rekreasi khas Desa Dalisodo.
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {wisataList.map((item) => (
-          <WisataCard key={item.id} item={item} />
-        ))}
-      </div>
+      {wisataList.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-slate-500">Belum ada wisata yang ditambahkan.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-x-4 md:gap-y-8">
+          {wisataList.map((item) => (
+            <WisataCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
