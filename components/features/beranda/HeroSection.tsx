@@ -82,6 +82,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isInlineVideoPlaying, setIsInlineVideoPlaying] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
@@ -107,6 +108,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       inlineVideoRef.current.currentTime = 0;
     }
     setIsInlineVideoPlaying(false);
+    setIsVideoLoading(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex((prev) => (prev + 1) % slides.length);
   }, []);
@@ -117,6 +119,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       inlineVideoRef.current.currentTime = 0;
     }
     setIsInlineVideoPlaying(false);
+    setIsVideoLoading(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
   }, []);
@@ -127,6 +130,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       inlineVideoRef.current.currentTime = 0;
     }
     setIsInlineVideoPlaying(false);
+    setIsVideoLoading(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex(index);
   };
@@ -165,15 +169,18 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
         inlineVideoRef.current.pause();
       }
       setIsInlineVideoPlaying(false);
+      setIsVideoLoading(false);
       setIsPlaying(true);
     } else {
       setIsInlineVideoPlaying(true);
+      setIsVideoLoading(true);
       setIsPlaying(false);
       setTimeout(() => {
         if (inlineVideoRef.current) {
           inlineVideoRef.current.currentTime = 0;
           inlineVideoRef.current.play().catch((err) => {
             console.warn("Inline play error:", err);
+            setIsVideoLoading(false);
           });
         }
       }, 100);
@@ -244,6 +251,24 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Glassmorphic Video Loading Animation Badge */}
+      {isInlineVideoPlaying && isVideoLoading && (
+        <div id="hero-video-loading-overlay" className="absolute inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300">
+          <div className="flex flex-col items-center gap-3 bg-[#181818]/90 border border-white/10 p-6 sm:p-8 rounded-[8px] shadow-2xl">
+            {/* Rotating Giallo Vivo & Emerald Spinner */}
+            <div className="w-10 h-10 border-3 border-[#15803d] border-t-[#ffc000] rounded-full animate-spin" />
+            <div className="text-center space-y-1">
+              <span className="font-lambo text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white block">
+                MEMUAT VIDEO SINEMATIK...
+              </span>
+              <span className="font-lambo text-xs uppercase tracking-wider text-[#ffc000] block animate-pulse">
+                (TUNGGU BEBERAPA SAAT...)
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Full Preview Modal Mode */}
       {isFullPreviewOpen && currentSlide.videoSrc ? (
         <div id="hero-full-preview-modal" className="absolute inset-0 z-50 bg-black flex flex-col justify-center items-center" role="dialog" aria-modal="true">
@@ -299,7 +324,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 fill
                 priority={idx === 0}
                 className={`object-cover object-center filter brightness-[0.88] contrast-[1.05] transition-opacity duration-500 ${
-                  isPlayingThisVideo ? "opacity-0" : "opacity-100"
+                  isPlayingThisVideo && !isVideoLoading ? "opacity-0" : "opacity-100"
                 }`}
                 sizes="100vw"
               />
@@ -312,6 +337,12 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                   playsInline
                   loop
                   muted={!isPlayingThisVideo}
+                  onLoadStart={() => isPlayingThisVideo && setIsVideoLoading(true)}
+                  onWaiting={() => isPlayingThisVideo && setIsVideoLoading(true)}
+                  onCanPlay={() => setIsVideoLoading(false)}
+                  onPlaying={() => setIsVideoLoading(false)}
+                  onPause={() => setIsVideoLoading(false)}
+                  onError={() => setIsVideoLoading(false)}
                   className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.05] transition-opacity duration-500 ${
                     isPlayingThisVideo ? "opacity-100 z-0" : "opacity-0 pointer-events-none z-0"
                   }`}
