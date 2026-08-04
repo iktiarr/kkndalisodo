@@ -27,6 +27,7 @@ export default function Footer() {
                     src="/assets/image/logo-dalisodo.svg"
                     alt="Logo Desa Dalisodo"
                     fill
+                    sizes="40px"
                     className="object-contain"
                   />
                 </div>
@@ -37,6 +38,7 @@ export default function Footer() {
                     src="/assets/image/Logo-kkn10.png"
                     alt="Logo KKN 10 Dalisodo"
                     fill
+                    sizes="40px"
                     className="object-contain"
                   />
                 </div>

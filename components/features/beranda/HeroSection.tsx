@@ -4,8 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { HeroSlideItem } from "@/types/hero";
+
 interface SlideData {
-  id: number;
+  id: string | number;
   type: "image" | "video";
   src: string;
   videoSrc?: string;
@@ -14,13 +16,12 @@ interface SlideData {
   description: string;
   primaryCtaText: string;
   primaryCtaLink: string;
-  secondaryCtaText: string;
-  secondaryCtaLink: string;
+  jenis?: string;
 }
 
-const slides: SlideData[] = [
+const DEFAULT_SLIDES: SlideData[] = [
   {
-    id: 1,
+    id: "1",
     type: "image",
     src: "/assets/image/gambar.jpeg",
     title: "PESONA WISATA & POTENSI",
@@ -29,25 +30,23 @@ const slides: SlideData[] = [
       "MENJELAJAHI KEINDAHAN ALAM LERENG GUNUNG KAWI, KEBERAGAMAN BUDAYA LOKAL, SERTA PROGRAM KEGIATAN MAHASISWA KKN 10.",
     primaryCtaText: "JELAJAHI WISATA",
     primaryCtaLink: "/wisata",
-    secondaryCtaText: "PROFIL DESA",
-    secondaryCtaLink: "/profil",
+    jenis: "Wisata",
   },
   {
-    id: 2,
+    id: "2",
     type: "video",
     src: "/assets/image/gambar.jpeg",
-    videoSrc: "/assets/videos/VIDEO%20PROFIL%20DESA%20BANCAK%20.mp4",
+    videoSrc: "/assets/videos/VIDEO PROFIL DESA BANCAK 1.mp4",
     title: "VIDEO PROFIL SINEMATIK",
     highlightTitle: "DESA DALISODO",
     description:
       "MENYAKSIKAN KEHIDUPAN MASYARAKAT, DOKUMENTASI KKNDALISODO, DAN POTENSI DESA DALAM TAYANGAN VIDEO SINEMATIK.",
     primaryCtaText: "PUTAR VIDEO PROFIL",
     primaryCtaLink: "#play-video",
-    secondaryCtaText: "BERITA DESA",
-    secondaryCtaLink: "/berita",
+    jenis: "Video",
   },
   {
-    id: 3,
+    id: "3",
     type: "image",
     src: "/assets/image/gambar.jpeg",
     title: "INOVASI & POTENSI",
@@ -56,12 +55,30 @@ const slides: SlideData[] = [
       "KOLABORASI MAHASISWA KKN 10 DENGAN WARGA DESA DALISODO UNTUK MENGEMBANGKAN POTENSI LOKAL SERTA DIGITALISASI DESA.",
     primaryCtaText: "BACA BERITA KKN",
     primaryCtaLink: "/berita",
-    secondaryCtaText: "HUBUNGI KAMI",
-    secondaryCtaLink: "#kontak",
+    jenis: "Berita",
   },
 ];
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  initialSlides?: HeroSlideItem[];
+}
+
+export default function HeroSection({ initialSlides }: HeroSectionProps) {
+  const slides: SlideData[] =
+    initialSlides && initialSlides.length > 0
+      ? initialSlides.map((s) => ({
+          id: s.id,
+          type: s.mediaType,
+          src: s.mediaType === "image" ? s.mediaUrl : "/assets/image/gambar.jpeg",
+          videoSrc: s.mediaType === "video" ? s.mediaUrl : undefined,
+          title: s.judul,
+          description: s.deskripsi,
+          primaryCtaText: s.primaryCtaText || "LIHAT DETAIL",
+          primaryCtaLink: s.primaryCtaLink || "/",
+          jenis: s.jenis,
+        }))
+      : DEFAULT_SLIDES;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isInlineVideoPlaying, setIsInlineVideoPlaying] = useState(false);
@@ -72,6 +89,17 @@ export default function HeroSection() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const inlineVideoRef = useRef<HTMLVideoElement | null>(null);
   const fullVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Warm video assets into browser HTTP disk cache on mount
+  useEffect(() => {
+    slides.forEach((slide) => {
+      if (slide.type === "video" && slide.videoSrc) {
+        fetch(slide.videoSrc, { cache: "force-cache" }).catch(() => {
+          // Silent fallback for cross-origin or local video assets
+        });
+      }
+    });
+  }, [slides]);
 
   const nextSlide = useCallback(() => {
     if (inlineVideoRef.current) {
@@ -233,18 +261,22 @@ export default function HeroSection() {
           {/* Full Screen Video Player */}
           <video
             ref={fullVideoRef}
-            src={currentSlide.videoSrc}
             controls
             autoPlay
             playsInline
             className="w-full h-full object-contain max-h-[90vh]"
-          />
+          >
+            <source src={currentSlide.videoSrc} type="video/mp4" />
+            <source src={currentSlide.videoSrc} />
+          </video>
         </div>
       ) : null}
 
       {/* Background Slides */}
       {slides.map((slide, idx) => {
         const isActive = idx === currentIndex;
+        const isPlayingThisVideo = idx === currentIndex && isInlineVideoPlaying;
+
         return (
           <div
             key={slide.id}
@@ -260,25 +292,33 @@ export default function HeroSection() {
 
             {/* Slide Background Visual */}
             <figure className="relative w-full h-full m-0 p-0">
-              {slide.type === "video" && slide.videoSrc ? (
+              {/* Poster Image Base (Guarantees no black boxes for Contentful video slides) */}
+              <Image
+                src={slide.src}
+                alt={slide.title}
+                fill
+                priority={idx === 0}
+                className={`object-cover object-center filter brightness-[0.88] contrast-[1.05] transition-opacity duration-500 ${
+                  isPlayingThisVideo ? "opacity-0" : "opacity-100"
+                }`}
+                sizes="100vw"
+              />
+
+              {/* Video Element Overlay */}
+              {slide.type === "video" && slide.videoSrc && (
                 <video
                   ref={idx === currentIndex ? inlineVideoRef : null}
-                  src={idx === currentIndex && isInlineVideoPlaying ? slide.videoSrc : `${slide.videoSrc}#t=2.0`}
-                  preload={idx === currentIndex && isInlineVideoPlaying ? "auto" : "metadata"}
+                  preload={isPlayingThisVideo ? "auto" : "none"}
                   playsInline
                   loop
-                  muted={!isInlineVideoPlaying}
-                  className="w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.05]"
-                />
-              ) : (
-                <Image
-                  src={slide.src}
-                  alt={slide.title}
-                  fill
-                  priority={idx === 0}
-                  className="object-cover object-center filter brightness-[0.88] contrast-[1.05]"
-                  sizes="100vw"
-                />
+                  muted={!isPlayingThisVideo}
+                  className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.05] transition-opacity duration-500 ${
+                    isPlayingThisVideo ? "opacity-100 z-0" : "opacity-0 pointer-events-none z-0"
+                  }`}
+                >
+                  <source src={slide.videoSrc} type="video/mp4" />
+                  <source src={slide.videoSrc} />
+                </video>
               )}
             </figure>
           </div>

@@ -1,24 +1,56 @@
 import ProfilSection from "@/components/features/profil/ProfilSection";
 import { getProfilDesa } from "@/server/services/profilService";
+import Link from "next/link";
 
 export const metadata = {
   title: "Profil Desa Dalisodo | Visi Misi & Geografis",
-  description: "Profil lengkap Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.",
+  description:
+    "Profil lengkap Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang. Informasi demografis, visi-misi, sejarah, dan struktur perangkat desa.",
 };
 
 export default async function ProfilPage() {
   const data = await getProfilDesa();
 
   return (
-    <div className="max-w-350 mx-auto space-y-12 py-10 px-4 sm:px-6">
-      <div className="text-center space-y-4 mb-16 border-b border-slate-200 pb-10">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">Profil Desa Dalisodo</h1>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Mengenal lebih dekat gambaran umum, visi-misi, serta informasi demografis desa.
-        </p>
-      </div>
+    <main id="profil-main-page" className="w-full bg-[#f5f5f5] min-h-screen">
+      {/* Header Banner Section (Dark Stage per DESIGN.md) */}
+      <header
+        id="profil-header-banner"
+        className="w-full bg-[#181818] text-white pt-28 sm:pt-36 pb-16 sm:pb-20 px-6 sm:px-12 lg:px-16 border-b border-[#313131]"
+      >
+        <div className="max-w-[1440px] mx-auto space-y-4">
+          {/* Breadcrumb Navigation */}
+          <nav
+            aria-label="Breadcrumb"
+            className="font-lambo text-xs tracking-[0.15em] text-[#ffc000] uppercase font-bold flex items-center gap-2"
+          >
+            <Link href="/" className="hover:underline">
+              BERANDA
+            </Link>
+            <span>/</span>
+            <span className="text-slate-400">PROFIL DESA</span>
+          </nav>
 
-      <ProfilSection data={data} />
-    </div>
+          {/* Page Headline */}
+          <h1 className="font-lambo text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-[0.023em] text-white leading-none">
+            PROFIL & GAMBARAN UMUM DESA DALISODO
+          </h1>
+
+          {/* Subtitle Narration */}
+          <p className="font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-[0.023em] max-w-2xl leading-relaxed">
+            MENGENAL LEBIH DEKAT GAMBARAN GEOGRAFIS, VISI-MISI, KEARIFAN LOKAL, SERTA DEMOGRAFI DESA DALISODO KECAMATAN WAGIR KABUPATEN MALANG.
+          </p>
+        </div>
+      </header>
+
+      {/* Main Content Section */}
+      <section
+        id="profil-content-section"
+        aria-label="Informasi Profil Desa"
+        className="w-full py-12 sm:py-16 px-6 sm:px-12 lg:px-16 max-w-[1440px] mx-auto"
+      >
+        <ProfilSection data={data} />
+      </section>
+    </main>
   );
 }

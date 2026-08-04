@@ -55,6 +55,7 @@ export default function Navbar() {
                 src="/assets/image/logo-dalisodo.svg"
                 alt="Logo Desa Dalisodo"
                 fill
+                sizes="(max-width: 640px) 36px, 40px"
                 className="object-contain"
               />
             </div>
@@ -65,6 +66,7 @@ export default function Navbar() {
                 src="/assets/image/Logo-kkn10.png"
                 alt="Logo KKN 10 Dalisodo"
                 fill
+                sizes="(max-width: 640px) 36px, 40px"
                 className="object-contain"
               />
             </div>

@@ -3,16 +3,18 @@ import WisataCard from "@/components/features/wisata/WisataCard";
 import BeritaCard from "@/components/features/berita/BeritaCard";
 import { getWisataList } from "@/server/services/wisataService";
 import { getBeritaList } from "@/server/services/beritaService";
+import { getHeroSlides } from "@/server/services/heroService";
 import Link from "next/link";
 import ContactSection from "@/components/features/beranda/ContactSection";
 
 export default async function HomePage() {
+  const heroSlides = await getHeroSlides();
   const wisataList = await getWisataList();
   const beritaList = await getBeritaList();
 
   return (
     <div className="space-y-16 pb-12">
-      <HeroSection />
+      <HeroSection initialSlides={heroSlides} />
 
       {/* Section 2: Berita Terkini (Editorial Story Grid per DESIGN.md) */}
       <section
