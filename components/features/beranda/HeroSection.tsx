@@ -187,23 +187,18 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     }
   };
 
+  const [savedTime, setSavedTime] = useState(0);
+
   // Open Full Preview Mode
   const handleOpenFullPreview = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    if (inlineVideoRef.current) {
+      setSavedTime(inlineVideoRef.current.currentTime || 0);
+      inlineVideoRef.current.pause();
+    }
+    setIsInlineVideoPlaying(false);
     setIsFullPreviewOpen(true);
     setIsPlaying(false);
-
-    setTimeout(() => {
-      if (fullVideoRef.current) {
-        if (inlineVideoRef.current) {
-          fullVideoRef.current.currentTime = inlineVideoRef.current.currentTime;
-          inlineVideoRef.current.pause();
-        }
-        fullVideoRef.current.play().catch((err) => {
-          console.warn("Full preview play error:", err);
-        });
-      }
-    }, 150);
   };
 
   // Close Full Preview Mode
@@ -259,7 +254,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             <div className="w-10 h-10 border-3 border-[#15803d] border-t-[#ffc000] rounded-full animate-spin" />
             <div className="text-center space-y-1">
               <span className="font-lambo text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white block">
-                MEMUAT VIDEO SINEMATIK...
+                MEMUAT VIDEO...
               </span>
               <span className="font-lambo text-xs uppercase tracking-wider text-[#ffc000] block animate-pulse">
                 (TUNGGU BEBERAPA SAAT...)
@@ -286,14 +281,22 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
           {/* Full Screen Video Player */}
           <video
             ref={fullVideoRef}
+            src={currentSlide.videoSrc}
             controls
             autoPlay
             playsInline
+            preload="auto"
+            onCanPlay={(e) => {
+              const video = e.currentTarget;
+              if (savedTime > 0 && video.currentTime === 0) {
+                try {
+                  video.currentTime = savedTime;
+                } catch {}
+              }
+              video.play().catch(() => {});
+            }}
             className="w-full h-full object-contain max-h-[90vh]"
-          >
-            <source src={currentSlide.videoSrc} type="video/mp4" />
-            <source src={currentSlide.videoSrc} />
-          </video>
+          />
         </div>
       ) : null}
 
@@ -311,9 +314,17 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
               isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
             }`}
           >
-            {/* Dark Cinematic Canvas & Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#181818]/85 via-[#181818]/45 to-transparent z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#181818]/90 via-transparent to-[#181818]/40 z-10" />
+            {/* Dark Cinematic Canvas & Overlay (Hidden when video is playing for 100% clear video view) */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-r from-[#181818]/85 via-[#181818]/45 to-transparent z-10 transition-opacity duration-500 ${
+                isPlayingThisVideo ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            />
+            <div
+              className={`absolute inset-0 bg-gradient-to-t from-[#181818]/90 via-transparent to-[#181818]/40 z-10 transition-opacity duration-500 ${
+                isPlayingThisVideo ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            />
 
             {/* Slide Background Visual */}
             <figure className="relative w-full h-full m-0 p-0">
@@ -359,22 +370,36 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       {/* Main Content Stage */}
       <div className="relative z-20 h-full max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-16 flex flex-col justify-end pb-20 sm:pb-24 lg:pb-28 pointer-events-none">
         <article className="max-w-xl space-y-4 pointer-events-auto">
-          {/* Scaled-down Uppercase Headline */}
-          <h1 id="hero-headline" className="font-lambo text-2xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[0.023em] text-white uppercase font-bold">
-            {currentSlide.title}{" "}
-            {currentSlide.highlightTitle && (
-              <span className="block text-[#ffc000] mt-1">
-                {currentSlide.highlightTitle}
-              </span>
-            )}
-          </h1>
+          {/* Scaled-down Uppercase Headline & Description (Hidden during video playback so video visual is 100% clear) */}
+          <div
+            className={`space-y-4 transition-all duration-500 ${
+              isInlineVideoPlaying
+                ? "opacity-0 pointer-events-none max-h-0 overflow-hidden"
+                : "opacity-100 max-h-96"
+            }`}
+          >
+            <h1
+              id="hero-headline"
+              className="font-lambo text-2xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[0.023em] text-white uppercase font-bold"
+            >
+              {currentSlide.title}{" "}
+              {currentSlide.highlightTitle && (
+                <span className="block text-[#ffc000] mt-1">
+                  {currentSlide.highlightTitle}
+                </span>
+              )}
+            </h1>
 
-          {/* Subtitle / Description */}
-          <p id="hero-description" className="font-lambo text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed tracking-[0.023em]">
-            {currentSlide.description}
-          </p>
+            {/* Subtitle / Description */}
+            <p
+              id="hero-description"
+              className="font-lambo text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed tracking-[0.023em]"
+            >
+              {currentSlide.description}
+            </p>
+          </div>
 
-          {/* Action Buttons Area */}
+          {/* Action Buttons Area (Remains 100% visible during video playback) */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
             {/* Primary Action Button Only */}
             {currentSlide.type === "video" ? (
