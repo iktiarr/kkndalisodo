@@ -35,11 +35,11 @@ export default function Navbar() {
       id="main-header"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 text-white ${
         isScrolled
-          ? "bg-[#181818]/80 backdrop-blur-xl border-b border-white/10 shadow-2xl py-0"
+          ? "bg-carbon-deep/80 backdrop-blur-xl border-b border-white/10 shadow-2xl py-0"
           : "bg-transparent border-b border-transparent py-2"
       }`}
     >
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between">
+      <div className="max-w-360 mx-auto px-6 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between">
         
         {/* Top-Left: 2 Logos Side-by-Side (Logo Desa Dalisodo + Logo KKN 10) */}
         <Link
@@ -50,7 +50,7 @@ export default function Navbar() {
         >
           <div className="flex items-center gap-2">
             {/* Logo 1: Circular Logo Desa Dalisodo */}
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-[#ffc000] transition-colors shadow-sm">
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/logo-dalisodo.svg"
                 alt="Logo Desa Dalisodo"
@@ -61,7 +61,7 @@ export default function Navbar() {
             </div>
 
             {/* Logo 2: Circular Logo KKN 10 Dalisodo */}
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-[#ffc000] transition-colors shadow-sm">
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo-kkn10.png"
                 alt="Logo KKN 10 Dalisodo"
@@ -74,10 +74,10 @@ export default function Navbar() {
 
           {/* Brand Name & Subtitle */}
           <div className="flex flex-col">
-            <span className="font-lambo font-bold text-base sm:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-[#ffc000] transition-colors">
+            <span className="font-lambo font-bold text-base sm:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-giallo transition-colors">
               DESA DALISODO
             </span>
-            <span className="font-lambo text-[10px] text-[#ffc000] tracking-[0.12em] font-semibold uppercase mt-1">
+            <span className="font-lambo text-[10px] text-giallo tracking-[0.12em] font-semibold uppercase mt-1">
               KKN 10 • WAGIR MALANG
             </span>
           </div>
@@ -95,9 +95,9 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-lambo text-xs sm:text-sm font-semibold tracking-[0.023em] uppercase px-4 py-2 rounded-[6px] transition-all duration-200 ${
+                className={`font-lambo text-xs sm:text-sm font-semibold tracking-[0.023em] uppercase px-4 py-2 rounded-md transition-all duration-200 ${
                   isActive
-                    ? "bg-[#ffc000] text-black font-bold shadow-md"
+                    ? "bg-giallo text-black font-bold shadow-md"
                     : "text-slate-300 hover:text-white hover:bg-white/10"
                 }`}
               >
@@ -112,7 +112,7 @@ export default function Navbar() {
           <button
             id="mobile-menu-toggle-btn"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-[8px] focus:outline-none transition-colors cursor-pointer border border-white/10"
+            className="md:hidden p-2.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg focus:outline-none transition-colors cursor-pointer border border-white/10"
             aria-label={isMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
           >
             <svg
@@ -136,7 +136,7 @@ export default function Navbar() {
         <nav
           id="mobile-nav-dropdown"
           aria-label="Navigasi Seluler"
-          className="md:hidden border-t border-[#313131] bg-[#181818] px-6 py-4 space-y-2 shadow-2xl"
+          className="md:hidden border-t border-anvil bg-carbon-deep px-6 py-4 space-y-2 shadow-2xl"
         >
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
@@ -145,10 +145,10 @@ export default function Navbar() {
                 key={link.href}
                 onClick={() => setIsMenuOpen(false)}
                 href={link.href}
-                className={`font-lambo block px-4 py-3 text-sm font-semibold tracking-[0.023em] uppercase rounded-[8px] transition-colors ${
+                className={`font-lambo block px-4 py-3 text-sm font-semibold tracking-[0.023em] uppercase rounded-lg transition-colors ${
                   isActive
-                    ? "bg-[#ffc000] text-black font-bold"
-                    : "text-slate-200 hover:bg-white/10 hover:text-[#ffc000]"
+                    ? "bg-giallo text-black font-bold"
+                    : "text-slate-200 hover:bg-white/10 hover:text-giallo"
                 }`}
               >
                 {link.label}
@@ -160,3 +160,4 @@ export default function Navbar() {
     </header>
   );
 }
+

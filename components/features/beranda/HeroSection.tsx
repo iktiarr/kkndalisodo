@@ -86,6 +86,8 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchEndY, setTouchEndY] = useState<number | null>(null);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const inlineVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -111,7 +113,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     setIsVideoLoading(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex((prev) => (prev + 1) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   const prevSlide = useCallback(() => {
     if (inlineVideoRef.current) {
@@ -122,7 +124,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     setIsVideoLoading(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   const goToSlide = (index: number) => {
     if (inlineVideoRef.current) {
@@ -144,8 +146,8 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     if (fullVideoRef.current) {
       fullVideoRef.current.pause();
     }
-    setIsInlineVideoPlaying(false);
-    setIsFullPreviewOpen(false);
+    // State resets (setIsInlineVideoPlaying, setIsFullPreviewOpen) are already handled
+    // within the nextSlide, prevSlide, and goToSlide handlers directly to avoid cascading renders.
   }, [currentIndex]);
 
   // Autoplay slider (paused automatically when video is playing inline or in full preview)
@@ -213,26 +215,32 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   // Touch Swipe Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEndX(e.targetTouches[0].clientX);
+    setTouchEndY(e.targetTouches[0].clientY);
   };
 
   const handleTouchEnd = () => {
-    if (!touchStartX || !touchEndX || isFullPreviewOpen) return;
-    const distance = touchStartX - touchEndX;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
+    if (!touchStartX || !touchEndX || !touchStartY || !touchEndY || isFullPreviewOpen) return;
+    const distanceX = touchStartX - touchEndX;
+    const distanceY = touchStartY - touchEndY;
 
-    if (isLeftSwipe) {
-      nextSlide();
-    } else if (isRightSwipe) {
-      prevSlide();
+    // Hanya geser slide jika gesekan horizontal (X) lebih dominan dari vertikal (Y)
+    if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > 50) {
+      if (distanceX > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
     }
 
     setTouchStartX(null);
     setTouchEndX(null);
+    setTouchStartY(null);
+    setTouchEndY(null);
   };
 
   const currentSlide = slides[currentIndex];
@@ -241,7 +249,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     <section
       id="hero-slider"
       aria-label="Hero Slider sinematik Desa Dalisodo"
-      className="relative w-full h-screen min-h-screen bg-[#202020] text-white overflow-hidden select-none border-b border-[#313131]"
+      className="relative w-full h-[55vh] min-h-[420px] sm:h-screen sm:min-h-screen bg-carbony text-white overflow-hidden select-none border-b border-anvil touch-pan-y"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -249,14 +257,14 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       {/* Glassmorphic Video Loading Animation Badge */}
       {isInlineVideoPlaying && isVideoLoading && (
         <div id="hero-video-loading-overlay" className="absolute inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300">
-          <div className="flex flex-col items-center gap-3 bg-[#181818]/90 border border-white/10 p-6 sm:p-8 rounded-[8px] shadow-2xl">
+          <div className="flex flex-col items-center gap-3 bg-carbon-deep/90 border border-white/10 p-6 sm:p-8 rounded-lg shadow-2xl">
             {/* Rotating Giallo Vivo & Emerald Spinner */}
-            <div className="w-10 h-10 border-3 border-[#15803d] border-t-[#ffc000] rounded-full animate-spin" />
+            <div className="w-10 h-10 border-3 border-emerald-dalisodo border-t-giallo rounded-full animate-spin" />
             <div className="text-center space-y-1">
               <span className="font-lambo text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white block">
                 MEMUAT VIDEO...
               </span>
-              <span className="font-lambo text-xs uppercase tracking-wider text-[#ffc000] block animate-pulse">
+              <span className="font-lambo text-xs uppercase tracking-wider text-giallo block animate-pulse">
                 (TUNGGU BEBERAPA SAAT...)
               </span>
             </div>
@@ -272,7 +280,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             <button
               id="hero-close-full-preview-btn"
               onClick={handleCloseFullPreview}
-              className="font-lambo bg-[#ffc000] text-black px-5 py-2.5 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-white transition-all uppercase flex items-center gap-2 rounded-[8px] cursor-pointer shadow-2xl z-50"
+              className="font-lambo bg-giallo text-black px-5 py-2.5 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-white transition-all uppercase flex items-center gap-2 rounded-lg cursor-pointer shadow-2xl z-50"
             >
               <span>✕ KEMBALI</span>
             </button>
@@ -316,12 +324,12 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
           >
             {/* Dark Cinematic Canvas & Overlay (Hidden when video is playing for 100% clear video view) */}
             <div
-              className={`absolute inset-0 bg-gradient-to-r from-[#181818]/85 via-[#181818]/45 to-transparent z-10 transition-opacity duration-500 ${
+              className={`absolute inset-0 bg-linear-to-r from-carbon-deep/85 via-carbon-deep/45 to-transparent z-10 transition-opacity duration-500 ${
                 isPlayingThisVideo ? "opacity-0 pointer-events-none" : "opacity-100"
               }`}
             />
             <div
-              className={`absolute inset-0 bg-gradient-to-t from-[#181818]/90 via-transparent to-[#181818]/40 z-10 transition-opacity duration-500 ${
+              className={`absolute inset-0 bg-linear-to-t from-carbon-deep/90 via-transparent to-carbon-deep/40 z-10 transition-opacity duration-500 ${
                 isPlayingThisVideo ? "opacity-0 pointer-events-none" : "opacity-100"
               }`}
             />
@@ -368,7 +376,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       })}
 
       {/* Main Content Stage */}
-      <div className="relative z-20 h-full max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-16 flex flex-col justify-end pb-20 sm:pb-24 lg:pb-28 pointer-events-none">
+      <div className="relative z-20 h-full max-w-360 mx-auto px-6 sm:px-12 lg:px-16 flex flex-col justify-end pb-20 sm:pb-24 lg:pb-28 pointer-events-none">
         <article className="max-w-xl space-y-4 pointer-events-auto">
           {/* Scaled-down Uppercase Headline & Description (Hidden during video playback so video visual is 100% clear) */}
           <div
@@ -384,7 +392,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             >
               {currentSlide.title}{" "}
               {currentSlide.highlightTitle && (
-                <span className="block text-[#ffc000] mt-1">
+                <span className="block text-giallo mt-1">
                   {currentSlide.highlightTitle}
                 </span>
               )}
@@ -408,7 +416,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 <button
                   id="hero-toggle-video-btn"
                   onClick={handleToggleInlineVideo}
-                  className="font-lambo bg-[#ffc000] text-[#000000] px-5 py-3 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-[#917300] hover:text-white transition-all duration-200 uppercase flex items-center gap-2 group rounded-[8px] cursor-pointer shadow-xl"
+                  className="font-lambo bg-giallo text-pure-black px-5 py-3 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-giallo-dark hover:text-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 uppercase flex items-center gap-2 group rounded-lg cursor-pointer shadow-md"
                 >
                   {isInlineVideoPlaying ? (
                     <>
@@ -434,7 +442,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                     onClick={handleOpenFullPreview}
                     title="Masuk Mode Full Preview"
                     aria-label="Mode Full Preview"
-                    className="p-2.5 text-[#ffc000] hover:text-white hover:scale-110 transition-all duration-200 cursor-pointer"
+                    className="p-2.5 text-giallo hover:text-white hover:scale-110 transition-all duration-200 cursor-pointer"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4" />
@@ -446,7 +454,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
               <Link
                 id="hero-primary-cta-link"
                 href={currentSlide.primaryCtaLink}
-                className="font-lambo bg-[#ffc000] text-[#000000] px-5 py-3 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-[#917300] hover:text-white transition-all duration-200 uppercase flex items-center gap-2 group rounded-[8px]"
+                className="font-lambo bg-giallo text-pure-black px-5 py-3 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-giallo-dark hover:text-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300 uppercase flex items-center gap-2 group rounded-lg"
               >
                 <span>{currentSlide.primaryCtaText}</span>
                 <span className="transition-transform duration-200 group-hover:translate-x-1">
@@ -466,7 +474,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
           prevSlide();
         }}
         aria-label="Slide Sebelumnya"
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/40 hover:bg-[#ffc000] text-white hover:text-black border border-white/20 hover:border-[#ffc000] transition-all duration-200 group hidden sm:flex items-center justify-center cursor-pointer rounded-[8px]"
+        className="absolute left-4 sm:left-8 bottom-6 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-3 bg-black/40 hover:bg-giallo text-white hover:text-black border border-white/20 hover:border-giallo transition-all duration-200 group flex items-center justify-center cursor-pointer rounded-lg"
       >
         <svg
           className="w-5 h-5 transition-transform group-hover:-translate-x-0.5"
@@ -485,7 +493,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
           nextSlide();
         }}
         aria-label="Slide Selanjutnya"
-        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/40 hover:bg-[#ffc000] text-white hover:text-black border border-white/20 hover:border-[#ffc000] transition-all duration-200 group hidden sm:flex items-center justify-center cursor-pointer rounded-[8px]"
+        className="absolute right-4 sm:right-8 bottom-6 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-3 bg-black/40 hover:bg-giallo text-white hover:text-black border border-white/20 hover:border-giallo transition-all duration-200 group flex items-center justify-center cursor-pointer rounded-lg"
       >
         <svg
           className="w-5 h-5 transition-transform group-hover:translate-x-0.5"
@@ -498,10 +506,10 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       </button>
 
       {/* Hero Bottom Bar Navigasi */}
-      <nav id="hero-slider-nav" aria-label="Indikator Slider Hero" className="absolute bottom-6 sm:bottom-10 right-6 sm:right-12 z-30 flex items-center gap-6 bg-black/60 backdrop-blur-md px-5 py-3 border border-white/10 rounded-[8px]">
+      <nav id="hero-slider-nav" aria-label="Indikator Slider Hero" className="absolute bottom-6 sm:bottom-10 right-6 sm:right-12 z-30 hidden sm:flex items-center gap-6 bg-black/60 backdrop-blur-md px-5 py-3 border border-white/10 rounded-lg">
         {/* Slide Counter */}
-        <div id="hero-slide-counter" className="font-lambo text-xs sm:text-sm tracking-[0.1em] text-slate-400 font-bold">
-          <span className="text-[#ffc000]">0{currentIndex + 1}</span> / 0{slides.length}
+        <div id="hero-slide-counter" className="font-lambo text-xs sm:text-sm tracking-widest text-slate-400 font-bold">
+          <span className="text-giallo">0{currentIndex + 1}</span> / 0{slides.length}
         </div>
 
         {/* Carousel Navigation Pips */}
@@ -517,9 +525,9 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 goToSlide(idx);
               }}
               aria-label={`Pindah ke slide ${idx + 1}`}
-              className={`h-[4px] transition-all duration-300 cursor-pointer rounded-[4px] ${
+              className={`h-1 transition-all duration-300 cursor-pointer rounded-sm ${
                 idx === currentIndex
-                  ? "w-10 bg-[#ffc000]"
+                  ? "w-10 bg-giallo"
                   : "w-5 bg-white/30 hover:bg-white/60"
               }`}
             />
@@ -534,7 +542,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             setIsPlaying(!isPlaying);
           }}
           aria-label={isPlaying ? "Jeda autoplay slider" : "Jalankan autoplay slider"}
-          className="p-1.5 border border-white/30 text-white hover:border-[#ffc000] hover:text-[#ffc000] transition-colors cursor-pointer rounded-[8px]"
+          className="p-1.5 border border-white/30 text-white hover:border-giallo hover:text-giallo transition-colors cursor-pointer rounded-lg"
         >
           {isPlaying ? (
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -550,3 +558,4 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     </section>
   );
 }
+

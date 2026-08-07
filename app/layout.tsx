@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${barlowCondensed.variable} antialiased bg-[#202020] text-white min-h-screen flex flex-col justify-between`}
+        className={`${geistSans.variable} ${geistMono.variable} ${barlowCondensed.variable} antialiased bg-carbony text-white min-h-screen flex flex-col justify-between`}
       >
         <div>
           <Navbar />
@@ -46,3 +46,4 @@ export default function RootLayout({
     </html>
   );
 }
+
