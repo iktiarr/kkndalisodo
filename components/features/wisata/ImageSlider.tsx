@@ -16,7 +16,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
 
   if (images.length === 1) {
     return (
-      <div className="w-full h-80 sm:h-96 md:h-[450px] relative rounded-[8px] overflow-hidden bg-[#202020] shadow-md border border-[#313131]">
+      <div className="w-full h-80 sm:h-96 md:h-[450px] relative rounded-lg overflow-hidden bg-carbony shadow-md border border-anvil">
         <Image
           src={images[0]}
           alt={judul}
@@ -53,7 +53,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
   };
 
   return (
-    <div className="relative group overflow-hidden w-full h-80 sm:h-96 md:h-[450px] bg-[#202020] rounded-[8px] border border-[#313131] shadow-md">
+    <div className="relative group overflow-hidden w-full h-80 sm:h-96 md:h-[450px] bg-carbony rounded-lg border border-anvil shadow-md">
       <div
         onTransitionEnd={handleTransitionEnd}
         className="flex w-full h-full"
@@ -80,7 +80,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
       {/* Nav Buttons */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#181818]/80 hover:bg-[#ffc000] text-white hover:text-black p-3 rounded-[8px] shadow-lg backdrop-blur-md transition-all opacity-90 group-hover:opacity-100 focus:opacity-100 z-10 cursor-pointer border border-white/10"
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-carbon-deep/80 hover:bg-giallo text-white hover:text-black p-3 rounded-lg shadow-lg backdrop-blur-md transition-all opacity-90 group-hover:opacity-100 focus:opacity-100 z-10 cursor-pointer border border-white/10"
         aria-label="Geser ke kiri"
       >
         <svg
@@ -101,7 +101,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
 
       <button
         onClick={handleNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#181818]/80 hover:bg-[#ffc000] text-white hover:text-black p-3 rounded-[8px] shadow-lg backdrop-blur-md transition-all opacity-90 group-hover:opacity-100 focus:opacity-100 z-10 cursor-pointer border border-white/10"
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-carbon-deep/80 hover:bg-giallo text-white hover:text-black p-3 rounded-lg shadow-lg backdrop-blur-md transition-all opacity-90 group-hover:opacity-100 focus:opacity-100 z-10 cursor-pointer border border-white/10"
         aria-label="Geser ke kanan"
       >
         <svg
@@ -121,9 +121,10 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
       </button>
 
       {/* Counter Pill */}
-      <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white font-lambo text-xs px-3 py-1 rounded-[6px] border border-white/10 tracking-widest font-bold z-10">
+      <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white font-lambo text-xs px-3 py-1 rounded-md border border-white/10 tracking-widest font-bold z-10">
         {currentIndex > images.length ? 1 : currentIndex < 1 ? images.length : currentIndex} / {images.length}
       </div>
     </div>
   );
 }
+

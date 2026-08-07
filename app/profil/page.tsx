@@ -12,19 +12,19 @@ export default async function ProfilPage() {
   const data = await getProfilDesa();
 
   return (
-    <main id="profil-main-page" className="w-full bg-[#f5f5f5] min-h-screen">
+    <main id="profil-main-page" className="w-full bg-marble min-h-screen">
       {/* Header Banner Section (Dark Stage per DESIGN.md) */}
       <header
         id="profil-header-banner"
-        className="w-full bg-[#181818] text-white pt-28 sm:pt-36 pb-16 sm:pb-20 px-6 sm:px-12 lg:px-16 border-b border-[#313131]"
+        className="w-full bg-carbon-deep text-white pt-28 sm:pt-36 pb-16 sm:pb-20 px-6 sm:px-12 lg:px-16 border-b border-anvil"
       >
-        <div className="max-w-[1440px] mx-auto space-y-4">
+        <div className="max-w-360 mx-auto space-y-4">
           {/* Breadcrumb Navigation */}
           <nav
             aria-label="Breadcrumb"
-            className="font-lambo text-xs tracking-[0.15em] text-[#ffc000] uppercase font-bold flex items-center gap-2"
+            className="font-lambo text-xs tracking-[0.15em] text-giallo uppercase font-bold flex items-center gap-2"
           >
-            <Link href="/" className="hover:underline">
+            <Link href="/" className="hover:text-white hover:-translate-y-0.5 transition-all duration-300 inline-block">
               BERANDA
             </Link>
             <span>/</span>
@@ -47,10 +47,11 @@ export default async function ProfilPage() {
       <section
         id="profil-content-section"
         aria-label="Informasi Profil Desa"
-        className="w-full py-12 sm:py-16 px-6 sm:px-12 lg:px-16 max-w-[1440px] mx-auto"
+        className="w-full py-12 sm:py-16 px-6 sm:px-12 lg:px-16 max-w-360 mx-auto"
       >
         <ProfilSection data={data} />
       </section>
     </main>
   );
 }
+
