@@ -1,42 +1,8 @@
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { HeroSlideItem } from "@/types/hero";
 
-// Fallback Mock Data apabila belum terhubung / terisi di Contentful
-const MOCK_HERO_SLIDES: HeroSlideItem[] = [
-  {
-    id: "1",
-    judul: "PESONA WISATA & POTENSI DESA DALISODO",
-    deskripsi:
-      "MENJELAJAHI KEINDAHAN ALAM LERENG GUNUNG KAWI, KEBERAGAMAN BUDAYA LOKAL, SERTA PROGRAM KEGIATAN MAHASISWA KKN 10.",
-    mediaUrl: "/assets/image/gambar.jpeg",
-    mediaType: "image",
-    jenis: "Wisata",
-    primaryCtaText: "JELAJAHI WISATA",
-    primaryCtaLink: "/wisata",
-  },
-  {
-    id: "2",
-    judul: "VIDEO PROFIL SINEMATIK DESA DALISODO",
-    deskripsi:
-      "MENYAKSIKAN KEHIDUPAN MASYARAKAT, DOKUMENTASI KKNDALISODO, DAN POTENSI DESA DALAM TAYANGAN VIDEO SINEMATIK.",
-    mediaUrl: "/assets/videos/VIDEO PROFIL DESA BANCAK 1.mp4",
-    mediaType: "video",
-    jenis: "Video",
-    primaryCtaText: "PUTAR VIDEO PROFIL",
-    primaryCtaLink: "#play-video",
-  },
-  {
-    id: "3",
-    judul: "INOVASI & POTENSI EKONOMI KREATIF",
-    deskripsi:
-      "KOLABORASI MAHASISWA KKN 10 DENGAN WARGA DESA DALISODO UNTUK MENGEMBANGKAN POTENSI LOKAL SERTA DIGITALISASI DESA.",
-    mediaUrl: "/assets/image/gambar.jpeg",
-    mediaType: "image",
-    jenis: "Berita",
-    primaryCtaText: "BACA BERITA KKN",
-    primaryCtaLink: "/berita",
-  },
-];
+// Fallback Mock Data (empty array)
+const MOCK_HERO_SLIDES: HeroSlideItem[] = [];
 
 interface RawContentfulSlide {
   sys: { id: string };
@@ -51,39 +17,29 @@ interface RawContentfulSlide {
 }
 
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
-  // Query Contentful GraphQL persis pada model schema: heroCollection
+  // Query Contentful GraphQL untuk Banner (deskripsi bertipe Text/String, media bertipe Asset)
   const queries = [
-    // 1. Query heroCollection dengan `deskripsi { json }` (Rich Text)
-    `query GetHeroCollectionRich {
-      heroCollection {
+    // 1. deskripsi bertipe Text (String)
+    `query GetBannerText {
+      bannerCollection {
+        items {
+          sys { id }
+          judul
+          deskripsi
+          jenis
+          media { url contentType title description }
+        }
+      }
+    }`,
+    // 2. deskripsi bertipe RichText
+    `query GetBannerRich {
+      bannerCollection {
         items {
           sys { id }
           judul
           deskripsi { json }
           jenis
-          media { url contentType }
-        }
-      }
-    }`,
-    // 2. Query heroCollection dengan `deskripsi` bertipe String / Text jika plain text
-    `query GetHeroCollectionText {
-      heroCollection {
-        items {
-          sys { id }
-          judul
-          jenis
-          media { url contentType }
-        }
-      }
-    }`,
-    // 3. Query heroCursorCollection
-    `query GetHeroCursorCollection {
-      heroCursorCollection {
-        items {
-          sys { id }
-          judul
-          jenis
-          media { url contentType }
+          media { url contentType title description }
         }
       }
     }`,
@@ -107,12 +63,22 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
 }
 
 function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
-  let rawUrl = item.media?.url || "";
+  // Jika deskripsi berupa File Asset, ambil url & contentType dari deskripsi
+  const deskripsiAssetUrl =
+    typeof item.deskripsi === "object" && item.deskripsi?.url ? item.deskripsi.url : "";
+  const mediaAssetUrl = item.media?.url || "";
+
+  let rawUrl = deskripsiAssetUrl || mediaAssetUrl || "";
   if (rawUrl.startsWith("//")) {
     rawUrl = `https:${rawUrl}`;
   }
 
-  const contentType = (item.media?.contentType || "").toLowerCase();
+  const contentType = (
+    (typeof item.deskripsi === "object" && item.deskripsi?.contentType) ||
+    item.media?.contentType ||
+    ""
+  ).toLowerCase();
+
   const jenis = (item.jenis || "Berita").toLowerCase();
 
   const isVideo =
@@ -151,6 +117,10 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
   let descText = "";
   if (typeof item.deskripsi === "string") {
     descText = item.deskripsi;
+  } else if (item.deskripsi?.description) {
+    descText = item.deskripsi.description;
+  } else if (item.deskripsi?.title) {
+    descText = item.deskripsi.title;
   } else if (item.deskripsi?.json) {
     descText = extractTextFromRichNodes(item.deskripsi.json.content || []);
   }
@@ -181,3 +151,4 @@ function extractTextFromRichNodes(nodes: any[]): string {
   }
   return text.trim();
 }
+

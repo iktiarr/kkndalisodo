@@ -98,6 +98,41 @@ export default async function WisataDetailPage({ params }: Props) {
             </div>
           </div>
 
+          {/* Detail Informasi Section (Key-Value Grid / Table Fallback) */}
+          {wisata.detailInformasiItems && wisata.detailInformasiItems.length > 0 ? (
+            <div className="pt-6 border-t border-marble space-y-4">
+              <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase text-carbony tracking-[0.023em] border-b border-carbony pb-2 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-dalisodo"></span>
+                <span>INFORMASI & KETERANGAN DESTINASI</span>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                {wisata.detailInformasiItems.map((info, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-marble/60 border border-ash/20 rounded-lg p-4 flex flex-col justify-between hover:border-emerald-dalisodo/40 transition-colors shadow-2xs"
+                  >
+                    <span className="font-lambo text-xs uppercase tracking-wider text-emerald-dalisodo font-bold">
+                      {info.label}
+                    </span>
+                    <span className="font-sans text-sm sm:text-base font-semibold text-carbony mt-1.5 leading-snug">
+                      {info.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : wisata.detailInformasi ? (
+            <div className="pt-6 border-t border-marble space-y-4">
+              <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase text-carbony tracking-[0.023em] border-b border-carbony pb-2">
+                DETAIL INFORMASI
+              </h2>
+              <div className="prose prose-slate max-w-none prose-img:rounded-lg prose-headings:font-lambo prose-headings:uppercase prose-a:text-emerald-dalisodo font-sans text-sm sm:text-base text-anvil leading-relaxed">
+                <RichContentRenderer content={wisata.detailInformasi} />
+              </div>
+            </div>
+          ) : null}
+
+
           {/* Facility & Extra Info Pills */}
           {wisata.lainnya && wisata.lainnya.length > 0 && (
             <div className="pt-6 border-t border-marble space-y-4">

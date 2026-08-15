@@ -21,6 +21,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
           src={images[0]}
           alt={judul}
           fill
+          priority
           sizes="(max-width: 1200px) 100vw, 1200px"
           className="object-cover"
         />
@@ -70,6 +71,7 @@ export default function ImageSlider({ images, judul }: ImageSliderProps) {
               src={imgUrl}
               alt={`${judul} - Foto ${idx}`}
               fill
+              priority={idx === 1}
               sizes="(max-width: 1200px) 100vw, 1200px"
               className="object-cover select-none pointer-events-none"
             />

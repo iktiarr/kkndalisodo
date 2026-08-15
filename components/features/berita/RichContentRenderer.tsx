@@ -102,6 +102,22 @@ function renderRichNode(node: any, index: number): React.ReactNode {
   }
 }
 
+function sanitizeUri(uri?: string): string {
+  if (!uri) return "#";
+  const clean = uri.trim();
+  if (
+    clean.startsWith("http://") ||
+    clean.startsWith("https://") ||
+    clean.startsWith("mailto:") ||
+    clean.startsWith("tel:") ||
+    clean.startsWith("/") ||
+    clean.startsWith("#")
+  ) {
+    return clean;
+  }
+  return "#";
+}
+
 function renderNodeContent(content: any[]): React.ReactNode {
   if (!Array.isArray(content)) return null;
 
@@ -127,7 +143,7 @@ function renderNodeContent(content: any[]): React.ReactNode {
       return (
         <a
           key={i}
-          href={child.data?.uri}
+          href={sanitizeUri(child.data?.uri)}
           target="_blank"
           rel="noopener noreferrer"
         >

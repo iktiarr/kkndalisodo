@@ -18,9 +18,15 @@ export async function fetchContentful<T>(query: string, variables = {}): Promise
           Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
         body: JSON.stringify({ query, variables }),
+        signal: AbortSignal.timeout(8000), // 8 seconds timeout to prevent hanging connections
         next: { revalidate: 60 }, // Cache revalidation 60 seconds
       }
     );
+
+    if (!res.ok) {
+      console.error(`Contentful HTTP Error: ${res.status} ${res.statusText}`);
+      return null;
+    }
 
     const { data, errors } = await res.json();
     if (errors) {
