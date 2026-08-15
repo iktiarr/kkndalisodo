@@ -1,4 +1,4 @@
-import { fetchContentful } from "@/lib/contentful";
+import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { WisataItem } from "@/types/wisata";
 
 const MOCK_WISATA: WisataItem[] = [
@@ -79,8 +79,8 @@ export async function getWisataList(): Promise<WisataItem[]> {
       judul: item.judul,
       kategori: item.kategori || [],
       deskripsi: item.deskripsi?.json || null,
-      thumbnailUrl: item.thumbnail?.url || MOCK_WISATA[0].thumbnailUrl,
-      galeriUrls: item.galeriCollection?.items?.map(g => g.url) || [],
+      thumbnailUrl: optimizeContentfulAsset(item.thumbnail?.url, 800) || MOCK_WISATA[0].thumbnailUrl,
+      galeriUrls: item.galeriCollection?.items?.map((g) => optimizeContentfulAsset(g.url, 1200)) || [],
       link: item.link,
       lainnya: item.lainnya || [],
     }));

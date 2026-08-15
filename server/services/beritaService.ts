@@ -1,4 +1,4 @@
-import { fetchContentful } from "@/lib/contentful";
+import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { BeritaItem } from "@/types/berita";
 
 // Helper: Format tanggal & waktu dari Contentful ISO string ke format Indonesia
@@ -21,6 +21,7 @@ export function formatTanggalWaktu(rawDateStr: string): string {
 }
 
 // Helper: Ekstrak teks bersih dari field `isi`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function extractTextFromIsi(isi: any): string {
   if (!isi) return "";
 
@@ -38,6 +39,7 @@ export function extractTextFromIsi(isi: any): string {
   return "";
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTextFromRichNodes(nodes: any[]): string {
   let text = "";
   for (const node of nodes) {
@@ -51,6 +53,7 @@ function extractTextFromRichNodes(nodes: any[]): string {
 }
 
 // Helper ringkasan
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createRingkasan(isi: any, maxLength = 140): string {
   const fullText = extractTextFromIsi(isi);
   if (fullText.length <= maxLength) return fullText;
@@ -110,6 +113,7 @@ interface RawContentfulPost {
   sys: { id: string };
   judul?: string;
   cover?: { url?: string; title?: string; description?: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isi?: any;
   tanggalwaktu?: string;
 }
@@ -130,19 +134,7 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
         }
       }
     }`,
-    // 2. Postinga / Post Collection dengan `isi` bertipe String / Text biasa
-    `query GetPostinganText {
-      postinganCollection {
-        items {
-          sys { id }
-          judul
-          cover { url title }
-          isi
-          tanggalwaktu
-        }
-      }
-    }`,
-    // 3. Berita Collection dengan `isi` Rich Text
+    // 2. Berita Collection dengan `isi` bertipe Rich Text (json)
     `query GetBeritaRich {
       beritaCollection {
         items {
@@ -154,9 +146,21 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
         }
       }
     }`,
-    // 4. Berita Collection dengan `isi` Text
-    `query GetBeritaText {
-      beritaCollection {
+    // 3. Kegiatan Collection dengan `isi` bertipe Rich Text (json)
+    `query GetKegiatanRich {
+      kegiatanCollection {
+        items {
+          sys { id }
+          judul
+          cover { url title }
+          isi { json }
+          tanggalwaktu
+        }
+      }
+    }`,
+    // 4. Postingan Collection dengan `isi` Text
+    `query GetPostinganText {
+      postinganCollection {
         items {
           sys { id }
           judul
@@ -166,14 +170,14 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
         }
       }
     }`,
-    // 5. Post Collection dengan `isi` Rich Text
-    `query GetPostRich {
-      postCollection {
+    // 5. Berita Collection dengan `isi` Text
+    `query GetBeritaText {
+      beritaCollection {
         items {
           sys { id }
           judul
           cover { url title }
-          isi { json }
+          isi
           tanggalwaktu
         }
       }
@@ -219,7 +223,8 @@ export async function getBeritaById(id: string): Promise<BeritaItem | null> {
 }
 
 function parseRawPostToBeritaItem(item: RawContentfulPost): BeritaItem {
-  const coverUrl = item.cover?.url || MOCK_BERITA[0].coverUrl;
+  const rawCoverUrl = item.cover?.url;
+  const coverUrl = rawCoverUrl ? optimizeContentfulAsset(rawCoverUrl, 800) : MOCK_BERITA[0].coverUrl;
   const rawIsi = item.isi || "";
   const rawTanggal = item.tanggalwaktu || new Date().toISOString();
 
