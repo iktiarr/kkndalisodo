@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const data = await getProfilDesa();
     return NextResponse.json({ success: true, data });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, message: "Gagal mengambil data profil desa" },
       { status: 500 }

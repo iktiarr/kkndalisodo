@@ -82,7 +82,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isInlineVideoPlaying, setIsInlineVideoPlaying] = useState(false);
-  const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const [isVideoFrameReady, setIsVideoFrameReady] = useState(false);
   const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
@@ -93,24 +93,13 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   const inlineVideoRef = useRef<HTMLVideoElement | null>(null);
   const fullVideoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Warm video assets into browser HTTP disk cache on mount
-  useEffect(() => {
-    slides.forEach((slide) => {
-      if (slide.type === "video" && slide.videoSrc) {
-        fetch(slide.videoSrc, { cache: "force-cache" }).catch(() => {
-          // Silent fallback for cross-origin or local video assets
-        });
-      }
-    });
-  }, [slides]);
-
   const nextSlide = useCallback(() => {
     if (inlineVideoRef.current) {
       inlineVideoRef.current.pause();
       inlineVideoRef.current.currentTime = 0;
     }
     setIsInlineVideoPlaying(false);
-    setIsVideoLoading(false);
+    setIsVideoFrameReady(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
@@ -121,7 +110,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       inlineVideoRef.current.currentTime = 0;
     }
     setIsInlineVideoPlaying(false);
-    setIsVideoLoading(false);
+    setIsVideoFrameReady(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
@@ -132,7 +121,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       inlineVideoRef.current.currentTime = 0;
     }
     setIsInlineVideoPlaying(false);
-    setIsVideoLoading(false);
+    setIsVideoFrameReady(false);
     setIsFullPreviewOpen(false);
     setCurrentIndex(index);
   };
@@ -146,8 +135,6 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     if (fullVideoRef.current) {
       fullVideoRef.current.pause();
     }
-    // State resets (setIsInlineVideoPlaying, setIsFullPreviewOpen) are already handled
-    // within the nextSlide, prevSlide, and goToSlide handlers directly to avoid cascading renders.
   }, [currentIndex]);
 
   // Autoplay slider (paused automatically when video is playing inline or in full preview)
@@ -162,7 +149,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     };
   }, [isPlaying, isInlineVideoPlaying, isFullPreviewOpen, nextSlide]);
 
-  // Toggle inline video playback directly in background without changing page layout
+  // Toggle inline video playback directly and instantly
   const handleToggleInlineVideo = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
 
@@ -171,21 +158,20 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
         inlineVideoRef.current.pause();
       }
       setIsInlineVideoPlaying(false);
-      setIsVideoLoading(false);
+      setIsVideoFrameReady(false);
       setIsPlaying(true);
     } else {
       setIsInlineVideoPlaying(true);
-      setIsVideoLoading(true);
       setIsPlaying(false);
-      setTimeout(() => {
-        if (inlineVideoRef.current) {
-          inlineVideoRef.current.currentTime = 0;
-          inlineVideoRef.current.play().catch((err) => {
-            console.warn("Inline play error:", err);
-            setIsVideoLoading(false);
+      if (inlineVideoRef.current) {
+        inlineVideoRef.current.currentTime = 0;
+        const playPromise = inlineVideoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn("Direct inline play error:", err);
           });
         }
-      }, 100);
+      }
     }
   };
 
@@ -199,6 +185,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       inlineVideoRef.current.pause();
     }
     setIsInlineVideoPlaying(false);
+    setIsVideoFrameReady(false);
     setIsFullPreviewOpen(true);
     setIsPlaying(false);
   };
@@ -249,29 +236,11 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     <section
       id="hero-slider"
       aria-label="Hero Slider sinematik Desa Dalisodo"
-      className="relative w-full h-[55vh] min-h-[420px] sm:h-screen sm:min-h-screen bg-carbony text-white overflow-hidden select-none border-b border-anvil touch-pan-y"
+      className="relative w-full h-[55vh] min-h-105 sm:h-screen sm:min-h-screen bg-carbony text-white overflow-hidden select-none border-b border-anvil touch-pan-y"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Glassmorphic Video Loading Animation Badge */}
-      {isInlineVideoPlaying && isVideoLoading && (
-        <div id="hero-video-loading-overlay" className="absolute inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300">
-          <div className="flex flex-col items-center gap-3 bg-carbon-deep/90 border border-white/10 p-6 sm:p-8 rounded-lg shadow-2xl">
-            {/* Rotating Giallo Vivo & Emerald Spinner */}
-            <div className="w-10 h-10 border-3 border-emerald-dalisodo border-t-giallo rounded-full animate-spin" />
-            <div className="text-center space-y-1">
-              <span className="font-lambo text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white block">
-                MEMUAT VIDEO...
-              </span>
-              <span className="font-lambo text-xs uppercase tracking-wider text-giallo block animate-pulse">
-                (TUNGGU BEBERAPA SAAT...)
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Full Preview Modal Mode */}
       {isFullPreviewOpen && currentSlide.videoSrc ? (
         <div id="hero-full-preview-modal" className="absolute inset-0 z-50 bg-black flex flex-col justify-center items-center" role="dialog" aria-modal="true">
@@ -322,28 +291,28 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
               isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
             }`}
           >
-            {/* Dark Cinematic Canvas & Overlay (Hidden when video is playing for 100% clear video view) */}
+            {/* Dark Cinematic Canvas & Overlay (Fades when video is actually rendering frames) */}
             <div
               className={`absolute inset-0 bg-linear-to-r from-carbon-deep/85 via-carbon-deep/45 to-transparent z-10 transition-opacity duration-500 ${
-                isPlayingThisVideo ? "opacity-0 pointer-events-none" : "opacity-100"
+                isPlayingThisVideo && isVideoFrameReady ? "opacity-0 pointer-events-none" : "opacity-100"
               }`}
             />
             <div
               className={`absolute inset-0 bg-linear-to-t from-carbon-deep/90 via-transparent to-carbon-deep/40 z-10 transition-opacity duration-500 ${
-                isPlayingThisVideo ? "opacity-0 pointer-events-none" : "opacity-100"
+                isPlayingThisVideo && isVideoFrameReady ? "opacity-0 pointer-events-none" : "opacity-100"
               }`}
             />
 
             {/* Slide Background Visual */}
             <figure className="relative w-full h-full m-0 p-0">
-              {/* Poster Image Base (Guarantees no black boxes for Contentful video slides) */}
+              {/* Poster Image Base (Stays 100% visible so there is NEVER a black blank box) */}
               <Image
                 src={slide.src}
                 alt={slide.title}
                 fill
                 priority={idx === 0}
                 className={`object-cover object-center filter brightness-[0.88] contrast-[1.05] transition-opacity duration-500 ${
-                  isPlayingThisVideo && !isVideoLoading ? "opacity-0" : "opacity-100"
+                  isPlayingThisVideo && isVideoFrameReady ? "opacity-0" : "opacity-100"
                 }`}
                 sizes="100vw"
               />
@@ -352,18 +321,20 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
               {slide.type === "video" && slide.videoSrc && (
                 <video
                   ref={idx === currentIndex ? inlineVideoRef : null}
-                  preload={isPlayingThisVideo ? "auto" : "none"}
+                  preload={isActive ? "metadata" : "none"}
                   playsInline
                   loop
                   muted={!isPlayingThisVideo}
-                  onLoadStart={() => isPlayingThisVideo && setIsVideoLoading(true)}
-                  onWaiting={() => isPlayingThisVideo && setIsVideoLoading(true)}
-                  onCanPlay={() => setIsVideoLoading(false)}
-                  onPlaying={() => setIsVideoLoading(false)}
-                  onPause={() => setIsVideoLoading(false)}
-                  onError={() => setIsVideoLoading(false)}
+                  onPlaying={() => setIsVideoFrameReady(true)}
+                  onTimeUpdate={(e) => {
+                    if (e.currentTarget.currentTime > 0) {
+                      setIsVideoFrameReady(true);
+                    }
+                  }}
                   className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.05] transition-opacity duration-500 ${
-                    isPlayingThisVideo ? "opacity-100 z-0" : "opacity-0 pointer-events-none z-0"
+                    isPlayingThisVideo && isVideoFrameReady
+                      ? "opacity-100 z-10"
+                      : "opacity-0 pointer-events-none z-0"
                   }`}
                 >
                   <source src={slide.videoSrc} type="video/mp4" />
@@ -381,7 +352,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
           {/* Scaled-down Uppercase Headline & Description (Hidden during video playback so video visual is 100% clear) */}
           <div
             className={`space-y-4 transition-all duration-500 ${
-              isInlineVideoPlaying
+              isInlineVideoPlaying && isVideoFrameReady
                 ? "opacity-0 pointer-events-none max-h-0 overflow-hidden"
                 : "opacity-100 max-h-96"
             }`}
@@ -420,10 +391,19 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 >
                   {isInlineVideoPlaying ? (
                     <>
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                      </svg>
-                      <span>HENTIKAN VIDEO</span>
+                      {isVideoFrameReady ? (
+                        <>
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                          </svg>
+                          <span>HENTIKAN VIDEO</span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-pure-black border-t-transparent rounded-full animate-spin" />
+                          <span>MEMUTAR VIDEO...</span>
+                        </>
+                      )}
                     </>
                   ) : (
                     <>

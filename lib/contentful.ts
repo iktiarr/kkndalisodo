@@ -34,3 +34,23 @@ export async function fetchContentful<T>(query: string, variables = {}): Promise
     return null;
   }
 }
+
+export function optimizeContentfulAsset(url?: string | null, width?: number): string {
+  if (!url) return "";
+  const cleanUrl = url.startsWith("//") ? `https:${url}` : url;
+  // If image from Contentful CDN, optimize format to webp and compress quality to 80
+  if (
+    (cleanUrl.includes("ctfassets.net") || cleanUrl.includes("images.ctfassets.net")) &&
+    !cleanUrl.endsWith(".mp4") &&
+    !cleanUrl.endsWith(".webm") &&
+    !cleanUrl.endsWith(".mov")
+  ) {
+    const separator = cleanUrl.includes("?") ? "&" : "?";
+    const params: string[] = ["fm=webp", "q=80"];
+    if (width) {
+      params.push(`w=${width}`);
+    }
+    return `${cleanUrl}${separator}${params.join("&")}`;
+  }
+  return cleanUrl;
+}

@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     revalidatePath("/berita");
 
     return NextResponse.json({ revalidated: true, now: Date.now() });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ message: "Error revalidating cache" }, { status: 500 });
   }
 }

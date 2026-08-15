@@ -1,4 +1,4 @@
-import { fetchContentful } from "@/lib/contentful";
+import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { HeroSlideItem } from "@/types/hero";
 
 // Fallback Mock Data apabila belum terhubung / terisi di Contentful
@@ -41,6 +41,7 @@ const MOCK_HERO_SLIDES: HeroSlideItem[] = [
 interface RawContentfulSlide {
   sys: { id: string };
   judul?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deskripsi?: any;
   jenis?: string;
   media?: {
@@ -122,11 +123,16 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
     rawUrl.endsWith(".mov") ||
     rawUrl.includes("video");
 
-  const mediaUrl =
+  let mediaUrl =
     rawUrl ||
     (isVideo
       ? "/assets/videos/VIDEO PROFIL DESA BANCAK 1.mp4"
       : "/assets/image/gambar.jpeg");
+
+  // Kompresi otomatis gambar dari Contentful
+  if (!isVideo && mediaUrl.includes("ctfassets.net")) {
+    mediaUrl = optimizeContentfulAsset(mediaUrl, 1920);
+  }
 
   let primaryCtaText = "LIHAT DETAIL";
   let primaryCtaLink = "/";
@@ -163,6 +169,7 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTextFromRichNodes(nodes: any[]): string {
   let text = "";
   for (const node of nodes) {

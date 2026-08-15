@@ -6,8 +6,8 @@ export interface ContentfulCover {
 
 export interface ContentfulRichText {
   nodeType: string;
-  content?: any[];
-  data?: any;
+  content?: unknown[];
+  data?: Record<string, unknown>;
 }
 
 export interface BeritaItem {
@@ -16,10 +16,11 @@ export interface BeritaItem {
   slug?: string;
   coverUrl: string;
   cover?: ContentfulCover;
-  isi: string | ContentfulRichText | any;
+  isi: string | ContentfulRichText | unknown;
   tanggalwaktu: string;
   ringkasan: string;
   kategori?: string;
   penulis?: string;
 }
+
 

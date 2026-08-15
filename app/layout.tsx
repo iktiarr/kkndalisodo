@@ -32,6 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
+      <head>
+        <link rel="preconnect" href="https://assets.ctfassets.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.ctfassets.net" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://assets.ctfassets.net" />
+        <link rel="dns-prefetch" href="https://images.ctfassets.net" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${barlowCondensed.variable} antialiased bg-carbony text-white min-h-screen flex flex-col justify-between`}
       >
