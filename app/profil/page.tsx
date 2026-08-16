@@ -32,12 +32,12 @@ export default async function ProfilPage() {
           </nav>
 
           {/* Page Headline */}
-          <h1 className="font-lambo text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-[0.023em] text-white leading-none">
+          <h1 className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-white leading-tight w-full max-w-none">
             PROFIL & GAMBARAN UMUM DESA DALISODO
           </h1>
 
-          {/* Subtitle Narration */}
-          <p className="font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-[0.023em] max-w-2xl leading-relaxed">
+          {/* Subtitle Narration (Full width, no cutoff) */}
+          <p className="font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-[0.023em] w-full max-w-none leading-relaxed">
             MENGENAL LEBIH DEKAT GAMBARAN GEOGRAFIS, VISI-MISI, KEARIFAN LOKAL, SERTA DEMOGRAFI DESA DALISODO KECAMATAN WAGIR KABUPATEN MALANG.
           </p>
         </div>

@@ -1,9 +1,6 @@
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { WisataItem } from "@/types/wisata";
 
-// Fallback Mock Data (empty array)
-const MOCK_WISATA: WisataItem[] = [];
-
 // Helper untuk mengekstrak teks bersih dari node RichText
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTextFromRichNode(node: any): string {
@@ -139,14 +136,22 @@ export async function getWisataList(): Promise<WisataItem[]> {
     });
   }
 
-  // Fallback ke data mock sederhana jika Contentful belum diisi
-  return MOCK_WISATA;
+  // Return empty array if not found
+  return [];
 }
 
 export async function getWisataBySlug(slug: string): Promise<WisataItem | null> {
   const allWisata = await getWisataList();
   const wisata = allWisata.find((item) => item.slug === slug || item.id === slug);
   return wisata || null;
+}
+
+// Ambil daftar wisata lain untuk rekomendasi (hanya data asli Contentful)
+export async function getOtherWisataList(excludeSlugOrId: string, limit = 4): Promise<WisataItem[]> {
+  const allWisata = await getWisataList();
+  return allWisata
+    .filter((w) => w.slug !== excludeSlugOrId && w.id !== excludeSlugOrId)
+    .slice(0, limit);
 }
 
 

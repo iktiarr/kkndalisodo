@@ -60,9 +60,6 @@ export function createRingkasan(isi: any, maxLength = 140): string {
   return fullText.substring(0, maxLength).trim() + "...";
 }
 
-// Fallback Mock Data (empty array)
-const MOCK_BERITA: BeritaItem[] = [];
-
 interface RawContentfulPost {
   sys: { id: string; publishedAt?: string; firstPublishedAt?: string };
   judul?: string;
@@ -91,17 +88,20 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
     return data.postinganCollection.items.map((item) => parseRawPostToBeritaItem(item));
   }
 
-  // Jika belum ada data dari Contentful, return MOCK_BERITA
-  return MOCK_BERITA;
+  return [];
 }
 
 // Ambil postingan berdasarkan ID
 export async function getBeritaById(id: string): Promise<BeritaItem | null> {
   const allPosts = await getBeritaList();
   const found = allPosts.find((p) => p.id === id);
-  if (found) return found;
+  return found || null;
+}
 
-  return MOCK_BERITA.find((item) => item.id === id) || null;
+// Ambil daftar postingan lain untuk rekomendasi (hanya data asli Contentful)
+export async function getOtherBeritaList(excludeId: string, limit = 4): Promise<BeritaItem[]> {
+  const allPosts = await getBeritaList();
+  return allPosts.filter((p) => p.id !== excludeId).slice(0, limit);
 }
 
 function parseRawPostToBeritaItem(item: RawContentfulPost): BeritaItem {
