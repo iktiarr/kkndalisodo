@@ -17,15 +17,14 @@ interface RawContentfulSlide {
 }
 
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
-  // Query Contentful GraphQL untuk Hero (heroCollection)
+  // Query Contentful GraphQL untuk Hero (bannerCollection)
   const query = `
     query GetHeroList {
-      heroCollection {
+      bannerCollection {
         items {
           sys { id }
           judul
-          deskripsi { json }
-          jenis
+          deskripsi
           media { url contentType title description }
         }
       }
@@ -33,6 +32,9 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
   `;
 
   interface HeroQueryResponse {
+    bannerCollection?: {
+      items: RawContentfulSlide[];
+    };
     heroCollection?: {
       items: RawContentfulSlide[];
     };
@@ -40,8 +42,9 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
 
   const data = await fetchContentful<HeroQueryResponse>(query);
 
-  if (data && data.heroCollection?.items && data.heroCollection.items.length > 0) {
-    return data.heroCollection.items.map((item) => parseRawSlideToHeroItem(item));
+  const items = data?.bannerCollection?.items || data?.heroCollection?.items;
+  if (items && items.length > 0) {
+    return items.map((item) => parseRawSlideToHeroItem(item));
   }
 
   // Jika belum ada data dari Contentful, return MOCK_HERO_SLIDES

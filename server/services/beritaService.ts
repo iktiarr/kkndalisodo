@@ -81,7 +81,6 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
         judul
         cover { url title description }
         isi { json }
-        tanggalwaktu
       }
     }
   }`;

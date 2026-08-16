@@ -83,14 +83,11 @@ export async function getWisataList(): Promise<WisataItem[]> {
       items {
         sys { id }
         judul
-        kategori
         deskripsi { json }
         thumbnail { url }
-        galeriCollection {
+        galerryCollection {
           items { url }
         }
-        link
-        lainnya
       }
     }
   }`;
@@ -102,6 +99,7 @@ export async function getWisataList(): Promise<WisataItem[]> {
     thumbnail?: { url?: string };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deskripsi?: { json?: any };
+    galerryCollection?: { items?: Array<{ url?: string }> };
     galeriCollection?: { items?: Array<{ url?: string }> };
     link?: string;
     lainnya?: string[];
@@ -111,7 +109,7 @@ export async function getWisataList(): Promise<WisataItem[]> {
 
   if (data && data.wisataCollection?.items && data.wisataCollection.items.length > 0) {
     return data.wisataCollection.items.map((item) => {
-      const galeriItems = item.galeriCollection?.items || [];
+      const galeriItems = item.galerryCollection?.items || item.galeriCollection?.items || [];
       const galeriUrls = galeriItems
         .map((g) => (g.url ? optimizeContentfulAsset(g.url, 1200) : ""))
         .filter(Boolean);
