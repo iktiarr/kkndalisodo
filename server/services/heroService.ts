@@ -1,5 +1,6 @@
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { HeroSlideItem } from "@/types/hero";
+import { parseVideoUrl } from "@/lib/videoUtils";
 
 // Fallback Mock Data (empty array)
 const MOCK_HERO_SLIDES: HeroSlideItem[] = [];
@@ -10,10 +11,8 @@ interface RawContentfulSlide {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deskripsi?: any;
   jenis?: string;
-  media?: {
-    url?: string;
-    contentType?: string;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media?: any;
 }
 
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
@@ -25,7 +24,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
           sys { id }
           judul
           deskripsi
-          media { url contentType title description }
+          media
         }
       }
     }
@@ -52,15 +51,27 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
 }
 
 function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
-  // Jika deskripsi berupa File Asset, ambil url & contentType dari deskripsi
+  // Extract URL dari deskripsi atau media (baik berupa object Asset maupun string URL)
   const deskripsiAssetUrl =
-    typeof item.deskripsi === "object" && item.deskripsi?.url ? item.deskripsi.url : "";
-  const mediaAssetUrl = item.media?.url || "";
+    typeof item.deskripsi === "object" && item.deskripsi?.url
+      ? item.deskripsi.url
+      : typeof item.deskripsi === "string" && (item.deskripsi.startsWith("http") || item.deskripsi.startsWith("//"))
+      ? item.deskripsi
+      : "";
+
+  const mediaAssetUrl =
+    typeof item.media === "string"
+      ? item.media
+      : typeof item.media === "object" && item.media?.url
+      ? item.media.url
+      : "";
 
   let rawUrl = deskripsiAssetUrl || mediaAssetUrl || "";
   if (rawUrl.startsWith("//")) {
     rawUrl = `https:${rawUrl}`;
   }
+
+  const videoInfo = parseVideoUrl(rawUrl);
 
   const contentType = (
     (typeof item.deskripsi === "object" && item.deskripsi?.contentType) ||
@@ -71,6 +82,7 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
   const jenis = (item.jenis || "Berita").toLowerCase();
 
   const isVideo =
+    videoInfo.provider !== "direct" ||
     contentType.startsWith("video/") ||
     jenis === "video" ||
     rawUrl.endsWith(".mp4") ||
@@ -104,7 +116,7 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
   }
 
   let descText = "";
-  if (typeof item.deskripsi === "string") {
+  if (typeof item.deskripsi === "string" && !item.deskripsi.startsWith("http") && !item.deskripsi.startsWith("//")) {
     descText = item.deskripsi;
   } else if (item.deskripsi?.description) {
     descText = item.deskripsi.description;
@@ -125,6 +137,8 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
     jenis: item.jenis || "Berita",
     primaryCtaText,
     primaryCtaLink,
+    videoProvider: isVideo ? videoInfo.provider : undefined,
+    embedUrl: isVideo ? videoInfo.embedUrl : undefined,
   };
 }
 

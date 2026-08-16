@@ -7,4 +7,6 @@ export interface HeroSlideItem {
   jenis: "Berita" | "Video" | "Wisata" | string;
   primaryCtaText?: string;
   primaryCtaLink?: string;
+  videoProvider?: "youtube" | "drive" | "direct";
+  embedUrl?: string;
 }

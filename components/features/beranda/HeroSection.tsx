@@ -5,12 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { HeroSlideItem } from "@/types/hero";
+import { parseVideoUrl } from "@/lib/videoUtils";
 
 interface SlideData {
   id: string | number;
   type: "image" | "video";
   src: string;
   videoSrc?: string;
+  embedUrl?: string;
+  videoProvider?: "youtube" | "drive" | "direct" | string;
   title: string;
   highlightTitle?: string;
   description: string;
@@ -19,45 +22,7 @@ interface SlideData {
   jenis?: string;
 }
 
-const DEFAULT_SLIDES: SlideData[] = [
-  {
-    id: "1",
-    type: "image",
-    src: "/assets/image/gambar.jpeg",
-    title: "PESONA WISATA & POTENSI",
-    highlightTitle: "DESA DALISODO",
-    description:
-      "MENJELAJAHI KEINDAHAN ALAM LERENG GUNUNG KAWI, KEBERAGAMAN BUDAYA LOKAL, SERTA PROGRAM KEGIATAN MAHASISWA KKN 10.",
-    primaryCtaText: "JELAJAHI WISATA",
-    primaryCtaLink: "/wisata",
-    jenis: "Wisata",
-  },
-  {
-    id: "2",
-    type: "video",
-    src: "/assets/image/gambar.jpeg",
-    videoSrc: "/assets/videos/VIDEO PROFIL DESA BANCAK 1.mp4",
-    title: "VIDEO PROFIL SINEMATIK",
-    highlightTitle: "DESA DALISODO",
-    description:
-      "MENYAKSIKAN KEHIDUPAN MASYARAKAT, DOKUMENTASI KKNDALISODO, DAN POTENSI DESA DALAM TAYANGAN VIDEO SINEMATIK.",
-    primaryCtaText: "PUTAR VIDEO PROFIL",
-    primaryCtaLink: "#play-video",
-    jenis: "Video",
-  },
-  {
-    id: "3",
-    type: "image",
-    src: "/assets/image/gambar.jpeg",
-    title: "INOVASI & POTENSI",
-    highlightTitle: "EKONOMI KREATIF",
-    description:
-      "KOLABORASI MAHASISWA KKN 10 DENGAN WARGA DESA DALISODO UNTUK MENGEMBANGKAN POTENSI LOKAL SERTA DIGITALISASI DESA.",
-    primaryCtaText: "BACA BERITA KKN",
-    primaryCtaLink: "/berita",
-    jenis: "Berita",
-  },
-];
+
 
 interface HeroSectionProps {
   initialSlides?: HeroSlideItem[];
@@ -66,18 +31,28 @@ interface HeroSectionProps {
 export default function HeroSection({ initialSlides }: HeroSectionProps) {
   const slides: SlideData[] =
     initialSlides && initialSlides.length > 0
-      ? initialSlides.map((s) => ({
-          id: s.id,
-          type: s.mediaType,
-          src: s.mediaType === "image" ? s.mediaUrl : "/assets/image/gambar.jpeg",
-          videoSrc: s.mediaType === "video" ? s.mediaUrl : undefined,
-          title: s.judul,
-          description: s.deskripsi,
-          primaryCtaText: s.primaryCtaText || "LIHAT DETAIL",
-          primaryCtaLink: s.primaryCtaLink || "/",
-          jenis: s.jenis,
-        }))
-      : DEFAULT_SLIDES;
+      ? initialSlides.map((s) => {
+          const videoInfo = s.mediaUrl ? parseVideoUrl(s.mediaUrl) : { provider: "direct" as const, rawUrl: "" };
+          const provider = (s.videoProvider || videoInfo.provider) as SlideData["videoProvider"];
+          const embedUrl = s.embedUrl || videoInfo.embedUrl;
+          const fallbackImage = videoInfo.thumbnailUrl || "/assets/image/gambar.jpeg";
+          const imageSrc = (s.mediaType === "image" ? s.mediaUrl : fallbackImage) || "/assets/image/gambar.jpeg";
+
+          return {
+            id: s.id || `slide-${Math.random()}`,
+            type: s.mediaType || "image",
+            src: imageSrc.trim() ? imageSrc : "/assets/image/gambar.jpeg",
+            videoSrc: s.mediaType === "video" ? s.mediaUrl : undefined,
+            embedUrl: s.mediaType === "video" ? embedUrl : undefined,
+            videoProvider: s.mediaType === "video" ? provider : undefined,
+            title: s.judul || "DESA DALISODO",
+            description: s.deskripsi || "INFORMASI RESMI DESA DALISODO KECAMATAN WAGIR KABUPATEN MALANG.",
+            primaryCtaText: s.primaryCtaText || "LIHAT DETAIL",
+            primaryCtaLink: s.primaryCtaLink || "/",
+            jenis: s.jenis || "Berita",
+          };
+        })
+      : [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -93,6 +68,36 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const inlineVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  if (slides.length === 0) {
+    return (
+      <section
+        id="hero-empty-state"
+        aria-label="Tampilan Hero Kosong"
+        className="relative w-full h-[50vh] min-h-96 sm:h-[65vh] bg-carbony text-white flex items-center justify-center border-b border-anvil overflow-hidden select-none"
+      >
+        {/* Ambient Dark Gradient & Glow */}
+        <div className="absolute inset-0 bg-linear-to-b from-carbon-deep via-carbony to-black opacity-95 z-0" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-giallo/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-lg mx-auto px-6 text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-carbon-deep border border-white/10 text-giallo shadow-xl backdrop-blur-md">
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+
+          <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase tracking-[0.023em] text-white">
+            BELUM ADA KONTEN HERO BANNER
+          </h2>
+
+          <p className="font-lambo text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed tracking-[0.023em]">
+            Belum ada data slide hero yang diunggah di Contentful. Silakan tambahkan banner baru di Contentful untuk menampilkan slide hero di halaman utama.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const nextSlide = useCallback(() => {
     if (timerRef.current) {
@@ -172,7 +177,9 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     } else {
       setIsInlineVideoPlaying(true);
       setIsPlaying(false);
-      if (inlineVideoRef.current) {
+      
+      const currentProvider = currentSlide.videoProvider || (currentSlide.videoSrc ? parseVideoUrl(currentSlide.videoSrc).provider : "direct");
+      if (currentProvider === "direct" && inlineVideoRef.current) {
         inlineVideoRef.current.muted = false;
         const playPromise = inlineVideoRef.current.play();
         if (playPromise !== undefined) {
@@ -182,8 +189,11 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             })
             .catch((err) => {
               console.warn("Direct inline play error:", err);
+              setIsVideoFrameReady(true);
             });
         }
+      } else {
+        setIsVideoFrameReady(true);
       }
     }
   };
@@ -297,7 +307,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
     setTimeout(() => setIsHovered(false), 2000);
   };
 
-  const currentSlide = slides[currentIndex];
+  const currentSlide = slides[currentIndex] || slides[0];
 
   return (
     <section
@@ -383,6 +393,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 alt={slide.title}
                 fill
                 priority={idx === 0}
+                unoptimized={slide.src.startsWith("http")}
                 className={`object-cover object-center transition-opacity duration-500 ${
                   (isPlayingThisVideo && isVideoFrameReady) || isFullPreviewOpen
                     ? "opacity-0 pointer-events-none"
@@ -391,43 +402,62 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 sizes="100vw"
               />
 
-              {/* Video Element Overlay (100% Pure Crisp Visual & Seamless Fullscreen) */}
-              {slide.type === "video" && slide.videoSrc && (
-                <video
-                  ref={idx === currentIndex ? inlineVideoRef : null}
-                  preload="auto"
-                  playsInline
-                  loop
-                  controls={isFullPreviewOpen && isPlayingThisVideo}
-                  muted={!isPlayingThisVideo}
-                  onLoadedData={() => {
-                    if (isPlayingThisVideo) setIsVideoFrameReady(true);
-                  }}
-                  onCanPlay={() => {
-                    if (isPlayingThisVideo) setIsVideoFrameReady(true);
-                  }}
-                  onCanPlayThrough={() => {
-                    if (isPlayingThisVideo) setIsVideoFrameReady(true);
-                  }}
-                  onPlaying={() => setIsVideoFrameReady(true)}
-                  onTimeUpdate={(e) => {
-                    if (e.currentTarget.currentTime > 0) {
-                      setIsVideoFrameReady(true);
-                    }
-                  }}
-                  className={`transition-all duration-500 ${
-                    isFullPreviewOpen && isPlayingThisVideo
-                      ? isMobileRotated
-                        ? "rotate-90 w-[100vh] h-[100vw] max-w-none max-h-none object-contain z-20"
-                        : "w-full h-full max-h-screen object-contain z-20"
-                      : isPlayingThisVideo && isVideoFrameReady
-                      ? "absolute inset-0 w-full h-full object-cover object-center opacity-100 z-10"
-                      : "absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none z-0"
-                  }`}
-                >
-                  <source src={slide.videoSrc} type="video/mp4" />
-                  <source src={slide.videoSrc} />
-                </video>
+              {/* Video Element Overlay (YouTube, Google Drive iframe, or Direct MP4 Video) */}
+              {slide.type === "video" && (slide.embedUrl || slide.videoSrc) && (
+                slide.videoProvider === "youtube" || slide.videoProvider === "drive" || (slide.embedUrl && !slide.videoSrc?.endsWith(".mp4")) ? (
+                  isPlayingThisVideo ? (
+                    <iframe
+                      src={slide.embedUrl || slide.videoSrc}
+                      title={slide.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      onLoad={() => setIsVideoFrameReady(true)}
+                      className={`transition-all duration-500 border-0 ${
+                        isFullPreviewOpen && isPlayingThisVideo
+                          ? isMobileRotated
+                            ? "rotate-90 w-[100vh] h-[100vw] max-w-none max-h-none object-contain z-20"
+                            : "w-full h-full max-h-screen object-contain z-20"
+                          : "absolute inset-0 w-full h-full object-cover z-20"
+                      }`}
+                    />
+                  ) : null
+                ) : slide.videoSrc ? (
+                  <video
+                    ref={idx === currentIndex ? inlineVideoRef : null}
+                    preload="auto"
+                    playsInline
+                    loop
+                    controls={isFullPreviewOpen && isPlayingThisVideo}
+                    muted={!isPlayingThisVideo}
+                    onLoadedData={() => {
+                      if (isPlayingThisVideo) setIsVideoFrameReady(true);
+                    }}
+                    onCanPlay={() => {
+                      if (isPlayingThisVideo) setIsVideoFrameReady(true);
+                    }}
+                    onCanPlayThrough={() => {
+                      if (isPlayingThisVideo) setIsVideoFrameReady(true);
+                    }}
+                    onPlaying={() => setIsVideoFrameReady(true)}
+                    onTimeUpdate={(e) => {
+                      if (e.currentTarget.currentTime > 0) {
+                        setIsVideoFrameReady(true);
+                      }
+                    }}
+                    className={`transition-all duration-500 ${
+                      isFullPreviewOpen && isPlayingThisVideo
+                        ? isMobileRotated
+                          ? "rotate-90 w-[100vh] h-[100vw] max-w-none max-h-none object-contain z-20"
+                          : "w-full h-full max-h-screen object-contain z-20"
+                        : isPlayingThisVideo && isVideoFrameReady
+                        ? "absolute inset-0 w-full h-full object-cover object-center opacity-100 z-10"
+                        : "absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none z-0"
+                    }`}
+                  >
+                    <source src={slide.videoSrc} type="video/mp4" />
+                    <source src={slide.videoSrc} />
+                  </video>
+                ) : null
               )}
             </figure>
           </div>
