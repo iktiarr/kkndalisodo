@@ -30,50 +30,50 @@ export default function WisataCard({ item }: { item: WisataItem }) {
   return (
     <article
       id={`wisata-card-${item.id}`}
-      className="group flex flex-col bg-white border border-ash/20 rounded-lg overflow-hidden hover:border-giallo hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-lg"
+      className="group flex flex-col bg-white border border-slate-200/80 rounded-2xl overflow-hidden hover:border-emerald-dalisodo/40 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-xl"
     >
       {/* Destination Image Visual */}
       <Link
         href={targetLink}
         aria-label={`Jelajahi wisata: ${item.judul}`}
-        className="block relative aspect-4/3 w-full overflow-hidden bg-carbony"
+        className="block relative aspect-video w-full overflow-hidden bg-carbon-deep"
       >
         <Image
           src={item.thumbnailUrl}
           alt={item.judul}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover object-center group-hover:scale-105 group-hover:brightness-100 transition-all duration-500 ease-out filter brightness-[0.95]"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
         />
         
         {/* Category Badge */}
         {item.kategori && item.kategori.length > 0 && (
-          <span className="absolute top-3 left-3 bg-emerald-dark/90 group-hover:bg-emerald-dalisodo/90 backdrop-blur-md text-giallo font-lambo text-[10px] sm:text-xs font-bold uppercase tracking-[0.12em] px-2.5 py-1 rounded-sm border border-emerald-light/30 shadow-md transition-colors duration-300">
+          <span className="absolute top-3 left-3 bg-carbon-deep/80 backdrop-blur-md text-giallo font-sans text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full border border-white/10 shadow-sm">
             {item.kategori.join(" • ")}
           </span>
         )}
       </Link>
 
       {/* Destination Content Details */}
-      <div className="flex flex-col flex-1 p-5 sm:p-6 justify-between bg-white">
-        <div className="space-y-2">
-          {/* Uppercase Headline */}
-          <h3 className="font-lambo text-lg sm:text-xl font-bold uppercase text-carbony group-hover:text-emerald-dalisodo transition-colors leading-snug line-clamp-2 tracking-[0.023em]">
+      <div className="flex flex-col flex-1 p-5 sm:p-6 justify-between bg-white space-y-4">
+        <div className="space-y-2.5">
+          {/* Modern Headline */}
+          <h3 className="font-sans text-base sm:text-lg font-bold text-carbony group-hover:text-emerald-dalisodo transition-colors leading-snug line-clamp-2">
             <Link href={targetLink}>{item.judul}</Link>
           </h3>
 
           {/* Description Snippet */}
-          <p className="font-sans text-xs sm:text-sm text-steel leading-relaxed line-clamp-2">
+          <p className="font-sans text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-2 font-normal">
             {shortDesc || "Destinasi wisata favorit di lereng Gunung Kawi Desa Dalisodo."}
           </p>
 
           {/* Facility / Highlights Pills */}
           {item.lainnya && item.lainnya.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-2">
+            <div className="flex flex-wrap gap-1.5 pt-1">
               {item.lainnya.slice(0, 3).map((tag, idx) => (
                 <span
                   key={idx}
-                  className="font-lambo text-[10px] uppercase tracking-wider text-emerald-dalisodo bg-emerald-dalisodo/10 px-2 py-0.5 rounded-sm border border-emerald-dalisodo/20 font-semibold"
+                  className="font-sans text-[11px] text-emerald-dalisodo bg-emerald-dalisodo/10 px-2.5 py-0.5 rounded-full border border-emerald-dalisodo/20 font-medium"
                 >
                   {tag}
                 </span>
@@ -83,12 +83,12 @@ export default function WisataCard({ item }: { item: WisataItem }) {
         </div>
 
         {/* Action Link */}
-        <div className="pt-4 mt-4 border-t border-marble">
+        <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between">
           <Link
             href={targetLink}
-            className="font-lambo text-xs font-bold text-carbony group-hover:text-emerald-dalisodo uppercase tracking-[0.023em] inline-flex items-center gap-1.5 transition-colors"
+            className="font-sans text-xs font-semibold text-emerald-dalisodo group-hover:text-emerald-dark inline-flex items-center gap-1.5 transition-colors"
           >
-            <span className="group-hover:text-emerald-dalisodo">JELAJAHI DESTINASI</span>
+            <span>Jelajahi Destinasi</span>
             <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1">
               &rarr;
             </span>

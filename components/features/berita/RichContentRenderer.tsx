@@ -76,17 +76,20 @@ function renderRichNode(node: any, index: number): React.ReactNode {
       const assetTitle = node.data?.target?.fields?.title || "Gambar Berita";
       if (assetUrl) {
         return (
-          <figure key={index} className="my-10">
-            <Image
-              src={assetUrl.startsWith("//") ? `https:${assetUrl}` : assetUrl}
-              alt={assetTitle}
-              width={800}
-              height={450}
-              style={{ width: "100%", height: "auto" }}
-              className="rounded-2xl shadow-md border border-gray-100"
-            />
+          <figure key={index} className="my-8 w-full">
+            <div className="relative w-full overflow-hidden rounded-xl shadow-md border border-gray-100 bg-carbony">
+              <Image
+                src={assetUrl.startsWith("//") ? `https:${assetUrl}` : assetUrl}
+                alt={assetTitle}
+                width={1200}
+                height={675}
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                style={{ width: "100%", height: "auto" }}
+                className="rounded-xl object-cover"
+              />
+            </div>
             {assetTitle && assetTitle !== "Gambar Berita" && (
-              <figcaption className="mt-3 text-center text-sm text-gray-500">{assetTitle}</figcaption>
+              <figcaption className="mt-2.5 text-center text-xs text-slate-500 font-sans">{assetTitle}</figcaption>
             )}
           </figure>
         );

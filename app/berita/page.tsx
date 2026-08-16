@@ -32,12 +32,12 @@ export default async function BeritaPage() {
           </nav>
 
           {/* Page Headline */}
-          <h1 className="font-lambo text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-[0.023em] text-white leading-none">
+          <h1 className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-white leading-tight w-full max-w-none">
             BERITA & DOKUMENTASI KEGIATAN
           </h1>
 
-          {/* Subtitle Narration */}
-          <p className="font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-[0.023em] max-w-2xl leading-relaxed">
+          {/* Subtitle Narration (Full width, no cutoff) */}
+          <p className="font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-[0.023em] w-full max-w-none leading-relaxed">
             INFORMASI TERBARU SEPUTAR AGENDA PEMBANGUNAN DESA, DOKUMENTASI KEGIATAN MASYARAKAT, DAN PROGRAM KERJA MAHASISWA KKN 10 DALISODO.
           </p>
         </div>
@@ -52,15 +52,12 @@ export default async function BeritaPage() {
         {/* Section Heading Block (Two-column row per DESIGN.md) */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-carbony mb-8 sm:mb-12">
           <div>
-            <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
-              KABAR LOKAL & KKN 10
-            </span>
             <h2 className="font-lambo text-3xl sm:text-4xl font-bold uppercase tracking-[0.023em] text-carbony">
               KUMPULAN ARTIKEL BERITA
             </h2>
           </div>
           <p className="font-lambo text-xs text-steel uppercase tracking-[0.023em]">
-            MENAMPILKAN {beritaList.length} BERITA TERBIT
+            MENAMPILKAN {beritaList.length} BERITA
           </p>
         </div>
 
