@@ -66,20 +66,6 @@ export default function WisataCard({ item }: { item: WisataItem }) {
           <p className="font-sans text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-2 font-normal">
             {shortDesc || "Destinasi wisata favorit di lereng Gunung Kawi Desa Dalisodo."}
           </p>
-
-          {/* Facility / Highlights Pills */}
-          {item.lainnya && item.lainnya.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {item.lainnya.slice(0, 3).map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="font-sans text-[11px] text-emerald-dalisodo bg-emerald-dalisodo/10 px-2.5 py-0.5 rounded-full border border-emerald-dalisodo/20 font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Action Link */}

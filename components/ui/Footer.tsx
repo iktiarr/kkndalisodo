@@ -1,10 +1,12 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
+import { getWisataList } from "@/server/services/wisataService";
+import BackToTopButton from "./BackToTopButton";
 
-export default function Footer() {
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+  const wisataList = await getWisataList();
+  const latestWisata = wisataList.slice(0, 4);
 
   return (
     <footer
@@ -102,27 +104,33 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* Column 3: Destinasi Wisata (2 cols) */}
+          {/* Column 3: Destinasi Wisata Dinamis (2 cols) */}
           <div className="lg:col-span-2 space-y-4">
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
               DESTINASI WISATA
             </h3>
             <ul className="space-y-2.5 font-lambo text-xs sm:text-sm uppercase tracking-[0.023em]">
-              <li>
-                <Link href="/wisata/coban-glotak" className="text-slate-300 hover:text-giallo hover:translate-x-1 inline-block transition-all duration-300">
-                  COBAN GLOTAK
-                </Link>
-              </li>
-              <li>
-                <Link href="/wisata/wisata-hutan-pinus-dalisodo" className="text-slate-300 hover:text-giallo hover:translate-x-1 inline-block transition-all duration-300">
-                  HUTAN PINUS
-                </Link>
-              </li>
-              <li>
-                <Link href="/wisata/agrowisata-kebun-kopi-dalisodo" className="text-slate-300 hover:text-giallo hover:translate-x-1 inline-block transition-all duration-300">
-                  AGROWISATA KOPI
-                </Link>
-              </li>
+              {latestWisata.length > 0 ? (
+                latestWisata.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      href={`/wisata/${item.slug || item.id}`}
+                      className="text-slate-300 hover:text-giallo hover:translate-x-1 inline-block transition-all duration-300 line-clamp-1"
+                    >
+                      {item.judul.toUpperCase()}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <Link
+                    href="/wisata"
+                    className="text-slate-300 hover:text-giallo hover:translate-x-1 inline-block transition-all duration-300"
+                  >
+                    JELAJAHI WISATA
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -159,13 +167,7 @@ export default function Footer() {
             © {currentYear} KKN 10 DESA DALISODO • KABUPATEN MALANG. HAK CIPTA DILINDUNGI.
           </p>
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="text-slate-400 hover:text-giallo hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-1 cursor-pointer group"
-            >
-              <span>KEMBALI KE ATAS</span>
-              <span className="group-hover:-translate-y-1 transition-transform duration-300">↑</span>
-            </button>
+            <BackToTopButton />
           </div>
         </div>
 
