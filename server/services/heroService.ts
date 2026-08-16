@@ -17,23 +17,10 @@ interface RawContentfulSlide {
 }
 
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
-  // Query Contentful GraphQL untuk Banner (deskripsi bertipe Text/String, media bertipe Asset)
-  const queries = [
-    // 1. deskripsi bertipe Text (String)
-    `query GetBannerText {
-      bannerCollection {
-        items {
-          sys { id }
-          judul
-          deskripsi
-          jenis
-          media { url contentType title description }
-        }
-      }
-    }`,
-    // 2. deskripsi bertipe RichText
-    `query GetBannerRich {
-      bannerCollection {
+  // Query Contentful GraphQL untuk Hero (heroCollection)
+  const query = `
+    query GetHeroList {
+      heroCollection {
         items {
           sys { id }
           judul
@@ -42,20 +29,19 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
           media { url contentType title description }
         }
       }
-    }`,
-  ];
-
-  for (const query of queries) {
-    const data = await fetchContentful<Record<string, { items: RawContentfulSlide[] }>>(query);
-
-    if (data) {
-      const collectionKey = Object.keys(data)[0];
-      const items = data[collectionKey]?.items;
-
-      if (items && items.length > 0) {
-        return items.map((item) => parseRawSlideToHeroItem(item));
-      }
     }
+  `;
+
+  interface HeroQueryResponse {
+    heroCollection?: {
+      items: RawContentfulSlide[];
+    };
+  }
+
+  const data = await fetchContentful<HeroQueryResponse>(query);
+
+  if (data && data.heroCollection?.items && data.heroCollection.items.length > 0) {
+    return data.heroCollection.items.map((item) => parseRawSlideToHeroItem(item));
   }
 
   // Jika belum ada data dari Contentful, return MOCK_HERO_SLIDES

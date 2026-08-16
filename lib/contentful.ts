@@ -24,7 +24,8 @@ export async function fetchContentful<T>(query: string, variables = {}): Promise
     );
 
     if (!res.ok) {
-      console.error(`Contentful HTTP Error: ${res.status} ${res.statusText}`);
+      const errorDetails = await res.text();
+      console.error(`Contentful HTTP Error: ${res.status} ${res.statusText} - Details: ${errorDetails}`);
       return null;
     }
 

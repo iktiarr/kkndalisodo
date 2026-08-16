@@ -13,7 +13,7 @@ function extractTextFromRichNode(node: any): string {
 
   if (Array.isArray(node.content)) {
     return node.content
-      .map((child: any) => extractTextFromRichNode(child))
+      .map((child: unknown) => extractTextFromRichNode(child))
       .join(" ")
       .trim();
   }
@@ -83,12 +83,14 @@ export async function getWisataList(): Promise<WisataItem[]> {
       items {
         sys { id }
         judul
-        thumbnail { url }
+        kategori
         deskripsi { json }
-        detailInformasi { json }
-        galerryCollection {
+        thumbnail { url }
+        galeriCollection {
           items { url }
         }
+        link
+        lainnya
       }
     }
   }`;
@@ -96,19 +98,20 @@ export async function getWisataList(): Promise<WisataItem[]> {
   interface RawWisataItem {
     sys: { id: string };
     judul?: string;
+    kategori?: string[];
     thumbnail?: { url?: string };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    deskripsi?: { json?: any } | any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    detailInformasi?: { json?: any } | any;
-    galerryCollection?: { items?: Array<{ url?: string }> };
+    deskripsi?: { json?: any };
+    galeriCollection?: { items?: Array<{ url?: string }> };
+    link?: string;
+    lainnya?: string[];
   }
 
   const data = await fetchContentful<{ wisataCollection?: { items: RawWisataItem[] } }>(query);
 
   if (data && data.wisataCollection?.items && data.wisataCollection.items.length > 0) {
     return data.wisataCollection.items.map((item) => {
-      const galeriItems = item.galerryCollection?.items || [];
+      const galeriItems = item.galeriCollection?.items || [];
       const galeriUrls = galeriItems
         .map((g) => (g.url ? optimizeContentfulAsset(g.url, 1200) : ""))
         .filter(Boolean);
@@ -119,21 +122,21 @@ export async function getWisataList(): Promise<WisataItem[]> {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)+/g, "");
 
-      const rawDetail = item.detailInformasi?.json || item.detailInformasi || null;
-      const detailInformasiItems = parseDetailInformasiTable(rawDetail);
+      const rawDeskripsi = item.deskripsi?.json || null;
+      const detailInformasiItems = parseDetailInformasiTable(rawDeskripsi);
 
       return {
         id: item.sys.id,
         slug: slug || item.sys.id,
         judul: judulText,
-        kategori: ["Wisata Alam"],
-        deskripsi: item.deskripsi?.json || item.deskripsi || null,
-        detailInformasi: rawDetail,
+        kategori: item.kategori && item.kategori.length > 0 ? item.kategori : ["Wisata Alam"],
+        deskripsi: rawDeskripsi,
+        detailInformasi: rawDeskripsi,
         detailInformasiItems: detailInformasiItems.length > 0 ? detailInformasiItems : undefined,
-        thumbnailUrl:
-          optimizeContentfulAsset(item.thumbnail?.url, 800) || "",
+        thumbnailUrl: optimizeContentfulAsset(item.thumbnail?.url, 800) || "",
         galeriUrls,
-        lainnya: ["Alam", "Spot Foto", "Edukasi"],
+        link: item.link,
+        lainnya: item.lainnya && item.lainnya.length > 0 ? item.lainnya : ["Alam", "Spot Foto", "Edukasi"],
       };
     });
   }
