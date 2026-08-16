@@ -101,17 +101,10 @@ export default async function DetailBeritaPage({ params }: PageProps) {
           </div>
 
           {/* Article Footer */}
-          <div className="pt-6 border-t border-marble flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="pt-6 border-t border-marble">
             <div className="font-lambo text-xs text-steel uppercase tracking-wider">
               DITERBITKAN OLEH PEMERINTAH DESA DALISODO & TIM KKN 10
             </div>
-            <Link
-              href="/berita"
-              className="font-lambo text-xs font-bold text-carbony hover:text-emerald-dalisodo uppercase tracking-[0.023em] inline-flex items-center gap-1.5 transition-colors group"
-            >
-              <span>KEMBALI KE SEMUA BERITA</span>
-              <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
-            </Link>
           </div>
         </article>
 
@@ -120,20 +113,10 @@ export default async function DetailBeritaPage({ params }: PageProps) {
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-carbony">
             <div>
-              <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
-                KABAR DESA & KKN 10
-              </span>
               <h2 className="font-lambo text-2xl sm:text-3xl font-bold uppercase tracking-[0.023em] text-carbony">
                 BERITA LAINNYA
               </h2>
             </div>
-            <Link
-              href="/berita"
-              className="font-lambo text-xs font-bold text-carbony hover:text-emerald-dalisodo uppercase tracking-[0.023em] inline-flex items-center gap-1.5 transition-colors group"
-            >
-              <span>LIHAT SEMUA BERITA</span>
-              <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
-            </Link>
           </div>
 
           {otherBerita.length === 0 ? (

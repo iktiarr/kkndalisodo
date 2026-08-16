@@ -39,8 +39,15 @@ function renderRichNode(node: any, index: number): React.ReactNode {
   if (!node) return null;
 
   switch (node.nodeType) {
-    case "paragraph":
+    case "paragraph": {
+      // Ignore completely empty paragraphs created accidentally in Contentful
+      if (!node.content || node.content.length === 0) return null;
+      const allEmpty = node.content.every(
+        (c: any) => c.nodeType === "text" && (!c.value || c.value.trim() === "")
+      );
+      if (allEmpty) return null;
       return <p key={index}>{renderNodeContent(node.content)}</p>;
+    }
     case "heading-1":
       return <h1 key={index}>{renderNodeContent(node.content)}</h1>;
     case "heading-2":
@@ -95,6 +102,46 @@ function renderRichNode(node: any, index: number): React.ReactNode {
         );
       }
       return null;
+    case "table":
+      return (
+        <div key={index} className="not-prose w-full my-3 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse m-0 p-0">
+              <tbody>
+                {node.content?.map((rowNode: any, rIdx: number) => renderRichNode(rowNode, rIdx))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    case "table-row":
+      return (
+        <tr key={index} className="border-b border-slate-200 last:border-b-0 hover:bg-slate-50/50 transition-colors">
+          {node.content?.map((cellNode: any, cIdx: number) => renderRichNode(cellNode, cIdx))}
+        </tr>
+      );
+    case "table-header-cell":
+      return (
+        <th
+          key={index}
+          className="bg-slate-100/90 text-carbony font-sans font-bold px-4 sm:px-5 py-3 border-r border-slate-200 last:border-r-0 text-xs sm:text-sm uppercase tracking-wider align-middle m-0"
+        >
+          <div className="m-0 p-0 leading-normal font-bold text-carbony">
+            {renderCellContent(node.content)}
+          </div>
+        </th>
+      );
+    case "table-cell":
+      return (
+        <td
+          key={index}
+          className="px-4 sm:px-5 py-3 text-slate-700 font-sans border-r border-slate-200 last:border-r-0 text-sm sm:text-base leading-normal align-middle m-0 bg-white"
+        >
+          <div className="m-0 p-0 leading-normal text-slate-700">
+            {renderCellContent(node.content)}
+          </div>
+        </td>
+      );
     case "hr":
       return <hr key={index} />;
     default:
@@ -119,6 +166,20 @@ function sanitizeUri(uri?: string): string {
     return clean;
   }
   return "#";
+}
+
+function renderCellContent(content: any[]): React.ReactNode {
+  if (!Array.isArray(content)) return null;
+
+  return content.map((child: any, i: number) => {
+    if (child.nodeType === "paragraph") {
+      return <span key={i} className="inline">{renderNodeContent(child.content)}</span>;
+    }
+    if (child.nodeType === "text" || child.nodeType === "hyperlink") {
+      return renderNodeContent([child]);
+    }
+    return renderRichNode(child, i);
+  });
 }
 
 function renderNodeContent(content: any[]): React.ReactNode {
@@ -153,6 +214,8 @@ function renderNodeContent(content: any[]): React.ReactNode {
           {renderNodeContent(child.content)}
         </a>
       );
+    } else if (child.nodeType === "paragraph") {
+      return <span key={i} className="inline">{renderNodeContent(child.content)}</span>;
     } else if (child.content) {
       return <React.Fragment key={i}>{renderNodeContent(child.content)}</React.Fragment>;
     }
