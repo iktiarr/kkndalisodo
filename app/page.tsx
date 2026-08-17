@@ -1,20 +1,29 @@
 import HeroSection from "@/components/features/beranda/HeroSection";
 import WisataCard from "@/components/features/wisata/WisataCard";
 import BeritaCard from "@/components/features/berita/BeritaCard";
+import VideoSection from "@/components/features/beranda/VideoSection";
+import DokumentasiSection from "@/components/features/beranda/DokumentasiSection";
 import { getWisataList } from "@/server/services/wisataService";
 import { getBeritaList } from "@/server/services/beritaService";
 import { getHeroSlides } from "@/server/services/heroService";
+import { getVideoList } from "@/server/services/videoService";
+import { getBannerList } from "@/server/services/bannerService";
 import Link from "next/link";
 import ContactSection from "@/components/features/beranda/ContactSection";
 
 export default async function HomePage() {
-  const heroSlides = await getHeroSlides();
-  const wisataList = await getWisataList();
-  const beritaList = await getBeritaList();
+  const [heroSlides, wisataList, beritaList, videoList, bannerList] = await Promise.all([
+    getHeroSlides(),
+    getWisataList(),
+    getBeritaList(),
+    getVideoList(),
+    getBannerList(),
+  ]);
 
   return (
     <div className="space-y-16 pb-12">
       <HeroSection initialSlides={heroSlides} />
+
 
       {/* Section 2: Berita Terkini (Editorial Story Grid per DESIGN.md) */}
       <section
@@ -93,6 +102,12 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* Section 4: Video Profil Dalisodo (Carousel if multiple videos) */}
+      <VideoSection videos={videoList} />
+
+      {/* Section 5: Dokumentasi Foto (4 Columns Desktop Grid) */}
+      <DokumentasiSection items={bannerList} />
 
       <ContactSection />
     </div>
