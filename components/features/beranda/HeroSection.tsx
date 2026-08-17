@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { HeroSlideItem } from "@/types/hero";
-import { parseVideoUrl } from "@/lib/videoUtils";
+import { parseVideoUrl, parseMediaUrl } from "@/lib/videoUtils";
 
 interface SlideData {
   id: string | number;
@@ -32,24 +32,39 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
   const slides: SlideData[] =
     initialSlides && initialSlides.length > 0
       ? initialSlides.map((s) => {
-          const videoInfo = s.mediaUrl ? parseVideoUrl(s.mediaUrl) : { provider: "direct" as const, rawUrl: "" };
-          const provider = (s.videoProvider || videoInfo.provider) as SlideData["videoProvider"];
-          const embedUrl = s.embedUrl || videoInfo.embedUrl;
-          const fallbackImage = videoInfo.thumbnailUrl || "/assets/image/gambar.jpeg";
-          const imageSrc = (s.mediaType === "image" ? s.mediaUrl : fallbackImage) || "/assets/image/gambar.jpeg";
+          const parsed = parseMediaUrl(s.mediaUrl || "");
+          const provider = (s.videoProvider || parsed.provider) as SlideData["videoProvider"];
+          const embedUrl = s.embedUrl || parsed.embedUrl;
+          const imageSrc = parsed.imageUrl || parsed.thumbnailUrl || s.mediaUrl;
+          const jenis = s.jenis || "Berita";
+          const jenisLower = jenis.toLowerCase();
+          const isVideo = jenisLower === "video";
+
+          let defaultCtaText = "LIHAT DETAIL";
+          let defaultCtaLink = "/";
+          if (jenisLower === "wisata") {
+            defaultCtaText = "JELAJAHI WISATA";
+            defaultCtaLink = "/wisata";
+          } else if (jenisLower === "berita") {
+            defaultCtaText = "JELAJAHI BERITA";
+            defaultCtaLink = "/berita";
+          } else if (jenisLower === "video") {
+            defaultCtaText = "PUTAR VIDEO PROFIL";
+            defaultCtaLink = "#play-video";
+          }
 
           return {
             id: s.id || `slide-${Math.random()}`,
-            type: s.mediaType || "image",
-            src: imageSrc.trim() ? imageSrc : "/assets/image/gambar.jpeg",
-            videoSrc: s.mediaType === "video" ? s.mediaUrl : undefined,
-            embedUrl: s.mediaType === "video" ? embedUrl : undefined,
-            videoProvider: s.mediaType === "video" ? provider : undefined,
+            type: isVideo ? "video" : "image",
+            src: imageSrc ? imageSrc.trim() : "/assets/image/gambar.jpeg",
+            videoSrc: isVideo ? s.mediaUrl : undefined,
+            embedUrl: isVideo ? embedUrl : undefined,
+            videoProvider: isVideo ? provider : undefined,
             title: s.judul || "DESA DALISODO",
             description: s.deskripsi || "INFORMASI RESMI DESA DALISODO KECAMATAN WAGIR KABUPATEN MALANG.",
-            primaryCtaText: s.primaryCtaText || "LIHAT DETAIL",
-            primaryCtaLink: s.primaryCtaLink || "/",
-            jenis: s.jenis || "Berita",
+            primaryCtaText: s.primaryCtaText || defaultCtaText,
+            primaryCtaLink: s.primaryCtaLink || defaultCtaLink,
+            jenis: jenis,
           };
         })
       : [];
@@ -402,7 +417,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                 sizes="100vw"
               />
 
-              {/* Video Element Overlay (YouTube, Google Drive iframe, or Direct MP4 Video) */}
+              {/* Video Element Overlay (YouTube, Google Drive iframe, or Direct MP4 Video) - only for video type */}
               {slide.type === "video" && (slide.embedUrl || slide.videoSrc) && (
                 slide.videoProvider === "youtube" || slide.videoProvider === "drive" || (slide.embedUrl && !slide.videoSrc?.endsWith(".mp4")) ? (
                   isPlayingThisVideo ? (
@@ -417,7 +432,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
                           ? isMobileRotated
                             ? "rotate-90 w-[100vh] h-[100vw] max-w-none max-h-none object-contain z-20"
                             : "w-full h-full max-h-screen object-contain z-20"
-                          : "absolute inset-0 w-full h-full object-cover z-20"
+                          : "absolute inset-0 w-full h-full object-cover z-20 scale-[1.25] pointer-events-none"
                       }`}
                     />
                   ) : null
@@ -467,6 +482,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       {/* Main Content Stage (Hidden when in Fullscreen Mode) */}
       <div className={`relative z-20 h-full max-w-360 mx-auto px-6 sm:px-12 lg:px-16 flex flex-col justify-end pb-20 sm:pb-24 lg:pb-28 pointer-events-none ${isFullPreviewOpen ? "hidden" : ""}`}>
         <article className="max-w-xl space-y-4 pointer-events-auto">
+
           {/* Scaled-down Uppercase Headline & Description */}
           <div
             className={`space-y-4 transition-all duration-500 ${
@@ -498,7 +514,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
 
           {/* Action Buttons Area */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            {currentSlide.type === "video" ? (
+            {currentSlide.jenis?.toLowerCase() === "video" && currentSlide.type === "video" ? (
               <div className="flex flex-wrap items-center gap-3">
                 {/* 1. Putar / Hentikan Video Button */}
                 <button

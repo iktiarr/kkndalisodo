@@ -1,6 +1,6 @@
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { HeroSlideItem } from "@/types/hero";
-import { parseVideoUrl } from "@/lib/videoUtils";
+import { parseMediaUrl } from "@/lib/videoUtils";
 
 // Fallback Mock Data (empty array)
 const MOCK_HERO_SLIDES: HeroSlideItem[] = [];
@@ -10,9 +10,12 @@ interface RawContentfulSlide {
   judul?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deskripsi?: any;
+  kategori?: string;
   jenis?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   media?: any;
+  primaryCtaText?: string;
+  primaryCtaLink?: string;
 }
 
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
@@ -24,6 +27,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
           sys { id }
           judul
           deskripsi
+          kategori
           media
         }
       }
@@ -46,7 +50,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
     return items.map((item) => parseRawSlideToHeroItem(item));
   }
 
-  // Jika belum ada data dari Contentful, return MOCK_HERO_SLIDES
+  // Jika belum ada data dari Contentful, return empty array
   return MOCK_HERO_SLIDES;
 }
 
@@ -71,48 +75,42 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
     rawUrl = `https:${rawUrl}`;
   }
 
-  const videoInfo = parseVideoUrl(rawUrl);
+  const parsedMedia = parseMediaUrl(rawUrl);
 
-  const contentType = (
-    (typeof item.deskripsi === "object" && item.deskripsi?.contentType) ||
-    item.media?.contentType ||
-    ""
-  ).toLowerCase();
+  const jenisRaw = (item.kategori || item.jenis || "").trim();
+  let jenis = jenisRaw;
 
-  const jenis = (item.jenis || "Berita").toLowerCase();
+  // Infer jenis if not specified in Contentful
+  if (!jenis) {
+    if (parsedMedia.provider === "youtube" || parsedMedia.mediaType === "video") {
+      jenis = "Video";
+    } else {
+      jenis = "Berita";
+    }
+  }
 
-  const isVideo =
-    videoInfo.provider !== "direct" ||
-    contentType.startsWith("video/") ||
-    jenis === "video" ||
-    rawUrl.endsWith(".mp4") ||
-    rawUrl.endsWith(".webm") ||
-    rawUrl.endsWith(".mov") ||
-    rawUrl.includes("video");
+  const jenisLower = jenis.toLowerCase();
+  const isVideo = jenisLower === "video";
 
-  let mediaUrl =
-    rawUrl ||
-    (isVideo
-      ? "/assets/videos/VIDEO PROFIL DESA BANCAK 1.mp4"
-      : "/assets/image/gambar.jpeg");
+  let mediaUrl = parsedMedia.imageUrl || parsedMedia.thumbnailUrl || rawUrl;
 
-  // Kompresi otomatis gambar dari Contentful
-  if (!isVideo && mediaUrl.includes("ctfassets.net")) {
+  // Kompresi otomatis gambar dari Contentful jika gambar
+  if (!isVideo && mediaUrl && mediaUrl.includes("ctfassets.net")) {
     mediaUrl = optimizeContentfulAsset(mediaUrl, 1920);
   }
 
-  let primaryCtaText = "LIHAT DETAIL";
-  let primaryCtaLink = "/";
+  let primaryCtaText = item.primaryCtaText || "LIHAT DETAIL";
+  let primaryCtaLink = item.primaryCtaLink || "/";
 
-  if (jenis === "wisata") {
-    primaryCtaText = "JELAJAHI WISATA";
-    primaryCtaLink = "/wisata";
-  } else if (jenis === "video" || isVideo) {
-    primaryCtaText = "PUTAR VIDEO PROFIL";
-    primaryCtaLink = "#play-video";
-  } else if (jenis === "berita") {
-    primaryCtaText = "BACA BERITA KKN";
-    primaryCtaLink = "/berita";
+  if (jenisLower === "wisata") {
+    primaryCtaText = item.primaryCtaText || "JELAJAHI WISATA";
+    primaryCtaLink = item.primaryCtaLink || "/wisata";
+  } else if (jenisLower === "berita") {
+    primaryCtaText = item.primaryCtaText || "JELAJAHI BERITA";
+    primaryCtaLink = item.primaryCtaLink || "/berita";
+  } else if (jenisLower === "video" || isVideo) {
+    primaryCtaText = item.primaryCtaText || "PUTAR VIDEO PROFIL";
+    primaryCtaLink = item.primaryCtaLink || "#play-video";
   }
 
   let descText = "";
@@ -134,11 +132,11 @@ function parseRawSlideToHeroItem(item: RawContentfulSlide): HeroSlideItem {
       "INFORMASI RESMI DESA DALISODO KECAMATAN WAGIR KABUPATEN MALANG.",
     mediaUrl,
     mediaType: isVideo ? "video" : "image",
-    jenis: item.jenis || "Berita",
+    jenis: jenis,
     primaryCtaText,
     primaryCtaLink,
-    videoProvider: isVideo ? videoInfo.provider : undefined,
-    embedUrl: isVideo ? videoInfo.embedUrl : undefined,
+    videoProvider: isVideo ? parsedMedia.provider : undefined,
+    embedUrl: isVideo ? parsedMedia.embedUrl : undefined,
   };
 }
 
@@ -154,4 +152,5 @@ function extractTextFromRichNodes(nodes: any[]): string {
   }
   return text.trim();
 }
+
 
