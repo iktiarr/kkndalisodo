@@ -14,7 +14,7 @@ export interface ParsedVideoInfo {
   rawUrl: string;
 }
 
-export function parseGoogleDriveImage(url: string): string | null {
+export function extractGoogleDriveId(url: string): string | null {
   if (!url) return null;
   const driveMatch =
     url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
@@ -25,8 +25,16 @@ export function parseGoogleDriveImage(url: string): string | null {
     driveMatch &&
     driveMatch[1]
   ) {
-    const fileId = driveMatch[1];
-    return `https://lh3.googleusercontent.com/d/${fileId}`;
+    return driveMatch[1];
+  }
+  return null;
+}
+
+export function parseGoogleDriveImage(url: string): string | null {
+  const fileId = extractGoogleDriveId(url);
+  if (fileId) {
+    // Use the direct download/view URL that works publicly
+    return `https://drive.google.com/uc?export=view&id=${fileId}`;
   }
   return null;
 }
@@ -44,7 +52,8 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
   );
   if (youtubeMatch && youtubeMatch[1]) {
     const videoId = youtubeMatch[1];
-    const youtubeThumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    // Try maxresdefault first, fall back to hqdefault
+    const youtubeThumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
     return {
       provider: "youtube",
       mediaType: "video",
@@ -55,14 +64,19 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
     };
   }
 
-  // 2. Check Google Drive (Photo / Image)
-  const gdriveImageUrl = parseGoogleDriveImage(trimmed);
-  if (gdriveImageUrl) {
+  // 2. Check Google Drive (can be photo or video)
+  const driveFileId = extractGoogleDriveId(trimmed);
+  if (driveFileId) {
+    // We treat Drive links as images by default (photos)
+    // The heroService will handle detecting if the user intended a video via kategori field
+    const driveImageUrl = `https://drive.google.com/uc?export=view&id=${driveFileId}`;
+    const driveEmbedUrl = `https://drive.google.com/file/d/${driveFileId}/preview`;
     return {
       provider: "drive",
       mediaType: "image",
-      imageUrl: gdriveImageUrl,
-      thumbnailUrl: gdriveImageUrl,
+      imageUrl: driveImageUrl,
+      thumbnailUrl: driveImageUrl,
+      embedUrl: driveEmbedUrl,
       rawUrl: trimmed,
     };
   }
