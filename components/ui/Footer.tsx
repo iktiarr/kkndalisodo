@@ -50,7 +50,7 @@ export default async function Footer() {
                 {/* Logo 3: Logo KKN 10 Dalisodo */}
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
                   <Image
-                    src="/assets/image/Logo-kkn10.png"
+                    src="/assets/image/Logo-kkn10.svg"
                     alt="Logo KKN 10 Dalisodo"
                     fill
                     sizes="40px"

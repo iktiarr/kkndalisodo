@@ -74,7 +74,7 @@ export default function Navbar() {
             {/* Logo 3: Logo KKN 10 Dalisodo */}
             <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
-                src="/assets/image/Logo-kkn10.png"
+                src="/assets/image/Logo-kkn10.svg"
                 alt="Logo KKN 10 Dalisodo"
                 fill
                 sizes="(max-width: 640px) 32px, 36px"
