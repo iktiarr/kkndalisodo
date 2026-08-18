@@ -4,10 +4,20 @@ interface DemografiSectionProps {
   data: ProfilDesa;
 }
 
+/**
+ * Komponen DemografiSection
+ * 
+ * Menampilkan seksi data kependudukan dan statistik Desa Dalisodo.
+ * Mencakup 4 kartu ringkasan (Total Penduduk, Kepala Keluarga, Laki-Laki, Perempuan),
+ * serta 3 grafik persentase dinamis (Kelompok Usia, Tingkat Pendidikan, Mata Pencaharian) dan data pemeluk agama.
+ *
+ * @param {DemografiSectionProps} props - Properti komponen berisi data profil desa.
+ * @returns {JSX.Element} Elemen seksi demografi kependudukan.
+ */
 export default function DemografiSection({ data }: DemografiSectionProps) {
   const { kependudukan } = data;
 
-  // Dynamic Total Sum Calculations for Real-Time Percentage Adjustments
+  // Penghitungan total dan persentase real-time
   const parseNum = (val: number | string) => (typeof val === "number" ? val : parseInt(String(val).replace(/[^0-9]/g, "")) || 0);
 
   const totalUsiaSum = kependudukan.kelompokUsia.reduce((acc, curr) => acc + parseNum(curr.jumlah), 0) || 6451;
@@ -16,6 +26,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
 
   return (
     <section id="demografi" className="scroll-mt-32 space-y-8">
+      {/* Header Seksi Demografi */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4 border-b border-carbony">
         <div>
           <span className="font-lambo text-xs sm:text-sm tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -30,7 +41,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
         </span>
       </div>
 
-      {/* 4 Main Stat Cards (Harmonious White Theme with Clean Brand Accents) */}
+      {/* 4 Kartu Statistik Utama (Total Penduduk, KK, Laki-Laki, Perempuan) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div className="bg-white p-6 sm:p-7 rounded-lg border border-ash/20 space-y-3 shadow-xs hover:border-emerald-dalisodo transition-colors">
           <div className="flex items-center justify-between">
@@ -38,7 +49,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
               TOTAL PENDUDUK
             </span>
             <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-dalisodo flex items-center justify-center border border-emerald-200">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M17 21V19C17 17 15 15 13 15H5C3 15 1 17 1 19V21" />
                 <rect x="5" y="3" width="8" height="8" />
                 <path d="M23 21V19C23 17.5 21.8 16.2 20.3 15.6M16 3.1C17.2 3.6 18 4.7 18 6C18 7.3 17.2 8.4 16 8.9" />
@@ -59,7 +70,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
               KEPALA KELUARGA
             </span>
             <div className="w-9 h-9 rounded-lg bg-amber-50 text-giallo-dark flex items-center justify-center border border-amber-200">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M3 9L12 2L21 9V20C21 21 20 22 19 22H5C4 22 3 21 3 20V9Z" />
                 <path d="M9 22V12H15V22" />
               </svg>
@@ -79,7 +90,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
               LAKI-LAKI
             </span>
             <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-dalisodo flex items-center justify-center border border-emerald-200">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="10" cy="14" r="5" />
                 <path d="M19 5L13.5 10.5M19 5H14M19 5V10" />
               </svg>
@@ -101,7 +112,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
               PEREMPUAN
             </span>
             <div className="w-9 h-9 rounded-lg bg-amber-50 text-giallo-dark flex items-center justify-center border border-amber-200">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="12" cy="9" r="5" />
                 <path d="M12 14V21M9 18H15" />
               </svg>
@@ -118,7 +129,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
         </div>
       </div>
 
-      {/* Detailed Demographic Tables with Dynamic Percentage Calculations */}
+      {/* Rincian Grafik Persentase (Usia, Pendidikan, Pekerjaan) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kelompok Usia */}
         <div className="bg-white p-6 sm:p-7 rounded-lg border border-ash/20 shadow-xs space-y-5">
@@ -126,7 +137,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
             <h3 className="font-lambo text-base sm:text-lg font-bold uppercase text-carbony">
               KELOMPOK USIA
             </h3>
-            <svg className="w-5 h-5 text-emerald-dalisodo" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-emerald-dalisodo" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 8V12L15 15M21 12C21 16.97 16.97 21 12 21C7.03 21 3 16.97 3 12C3 7.03 7.03 3 12 3C16.97 3 21 7.03 21 12Z" />
             </svg>
           </div>
@@ -157,7 +168,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
             <h3 className="font-lambo text-base sm:text-lg font-bold uppercase text-carbony">
               TINGKAT PENDIDIKAN
             </h3>
-            <svg className="w-5 h-5 text-giallo-dark" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-giallo-dark" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22 10L12 4L2 10L12 16L22 10ZM22 10V16M6 12.5V17C6 19 8.7 20.5 12 20.5C15.3 20.5 18 19 18 17V12.5" />
             </svg>
           </div>
@@ -188,7 +199,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
             <h3 className="font-lambo text-base sm:text-lg font-bold uppercase text-carbony">
               MATA PENCAHARIAN
             </h3>
-            <svg className="w-5 h-5 text-carbony" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-carbony" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
               <rect x="2" y="7" width="20" height="14" />
               <path d="M16 7V4H8V7M2 13H22" />
             </svg>
@@ -213,7 +224,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
         </div>
       </div>
 
-      {/* Agama Card with Religion-Specific Sharp Icons */}
+      {/* Kartu Pemeluk Agama */}
       <div className="bg-marble p-6 sm:p-8 rounded-lg border border-ash/20 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div>
           <span className="font-lambo text-xs sm:text-sm font-bold uppercase text-emerald-dalisodo tracking-widest block mb-1">
@@ -235,10 +246,9 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
                 key={idx}
                 className="bg-white px-5 py-3 rounded-lg border border-ash/20 font-semibold shadow-xs flex items-center gap-3 hover:border-carbony/40 transition-colors"
               >
-                {/* Specific Religious Icon */}
                 {isIslam && (
                   <div className="w-7 h-7 rounded-md bg-emerald-50 text-emerald-dalisodo flex items-center justify-center border border-emerald-200 shrink-0">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M3 21H21M4 21V10L6 8L8 10V21M16 21V10L18 8L20 10V21M8 21V13C8 10.8 9.8 9 12 9C14.2 9 16 10.8 16 13V21M12 9V5" />
                       <circle cx="12" cy="4" r="1.5" />
                     </svg>
@@ -247,7 +257,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
 
                 {isKristen && (
                   <div className="w-7 h-7 rounded-md bg-amber-50 text-giallo-dark flex items-center justify-center border border-amber-200 shrink-0">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 2V22M6 8H18" />
                     </svg>
                   </div>
@@ -255,7 +265,7 @@ export default function DemografiSection({ data }: DemografiSectionProps) {
 
                 {isHindu && (
                   <div className="w-7 h-7 rounded-md bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-200 shrink-0">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 2L9 6H15L12 2ZM7 6L5 10H19L17 6H7ZM4 10L2 15H22L20 10H4ZM3 15V22H21V15M10 22V17H14V22" />
                     </svg>
                   </div>

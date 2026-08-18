@@ -5,6 +5,15 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
+/**
+ * Komponen Navbar
+ * 
+ * Bilah navigasi atas (header) aplikasi portal web Desa Dalisodo.
+ * Menampilkan 3 logo instansi (Kabupaten Malang, UNMER, KKN 10), nama brand,
+ * menu navigasi desktop, efek glassmorphism saat digulir (scroll), serta menu hamburger seluler (mobile).
+ *
+ * @returns {JSX.Element} Elemen header navigasi portal.
+ */
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,7 +26,7 @@ export default function Navbar() {
     { href: "/profil", label: "PROFIL DESA" },
   ];
 
-  // Detect scroll position to activate glassmorphism header
+  // ── Deteksi posisi scroll layar untuk mengaktifkan latar belakang glassmorphism ──
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -43,7 +52,7 @@ export default function Navbar() {
     >
       <div className="max-w-360 mx-auto px-4 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between min-w-0">
         
-        {/* Top-Left: 3 Logos Side-by-Side (Kabupaten Malang + UNMER + KKN 10) */}
+        {/* Brand Header: 3 Logo Instansi (Kabupaten Malang + UNMER + KKN 10) & Nama Desa */}
         <Link
           id="navbar-brand-link"
           href="/"
@@ -51,7 +60,7 @@ export default function Navbar() {
           aria-label="Kembali ke Beranda Desa Dalisodo"
         >
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            {/* Logo 1: Logo Kabupaten Malang */}
+            {/* Logo 1: Kabupaten Malang */}
             <div className="relative w-7 h-7 sm:w-9 sm:h-9 shrink-0 bg-white p-0.5 sm:p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo_Kabupaten_Malang.svg"
@@ -62,7 +71,7 @@ export default function Navbar() {
               />
             </div>
 
-            {/* Logo 2: Logo Universitas Merdeka Malang */}
+            {/* Logo 2: Universitas Merdeka Malang */}
             <div className="relative w-7 h-7 sm:w-9 sm:h-9 shrink-0 bg-white p-0.5 sm:p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo_Unmer_resmi.svg"
@@ -73,7 +82,7 @@ export default function Navbar() {
               />
             </div>
 
-            {/* Logo 3: Logo KKN 10 Dalisodo */}
+            {/* Logo 3: KKN 10 Dalisodo */}
             <div className="relative w-7 h-7 sm:w-9 sm:h-9 shrink-0 bg-white p-0.5 sm:p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo-kkn10.svg"
@@ -85,7 +94,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Brand Name & Subtitle */}
+          {/* Nama & Subtitle Brand */}
           <div className="flex flex-col min-w-0 shrink">
             <span className="font-lambo font-bold text-xs sm:text-base md:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-giallo transition-colors truncate">
               DESA DALISODO
@@ -96,7 +105,7 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation Menu (LamboType Uppercase) */}
+        {/* Menu Navigasi Desktop */}
         <nav
           id="desktop-nav-menu"
           aria-label="Navigasi Utama"
@@ -120,7 +129,7 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Right Side: Hamburger Mobile Button */}
+        {/* Tombol Hamburger Tampilan Seluler (Mobile) */}
         <div className="flex items-center gap-3">
           <button
             id="mobile-menu-toggle-btn"
@@ -133,6 +142,7 @@ export default function Navbar() {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               {isMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -144,7 +154,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Menu Dropdown Tampilan Seluler (Mobile Dropdown) */}
       {isMenuOpen && (
         <nav
           id="mobile-nav-dropdown"

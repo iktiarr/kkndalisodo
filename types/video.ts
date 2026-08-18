@@ -1,3 +1,7 @@
+/**
+ * Antarmuka VideoItem
+ * Struktur data untuk seksi video profil dan dokumentasi Desa Dalisodo.
+ */
 export interface VideoItem {
   id: string;
   linkVideo: string;

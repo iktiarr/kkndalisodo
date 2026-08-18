@@ -3,6 +3,15 @@ import Image from "next/image";
 import { getWisataList } from "@/server/services/wisataService";
 import BackToTopButton from "./BackToTopButton";
 
+/**
+ * Komponen Footer
+ * 
+ * Baris catatan kaki (footer) utama portal web Desa Dalisodo.
+ * Menampilkan logo instansi, ringkasan pengabdian KKN 10, navigasi utama,
+ * tautan wisata populer secara dinamis, kontak balai desa, iframe peta lokasi, serta hak cipta.
+ *
+ * @returns {Promise<JSX.Element>} Elemen footer komponen server (Async Server Component).
+ */
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
   const wisataList = await getWisataList();
@@ -16,16 +25,16 @@ export default async function Footer() {
     >
       <div className="max-w-360 mx-auto px-6 sm:px-12 lg:px-16 py-16 sm:py-20">
         
-        {/* 4-Column Footer Grid */}
+        {/* Grid Footer 4 Kolom */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
           
-          {/* Column 1: Brand & Logos (4 cols) */}
+          {/* Kolom 1: Brand, Logo Instansi, Ringkasan (4 Kolom Grid) */}
           <div className="lg:col-span-4 space-y-5">
             
-            {/* 3 Circular Logos Side-by-Side (Kabupaten Malang + UNMER + KKN 10) */}
+            {/* 3 Logo Instansi (Kabupaten Malang, UNMER Malang, KKN 10) */}
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                {/* Logo 1: Logo Kabupaten Malang */}
+                {/* Logo 1: Kabupaten Malang */}
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
                   <Image
                     src="/assets/image/Logo_Kabupaten_Malang.svg"
@@ -36,7 +45,7 @@ export default async function Footer() {
                   />
                 </div>
 
-                {/* Logo 2: Logo Universitas Merdeka Malang */}
+                {/* Logo 2: Universitas Merdeka Malang */}
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
                   <Image
                     src="/assets/image/Logo_Unmer_resmi.svg"
@@ -47,7 +56,7 @@ export default async function Footer() {
                   />
                 </div>
 
-                {/* Logo 3: Logo KKN 10 Dalisodo */}
+                {/* Logo 3: KKN 10 Dalisodo */}
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
                   <Image
                     src="/assets/image/Logo-kkn10.svg"
@@ -59,7 +68,7 @@ export default async function Footer() {
                 </div>
               </div>
 
-              {/* Title & Subtitle */}
+              {/* Judul & Subtitle Brand */}
               <div className="flex flex-col">
                 <span className="font-lambo text-lg sm:text-xl font-bold uppercase tracking-[0.023em] text-white leading-tight">
                   DESA DALISODO
@@ -70,12 +79,12 @@ export default async function Footer() {
               </div>
             </div>
 
-            {/* Editorial Summary */}
+            {/* Deskripsi Ringkas Kolaborasi */}
             <p className="font-lambo text-xs sm:text-sm text-steel leading-relaxed tracking-[0.023em] max-w-md">
               Ruang informasi menampilkan keindahan destinasi lokal, cerita keseharian warga dan jejak kolaborasi mahasiswa KKN 10 Dalisodo bersama masyarakat desa.
             </p>
 
-            {/* Social / Tag Badges */}
+            {/* Lencana (Tag Badges) */}
             <div className="flex flex-wrap gap-2 pt-2">
               <span className="font-lambo text-[10px] uppercase tracking-wider text-giallo bg-black/60 px-3 py-1 rounded-md border border-white/10 hover:border-giallo hover:-translate-y-0.5 transition-all duration-300 cursor-default">
                 KKN 10 DALISODO
@@ -86,7 +95,7 @@ export default async function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Navigasi Utama (2 cols) */}
+          {/* Kolom 2: Navigasi Utama Halaman (2 Kolom Grid) */}
           <nav aria-label="Navigasi Footer" className="lg:col-span-2 space-y-4">
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
               NAVIGASI UTAMA
@@ -115,7 +124,7 @@ export default async function Footer() {
             </ul>
           </nav>
 
-          {/* Column 3: Destinasi Wisata Dinamis (2 cols) */}
+          {/* Kolom 3: Tautan Destinasi Wisata Populer Dinamis (2 Kolom Grid) */}
           <div className="lg:col-span-2 space-y-4">
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
               DESTINASI WISATA
@@ -145,31 +154,31 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Kontak & Lokasi Peta (4 cols) */}
+          {/* Kolom 4: Informasi Kontak & Embed Peta Google Maps (4 Kolom Grid) */}
           <address className="not-italic lg:col-span-4 space-y-4">
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
               KONTAK & LOKASI DESA
             </h3>
             <div className="space-y-2 font-lambo text-xs text-slate-300 uppercase tracking-[0.023em]">
               <p className="flex items-center gap-2">
-                <span className="text-giallo">📍</span>
+                <span className="text-giallo" aria-hidden="true">📍</span>
                 <span>JL. RAYA DALISODO NO. 123, WAGIR MALANG</span>
               </p>
               <p className="flex items-center gap-2">
-                <span className="text-giallo">📞</span>
+                <span className="text-giallo" aria-hidden="true">📞</span>
                 <span>+62 812-3456-7890</span>
               </p>
               <p className="flex items-center gap-2">
-                <span className="text-giallo">✉️</span>
+                <span className="text-giallo" aria-hidden="true">✉️</span>
                 <span className="lowercase">kkn10dalisodo2026@gmail.com</span>
               </p>
               <p className="flex items-center gap-2 pt-1 text-giallo-dark font-semibold">
-                <span className="text-giallo">🕒</span>
+                <span className="text-giallo" aria-hidden="true">🕒</span>
                 <span>SENIN - JUMAT (08:00 - 15:30 WIB)</span>
               </p>
             </div>
 
-            {/* Embedded Interactive Google Map */}
+            {/* Peta Google Maps Embed */}
             <div className="relative w-full h-36 rounded-lg overflow-hidden border border-white/10 mt-3 group hover:border-giallo transition-colors shadow-sm">
               <iframe
                 id="footer-map-iframe"
@@ -184,7 +193,7 @@ export default async function Footer() {
 
         </div>
 
-        {/* Footer Bottom Copyright Bar */}
+        {/* Hak Cipta (Copyright) & Tombol Kembali ke Atas */}
         <div className="border-t border-anvil pt-8 mt-12 flex flex-col sm:flex-row items-center justify-between text-xs font-lambo tracking-wider uppercase text-steel gap-4">
           <p id="footer-copyright">
             © {currentYear} KKN 10 DESA DALISODO • KABUPATEN MALANG. HAK CIPTA DILINDUNGI.

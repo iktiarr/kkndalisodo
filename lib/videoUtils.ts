@@ -1,3 +1,7 @@
+/**
+ * Antarmuka ParsedMediaInfo
+ * Struktur hasil parsing URL media (gambar atau video).
+ */
 export interface ParsedMediaInfo {
   provider: "youtube" | "drive" | "direct";
   mediaType: "video" | "image";
@@ -7,6 +11,10 @@ export interface ParsedMediaInfo {
   rawUrl: string;
 }
 
+/**
+ * Antarmuka ParsedVideoInfo
+ * Struktur hasil parsing URL spesifik video.
+ */
 export interface ParsedVideoInfo {
   provider: "youtube" | "drive" | "direct";
   embedUrl?: string;
@@ -14,6 +22,12 @@ export interface ParsedVideoInfo {
   rawUrl: string;
 }
 
+/**
+ * Mengekstrak ID berkas dari URL Google Drive.
+ *
+ * @param {string} url - URL Google Drive.
+ * @returns {string | null} ID berkas Google Drive atau null.
+ */
 export function extractGoogleDriveId(url: string): string | null {
   if (!url) return null;
   const driveMatch =
@@ -30,15 +44,26 @@ export function extractGoogleDriveId(url: string): string | null {
   return null;
 }
 
+/**
+ * Mengonversi URL Google Drive menjadi URL pratinjau gambar langsung.
+ *
+ * @param {string} url - URL Google Drive.
+ * @returns {string | null} URL gambar langsung atau null.
+ */
 export function parseGoogleDriveImage(url: string): string | null {
   const fileId = extractGoogleDriveId(url);
   if (fileId) {
-    // Use the direct download/view URL that works publicly
     return `https://drive.google.com/uc?export=view&id=${fileId}`;
   }
   return null;
 }
 
+/**
+ * Memparsed URL media (YouTube, Google Drive, atau tautan langsung) untuk menghasilkan URL embed dan thumbnail.
+ *
+ * @param {string} url - Tautan URL media.
+ * @returns {ParsedMediaInfo} Objek terurai informasi media.
+ */
 export function parseMediaUrl(url: string): ParsedMediaInfo {
   if (!url) {
     return { provider: "direct", mediaType: "image", rawUrl: "" };
@@ -46,13 +71,12 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
 
   const trimmed = url.trim();
 
-  // 1. Check YouTube (Video)
+  // 1. Periksa Tautan YouTube (Video)
   const youtubeMatch = trimmed.match(
     /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
   );
   if (youtubeMatch && youtubeMatch[1]) {
     const videoId = youtubeMatch[1];
-    // Try maxresdefault first, fall back to hqdefault
     const youtubeThumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
     return {
       provider: "youtube",
@@ -64,11 +88,9 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
     };
   }
 
-  // 2. Check Google Drive (can be photo or video)
+  // 2. Periksa Tautan Google Drive
   const driveFileId = extractGoogleDriveId(trimmed);
   if (driveFileId) {
-    // We treat Drive links as images by default (photos)
-    // The heroService will handle detecting if the user intended a video via kategori field
     const driveImageUrl = `https://drive.google.com/uc?export=view&id=${driveFileId}`;
     const driveEmbedUrl = `https://drive.google.com/file/d/${driveFileId}/preview`;
     return {
@@ -81,7 +103,7 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
     };
   }
 
-  // 3. Fallback direct link
+  // 3. Penanganan Tautan Langsung (Direct Link)
   const isVideoFile =
     trimmed.endsWith(".mp4") || trimmed.endsWith(".webm") || trimmed.endsWith(".mov");
   return {
@@ -92,6 +114,12 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
   };
 }
 
+/**
+ * Memparsed URL spesifik video untuk mendapatkan URL pemutar (embed) dan thumbnail.
+ *
+ * @param {string} url - Tautan URL video.
+ * @returns {ParsedVideoInfo} Informasi terurai pemutar video.
+ */
 export function parseVideoUrl(url: string): ParsedVideoInfo {
   const mediaInfo = parseMediaUrl(url);
   return {

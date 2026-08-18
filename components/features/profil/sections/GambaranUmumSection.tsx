@@ -4,10 +4,20 @@ interface GambaranUmumSectionProps {
   data: ProfilDesa;
 }
 
+/**
+ * Komponen GambaranUmumSection
+ * 
+ * Menampilkan seksi profil identitas dasar Desa Dalisodo.
+ * Mencakup semboyan desa, kartu sorotan (ketinggian, iklim/suhu, jumlah dusun, kode pos),
+ * narasi tentang desa, serta visi & misi pembangunan desa.
+ *
+ * @param {GambaranUmumSectionProps} props - Properti komponen berisi data profil desa.
+ * @returns {JSX.Element} Elemen seksi gambaran umum.
+ */
 export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) {
   return (
     <section id="gambaran-umum" className="scroll-mt-32 space-y-8">
-      {/* Section Header */}
+      {/* Header Seksi Gambaran Umum */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4 border-b border-carbony">
         <div>
           <span className="font-lambo text-xs sm:text-sm tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -22,14 +32,14 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
         </span>
       </div>
 
-      {/* Top Info Highlights with Harmonious Gradients */}
+      {/* Kartu Sorotan Informasi Dasar (Ketinggian, Suhu, Dusun, Kode Pos) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* Card 1: Ketinggian */}
+        {/* Kartu 1: Ketinggian */}
         <div className="bg-linear-to-br from-emerald-50/80 via-white to-white p-5 sm:p-6 rounded-lg border border-emerald-200/80 shadow-xs space-y-3 hover:border-emerald-dalisodo transition-all group">
           <div className="flex items-center justify-between">
             <span className="font-lambo text-xs sm:text-sm text-emerald-800 font-bold uppercase tracking-wider block">KETINGGIAN</span>
             <div className="w-9 h-9 rounded-lg bg-emerald-100/80 text-emerald-dalisodo flex items-center justify-center border border-emerald-200 group-hover:bg-emerald-dalisodo group-hover:text-white transition-colors">
-              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M2 20L9 6L14 15L17 10L22 20H2Z" />
                 <path d="M7 14L9 11L12 16" />
               </svg>
@@ -41,12 +51,12 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
           </div>
         </div>
 
-        {/* Card 2: Iklim & Suhu */}
+        {/* Kartu 2: Iklim & Suhu */}
         <div className="bg-linear-to-br from-teal-50/80 via-white to-white p-5 sm:p-6 rounded-lg border border-teal-200/80 shadow-xs space-y-3 hover:border-teal-600 transition-all group">
           <div className="flex items-center justify-between">
             <span className="font-lambo text-xs sm:text-sm text-teal-800 font-bold uppercase tracking-wider block">IKLIM & SUHU</span>
             <div className="w-9 h-9 rounded-lg bg-teal-100/80 text-teal-700 flex items-center justify-center border border-teal-200 group-hover:bg-teal-700 group-hover:text-white transition-colors">
-              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M14 4V14.5L17 17.5L15 19.5L12 16.5V4H14Z" />
                 <path d="M12 12H8M12 8H9M12 4H7" />
                 <circle cx="12" cy="18" r="3" strokeWidth={2} />
@@ -59,12 +69,12 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
           </div>
         </div>
 
-        {/* Card 3: Wilayah Dusun */}
+        {/* Kartu 3: Wilayah Dusun */}
         <div className="bg-linear-to-br from-amber-50/80 via-white to-white p-5 sm:p-6 rounded-lg border border-amber-200/80 shadow-xs space-y-3 hover:border-giallo-dark transition-all group">
           <div className="flex items-center justify-between">
             <span className="font-lambo text-xs sm:text-sm text-amber-900 font-bold uppercase tracking-wider block">WILAYAH DUSUN</span>
             <div className="w-9 h-9 rounded-lg bg-amber-100/80 text-giallo-dark flex items-center justify-center border border-amber-200 group-hover:bg-giallo group-hover:text-pure-black transition-colors">
-              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <rect x="3" y="3" width="7" height="7" />
                 <rect x="14" y="3" width="7" height="7" />
                 <rect x="3" y="14" width="7" height="7" />
@@ -78,12 +88,12 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
           </div>
         </div>
 
-        {/* Card 4: Kode Pos */}
+        {/* Kartu 4: Kode Pos */}
         <div className="bg-linear-to-br from-slate-50 via-white to-white p-5 sm:p-6 rounded-lg border border-ash/30 shadow-xs space-y-3 hover:border-carbony transition-all group">
           <div className="flex items-center justify-between">
             <span className="font-lambo text-xs sm:text-sm text-steel font-bold uppercase tracking-wider block">KODE POS</span>
             <div className="w-9 h-9 rounded-lg bg-slate-100 text-carbony flex items-center justify-center border border-ash/30 group-hover:bg-carbony group-hover:text-white transition-colors">
-              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" />
                 <path d="M12 12V22M12 12L4 7M12 12L20 7" />
               </svg>
@@ -96,12 +106,12 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
         </div>
       </div>
 
-      {/* Description & Visi Misi */}
+      {/* Deskripsi Tentang Desa & Blok Visi-Misi */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         <div className="lg:col-span-7 bg-white border border-ash/20 rounded-lg p-6 sm:p-8 shadow-xs space-y-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-dalisodo shrink-0">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M3 21H21M3 7L12 3L21 7V10H3V7ZM5 10V18M9 10V18M15 10V18M19 10V18" />
               </svg>
             </div>
@@ -119,10 +129,11 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
           </div>
         </div>
 
+        {/* Blok Visi & Misi Utama */}
         <div className="lg:col-span-5 bg-linear-to-br from-emerald-50/50 via-white to-white border border-emerald-200/80 rounded-lg p-6 sm:p-8 shadow-xs flex flex-col justify-between space-y-6">
           <div className="space-y-3.5">
             <div className="flex items-center gap-2.5">
-              <div className="w-6 h-6 bg-emerald-dalisodo rounded-md flex items-center justify-center text-white font-bold text-xs">
+              <div className="w-6 h-6 bg-emerald-dalisodo rounded-md flex items-center justify-center text-white font-bold text-xs" aria-hidden="true">
                 ◆
               </div>
               <span className="font-lambo text-xs sm:text-sm font-bold uppercase text-emerald-dalisodo tracking-wider">
@@ -141,7 +152,7 @@ export default function GambaranUmumSection({ data }: GambaranUmumSectionProps) 
             <ul className="space-y-3">
               {data.misi.map((m, idx) => (
                 <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-anvil">
-                  <span className="text-emerald-dalisodo font-bold shrink-0 text-base leading-none">■</span>
+                  <span className="text-emerald-dalisodo font-bold shrink-0 text-base leading-none" aria-hidden="true">■</span>
                   <span className="font-sans leading-relaxed">{m}</span>
                 </li>
               ))}

@@ -4,9 +4,19 @@ interface DusunSectionProps {
   data: ProfilDesa;
 }
 
+/**
+ * Komponen DusunSection
+ * 
+ * Menampilkan seksi daftar 7 wilayah dusun yang ada di Desa Dalisodo.
+ * Setiap kartu mencakup nomor dusun, nama, penanda khusus (misal Kampung KB Precet / Lereng Kawi Bedali), dan deskripsi wilayah.
+ *
+ * @param {DusunSectionProps} props - Properti komponen berisi data profil desa.
+ * @returns {JSX.Element} Elemen seksi pembagian wilayah dusun.
+ */
 export default function DusunSection({ data }: DusunSectionProps) {
   return (
     <section id="dusun" className="scroll-mt-32 space-y-8">
+      {/* Header Seksi Pembagian Wilayah Dusun */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4 border-b border-carbony">
         <div>
           <span className="font-lambo text-xs sm:text-sm tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -21,6 +31,7 @@ export default function DusunSection({ data }: DusunSectionProps) {
         </span>
       </div>
 
+      {/* Grid Kartu 7 Wilayah Dusun */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
         {data.dusunList.map((dusun) => {
           const isPrecet = dusun.nama.toLowerCase().includes("precet");
@@ -40,7 +51,7 @@ export default function DusunSection({ data }: DusunSectionProps) {
               <div className="flex items-center justify-between border-b border-marble pb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-md bg-emerald-50 text-emerald-dalisodo flex items-center justify-center border border-emerald-200">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" />
                       <path d="M9 3V21M15 3V21M3 9H21M3 15H21" />
                     </svg>

@@ -1,3 +1,4 @@
+
 import { getWisataBySlug, getOtherWisataList } from "@/server/services/wisataService";
 import { notFound } from "next/navigation";
 import RichContentRenderer from "@/components/features/berita/RichContentRenderer";
@@ -9,6 +10,12 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+/**
+ * Menghasilkan metadata SEO dinamis untuk halaman detail destinasi wisata.
+ *
+ * @param {Props} props - Parameter rute berisi slug wisata.
+ * @returns {Promise<Metadata>} Objek metadata judul dan deskripsi.
+ */
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const wisata = await getWisataBySlug(slug);
@@ -20,6 +27,13 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+/**
+ * Halaman Detail Destinasi Wisata Desa Dalisodo.
+ * Rute server async yang mengambil data destinasi wisata berdasarkan slug/ID dan wisata rekomendasi lainnya.
+ *
+ * @param {Props} props - Parameter rute berisi slug wisata.
+ * @returns {Promise<JSX.Element>} Elemen halaman detail wisata.
+ */
 export default async function WisataDetailPage({ params }: Props) {
   const { slug } = await params;
   const wisata = await getWisataBySlug(slug);
@@ -38,23 +52,23 @@ export default async function WisataDetailPage({ params }: Props) {
 
   return (
     <main id={`wisata-detail-${wisata.id}`} className="w-full bg-marble min-h-screen pb-20">
-      {/* Header Banner Section (Dark Stage per DESIGN.md) */}
+      {/* Header Banner Utama (Dark Stage) */}
       <header className="w-full bg-carbon-deep text-white pt-24 sm:pt-32 pb-12 sm:pb-16 px-6 sm:px-12 lg:px-16 border-b border-anvil relative overflow-hidden">
-        {/* Subtle Background Glow */}
+        {/* Ornamen Pencahayaan Latar Belakang */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-dalisodo/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-giallo/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
         <div className="max-w-7xl mx-auto space-y-3.5 relative z-10">
-          {/* Breadcrumb Navigation */}
+          {/* Tombol Navigasi Kembali */}
           <Link
             href="/wisata"
             className="font-lambo text-xs sm:text-sm tracking-[0.15em] text-giallo uppercase font-bold inline-flex items-center gap-2 group hover:text-white transition-colors duration-300 w-fit"
           >
-            <span className="group-hover:-translate-x-1.5 transition-transform duration-300">&larr;</span>
+            <span className="group-hover:-translate-x-1.5 transition-transform duration-300" aria-hidden="true">&larr;</span>
             <span>KEMBALI KE DAFTAR WISATA</span>
           </Link>
 
-          {/* Category Badges */}
+          {/* Lencana Kategori Wisata */}
           {wisata.kategori && wisata.kategori.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-1.5">
               {wisata.kategori.map((kat, idx) => (
@@ -68,25 +82,25 @@ export default async function WisataDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* Page Headline (Wide span & perfectly scaled font) */}
+          {/* Judul Utama Destinasi Wisata */}
           <h1 className="font-lambo text-xl sm:text-2xl md:text-3xl lg:text-3.5xl xl:text-4xl font-bold uppercase tracking-[0.02em] text-white leading-tight w-full max-w-none drop-shadow-md">
             {wisata.judul}
           </h1>
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Area Konten Utama */}
       <div className="max-w-7xl mx-auto pt-8 sm:pt-12 px-6 sm:px-12 lg:px-16 space-y-12 sm:space-y-16">
         
-        {/* Photo Gallery Image Slider */}
+        {/* Slider Galeri Foto */}
         <div className="w-full shadow-lg rounded-xl overflow-hidden">
           <ImageSlider images={sliderImages} judul={wisata.judul} />
         </div>
 
-        {/* Informational Narrative Card */}
+        {/* Kartu Informasi & Narasi Deskripsi Wisata */}
         <article className="bg-white rounded-xl border border-ash/20 p-6 sm:p-10 lg:p-14 shadow-sm space-y-8">
           
-          {/* Main Description */}
+          {/* Narasi Deskripsi */}
           <div className="space-y-4">
             <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase text-carbony tracking-[0.023em] flex items-center gap-2">
               <span>TENTANG DESTINASI</span>
@@ -96,7 +110,7 @@ export default async function WisataDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Detail Informasi (Tabel Terintegrasi di Bagian Bawah Isi Konten) */}
+          {/* Rincian Detail Informasi (Tabel/RichText) */}
           {wisata.detailInformasi && (
             <div className="pt-6 border-t border-slate-200/80 space-y-3">
               <h2 className="font-lambo text-xl sm:text-2xl font-bold uppercase text-carbony tracking-[0.023em] flex items-center gap-2">
@@ -108,12 +122,12 @@ export default async function WisataDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* Action CTA Banner */}
+          {/* Spanduk CTA Kontak Balai Desa */}
           <div className="bg-carbon-deep text-white p-6 sm:p-8 rounded-xl border border-anvil flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-8">
             <div>
-              <h4 className="font-lambo text-xl font-bold uppercase text-giallo tracking-[0.023em]">
+              <h3 className="font-lambo text-xl font-bold uppercase text-giallo tracking-[0.023em]">
                 INGIN BERKUNJUNG KE {wisata.judul.toUpperCase()}?
-              </h4>
+              </h3>
               <p className="font-sans text-xs sm:text-sm text-slate-300 mt-1">
                 Hubungi Balai Desa atau pemandu lokasi untuk petunjuk arah dan informasi selengkapnya.
               </p>
@@ -128,9 +142,8 @@ export default async function WisataDetailPage({ params }: Props) {
 
         </article>
 
-        {/* 2-Column, 4-Card Compact Other Wisata Section */}
+        {/* Seksi Destinasi Wisata Rekomendasi Lainnya */}
         <section id="wisata-rekomendasi" aria-label="Destinasi Wisata Lainnya" className="space-y-6 pt-4">
-          {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-carbony">
             <div>
               <h2 className="font-lambo text-2xl sm:text-3xl font-bold uppercase tracking-[0.023em] text-carbony">

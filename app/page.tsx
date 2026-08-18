@@ -10,6 +10,15 @@ import { getVideoList } from "@/server/services/videoService";
 import { getBannerList } from "@/server/services/bannerService";
 import Link from "next/link";
 
+/**
+ * Halaman Utama (HomePage / Beranda)
+ * 
+ * Halaman utama portal web Desa Dalisodo yang menyajikan data secara dinamis dari Contentful.
+ * Mengambil data secara paralel (`Promise.all`) untuk slide hero, berita terbaru, wisata unggulan,
+ * video profil, serta galeri foto dokumentasi.
+ *
+ * @returns {Promise<JSX.Element>} Halaman beranda portal web.
+ */
 export default async function HomePage() {
   const [heroSlides, wisataList, beritaList, videoList, bannerList] = await Promise.all([
     getHeroSlides(),
@@ -21,15 +30,16 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-6 sm:space-y-16 pb-6 sm:pb-12">
+      {/* Seksi 1: Banner Slider Utama (Hero Section) */}
       <HeroSection initialSlides={heroSlides} />
 
-      {/* Section 2: Berita Terkini (Editorial Story Grid per DESIGN.md) */}
+      {/* Seksi 2: Berita Terkini (Grid 4 Kolom Artikel Terbaru) */}
       <section
         id="berita-terkini-section"
         aria-labelledby="berita-heading"
         className="w-full bg-[#ffffff] text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-b border-marble"
       >
-        {/* Section Heading Block (Two-column row) */}
+        {/* Header Seksi Berita */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony">
           <div>
             <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -48,13 +58,13 @@ export default async function HomePage() {
             className="font-lambo text-xs sm:text-sm font-bold uppercase tracking-[0.023em] text-carbony hover:text-emerald-dalisodo hover:-translate-y-0.5 inline-flex items-center gap-2 border-b-2 border-giallo pb-1 transition-all duration-300 self-start sm:self-end group"
           >
             <span className="group-hover:text-emerald-dalisodo transition-colors">LIHAT SEMUA BERITA</span>
-            <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1.5">
+            <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1.5" aria-hidden="true">
               &rarr;
             </span>
           </Link>
         </div>
 
-        {/* Four-Column Story Grid */}
+        {/* Grid Kartu Berita (Maksimal 4 Item Terbaru) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 pt-5 sm:pt-10">
           {beritaList.slice(0, 4).map((item) => (
             <BeritaCard key={item.id} item={item} />
@@ -62,13 +72,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Section 3: Wisata Dalisodo (Marble Gray Surface + Subtle Pattern Overlay) */}
+      {/* Seksi 3: Wisata Dalisodo (Grid 4 Kolom Destinasi Populer) */}
       <section
         id="wisata-dalisodo-section"
         aria-labelledby="wisata-heading"
         className="w-full bg-marble bg-pattern text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-b border-ash/20"
       >
-        {/* Section Heading Block (Two-column row) */}
+        {/* Header Seksi Wisata */}
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony">
           <div>
             <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -87,13 +97,13 @@ export default async function HomePage() {
             className="font-lambo text-xs sm:text-sm font-bold uppercase tracking-[0.023em] text-carbony hover:text-emerald-dalisodo hover:-translate-y-0.5 inline-flex items-center gap-2 border-b-2 border-giallo pb-1 transition-all duration-300 self-start sm:self-end group"
           >
             <span className="group-hover:text-emerald-dalisodo transition-colors">JELAJAHI SEMUA WISATA</span>
-            <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1.5">
+            <span className="text-giallo font-bold transition-transform duration-200 group-hover:translate-x-1.5" aria-hidden="true">
               &rarr;
             </span>
           </Link>
         </div>
 
-        {/* Four-Column Showcase Grid */}
+        {/* Grid Kartu Wisata (Maksimal 4 Item Unggulan) */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 pt-5 sm:pt-10">
           {wisataList.slice(0, 4).map((item) => (
             <WisataCard key={item.id} item={item} />
@@ -101,10 +111,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Section 4: Video Profil Dalisodo (Carousel if multiple videos) */}
+      {/* Seksi 4: Video Profil Desa Dalisodo */}
       <VideoSection videos={videoList} />
 
-      {/* Section 5: Dokumentasi Foto (4 Columns Desktop Grid) */}
+      {/* Seksi 5: Dokumentasi Foto Kegiatan */}
       <DokumentasiSection items={bannerList} />
     </div>
   );
