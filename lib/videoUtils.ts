@@ -57,7 +57,7 @@ export function parseMediaUrl(url: string): ParsedMediaInfo {
     return {
       provider: "youtube",
       mediaType: "video",
-      embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&controls=1&loop=1&playlist=${videoId}&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&playsinline=1`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&controls=1&rel=0&modestbranding=1&enablejsapi=1&playsinline=1`,
       thumbnailUrl: youtubeThumb,
       imageUrl: youtubeThumb,
       rawUrl: trimmed,

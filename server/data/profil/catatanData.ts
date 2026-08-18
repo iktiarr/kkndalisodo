@@ -1,0 +1,2 @@
+export const catatanData =
+  "Profil ini disusun berdasarkan kompilasi data dari situs resmi Desa Dalisodo, Wikipedia Bahasa Indonesia, laman Kampung KB BKKBN, dan media lokal. Data kependudukan dan struktur pemerintahan bersumber dari data historis (sekitar tahun 2016–2019). Untuk keperluan administrasi resmi, disarankan memverifikasi dan memutakhirkan data langsung melalui Kantor Desa Dalisodo atau situs resmi dalisodo-malangkab.desa.id.";
