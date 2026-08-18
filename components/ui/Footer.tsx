@@ -22,22 +22,33 @@ export default async function Footer() {
           {/* Column 1: Brand & Logos (5 cols) */}
           <div className="lg:col-span-5 space-y-5">
             
-            {/* 2 Circular Logos Side-by-Side */}
+            {/* 3 Circular Logos Side-by-Side (Kabupaten Malang + UNMER + KKN 10) */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                {/* Logo 1: Circular Logo Desa Dalisodo */}
-                <div className="relative w-10 h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {/* Logo 1: Logo Kabupaten Malang */}
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
                   <Image
-                    src="/assets/image/logo-dalisodo.svg"
-                    alt="Logo Desa Dalisodo"
+                    src="/assets/image/Logo_Kabupaten_Malang.svg"
+                    alt="Logo Kabupaten Malang"
                     fill
                     sizes="40px"
                     className="object-contain"
                   />
                 </div>
 
-                {/* Logo 2: Circular Logo KKN 10 Dalisodo */}
-                <div className="relative w-10 h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
+                {/* Logo 2: Logo Universitas Merdeka Malang */}
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
+                  <Image
+                    src="/assets/image/Logo_Unmer_resmi.svg"
+                    alt="Logo Universitas Merdeka Malang"
+                    fill
+                    sizes="40px"
+                    className="object-contain"
+                  />
+                </div>
+
+                {/* Logo 3: Logo KKN 10 Dalisodo */}
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden shadow-md hover:scale-110 hover:border-giallo transition-all duration-300">
                   <Image
                     src="/assets/image/Logo-kkn10.png"
                     alt="Logo KKN 10 Dalisodo"
@@ -54,14 +65,14 @@ export default async function Footer() {
                   DESA DALISODO
                 </span>
                 <span className="font-lambo text-[10px] text-giallo tracking-[0.12em] font-semibold uppercase">
-                  KECAMATAN WAGIR • KABUPATEN MALANG
+                  KAB. MALANG • UNIVERSITAS MERDEKA • KKN 10
                 </span>
               </div>
             </div>
 
             {/* Editorial Summary */}
             <p className="font-lambo text-xs sm:text-sm text-steel leading-relaxed tracking-[0.023em] max-w-md">
-              PORTAL RESMI INFORMASI DESTINASI WISATA ALAM, KABAR KEGIATAN MASYARAKAT, DAN PROGRAM KERJA MAHASISWA KKN 10 DALISODO.
+              Ruang informasi menampilkan keindahan destinasi lokal, cerita keseharian warga dan jejak kolaborasi mahasiswa KKN 10 Dalisodo bersama masyarakat desa.
             </p>
 
             {/* Social / Tag Badges */}
@@ -134,7 +145,7 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Kontak & Operasional (3 cols) */}
+          {/* Column 4:  Operasional (3 cols) */}
           <address className="not-italic lg:col-span-3 space-y-4">
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
               KONTAK & OPERASIONAL
@@ -150,7 +161,7 @@ export default async function Footer() {
               </p>
               <p className="flex items-center gap-2">
                 <span className="text-giallo">✉️</span>
-                <span className="lowercase">layanan@dalisodo.desa.id</span>
+                <span className="lowercase">kkn10dalisodo2026@gmail.com</span>
               </p>
               <p className="flex items-center gap-2 pt-2 text-giallo-dark font-semibold">
                 <span className="text-giallo">🕒</span>

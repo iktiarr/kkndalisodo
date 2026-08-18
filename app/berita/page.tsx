@@ -38,7 +38,7 @@ export default async function BeritaPage() {
 
           {/* Subtitle Narration (Full width, no cutoff) */}
           <p className="font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-[0.023em] w-full max-w-none leading-relaxed">
-            INFORMASI TERBARU SEPUTAR AGENDA PEMBANGUNAN DESA, DOKUMENTASI KEGIATAN MASYARAKAT, DAN PROGRAM KERJA MAHASISWA KKN 10 DALISODO.
+          Kilas informasi terbaru mengenai potensi wisata, kegiatan masyarakat, dan beragan cerita dari Desa Dalisodo.
           </p>
         </div>
       </header>

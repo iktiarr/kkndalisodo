@@ -41,32 +41,43 @@ export default function Navbar() {
     >
       <div className="max-w-360 mx-auto px-6 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between">
         
-        {/* Top-Left: 2 Logos Side-by-Side (Logo Desa Dalisodo + Logo KKN 10) */}
+        {/* Top-Left: 3 Logos Side-by-Side (Kabupaten Malang + UNMER + KKN 10) */}
         <Link
           id="navbar-brand-link"
           href="/"
-          className="flex items-center gap-3.5 group shrink-0"
+          className="flex items-center gap-3 group shrink-0"
           aria-label="Kembali ke Beranda Desa Dalisodo"
         >
-          <div className="flex items-center gap-2">
-            {/* Logo 1: Circular Logo Desa Dalisodo */}
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Logo 1: Logo Kabupaten Malang */}
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
-                src="/assets/image/logo-dalisodo.svg"
-                alt="Logo Desa Dalisodo"
+                src="/assets/image/Logo_Kabupaten_Malang.svg"
+                alt="Logo Kabupaten Malang"
                 fill
-                sizes="(max-width: 640px) 36px, 40px"
+                sizes="(max-width: 640px) 32px, 36px"
                 className="object-contain"
               />
             </div>
 
-            {/* Logo 2: Circular Logo KKN 10 Dalisodo */}
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white/10 p-1 border border-white/20 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
+            {/* Logo 2: Logo Universitas Merdeka Malang */}
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
+              <Image
+                src="/assets/image/Logo_Unmer_resmi.svg"
+                alt="Logo Universitas Merdeka Malang"
+                fill
+                sizes="(max-width: 640px) 32px, 36px"
+                className="object-contain"
+              />
+            </div>
+
+            {/* Logo 3: Logo KKN 10 Dalisodo */}
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo-kkn10.png"
                 alt="Logo KKN 10 Dalisodo"
                 fill
-                sizes="(max-width: 640px) 36px, 40px"
+                sizes="(max-width: 640px) 32px, 36px"
                 className="object-contain"
               />
             </div>
@@ -74,11 +85,11 @@ export default function Navbar() {
 
           {/* Brand Name & Subtitle */}
           <div className="flex flex-col">
-            <span className="font-lambo font-bold text-base sm:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-giallo transition-colors">
+            <span className="font-lambo font-bold text-sm sm:text-base md:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-giallo transition-colors">
               DESA DALISODO
             </span>
             <span className="font-lambo text-[10px] text-giallo tracking-[0.12em] font-semibold uppercase mt-1">
-              KKN 10 • WAGIR MALANG
+              KAB. MALANG • UNIVERSITAS MERDEKA • KKN 10
             </span>
           </div>
         </Link>

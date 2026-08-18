@@ -95,4 +95,3 @@ export interface ProfilDesa {
   kerawananBencana: KerawananBencana;
   catatanSumberData: string;
 }
-
