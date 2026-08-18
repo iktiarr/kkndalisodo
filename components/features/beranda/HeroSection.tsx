@@ -160,19 +160,12 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
       })}
 
       {/* ── Content Overlay ───────────────────────────────────────────────────── */}
-      <div className="relative z-20 h-full max-w-360 mx-auto px-6 sm:px-12 lg:px-16 flex flex-col justify-end pb-24 sm:pb-28 lg:pb-32">
-        <article className="max-w-lg space-y-3">
-          {/* Kategori badge */}
-          <span
-            className={`font-lambo text-[10px] sm:text-xs font-bold tracking-[0.15em] uppercase px-3 py-1 rounded-md text-pure-black inline-block ${config.color}`}
-          >
-            {config.label}
-          </span>
-
+      <div className="relative z-20 h-full max-w-360 mx-auto px-4 sm:px-12 lg:px-16 flex flex-col justify-end pb-12 sm:pb-28 lg:pb-32">
+        <article className="max-w-lg space-y-2 sm:space-y-3">
           {/* Judul */}
           <h1
             id="hero-headline"
-            className="font-lambo text-xl sm:text-2xl md:text-3xl leading-tight tracking-[0.023em] text-white uppercase font-bold"
+            className="font-lambo text-base sm:text-2xl md:text-3xl leading-snug sm:leading-tight tracking-[0.023em] text-white uppercase font-bold line-clamp-3"
           >
             {currentSlide.judul}
           </h1>
@@ -182,7 +175,7 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             <Link
               id="hero-primary-cta-link"
               href={currentSlide.ctaLink}
-              className="font-lambo bg-giallo text-pure-black px-5 py-3 text-xs sm:text-sm font-bold tracking-[0.023em] hover:bg-giallo-dark hover:text-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300 uppercase inline-flex items-center gap-2 group rounded-lg"
+              className="font-lambo bg-giallo text-pure-black px-4 py-2.5 sm:px-5 sm:py-3 text-[11px] sm:text-sm font-bold tracking-[0.023em] hover:bg-giallo-dark hover:text-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300 uppercase inline-flex items-center gap-2 group rounded-lg"
             >
               <span>{config.ctaText}</span>
               <span className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
@@ -218,10 +211,10 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             id="hero-prev-slide-btn"
             onClick={(e) => { e.stopPropagation(); prevSlide(); }}
             aria-label="Slide Sebelumnya"
-            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/40 hover:bg-giallo text-white hover:text-black border border-white/20 hover:border-giallo transition-all duration-200 group flex items-center justify-center cursor-pointer rounded-lg"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-2 sm:p-3 bg-transparent text-white/80 hover:text-giallo drop-shadow-lg transition-all duration-200 group flex items-center justify-center cursor-pointer hover:scale-115"
           >
-            <svg className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg className="w-7 h-7 sm:w-8 sm:h-8 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
@@ -229,10 +222,10 @@ export default function HeroSection({ initialSlides }: HeroSectionProps) {
             id="hero-next-slide-btn"
             onClick={(e) => { e.stopPropagation(); nextSlide(); }}
             aria-label="Slide Selanjutnya"
-            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/40 hover:bg-giallo text-white hover:text-black border border-white/20 hover:border-giallo transition-all duration-200 group flex items-center justify-center cursor-pointer rounded-lg"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-2 sm:p-3 bg-transparent text-white/80 hover:text-giallo drop-shadow-lg transition-all duration-200 group flex items-center justify-center cursor-pointer hover:scale-115"
           >
-            <svg className="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg className="w-7 h-7 sm:w-8 sm:h-8 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </>

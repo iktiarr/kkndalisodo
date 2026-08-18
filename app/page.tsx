@@ -9,7 +9,6 @@ import { getHeroSlides } from "@/server/services/heroService";
 import { getVideoList } from "@/server/services/videoService";
 import { getBannerList } from "@/server/services/bannerService";
 import Link from "next/link";
-import ContactSection from "@/components/features/beranda/ContactSection";
 
 export default async function HomePage() {
   const [heroSlides, wisataList, beritaList, videoList, bannerList] = await Promise.all([
@@ -21,25 +20,24 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="space-y-16 pb-12">
+    <div className="space-y-6 sm:space-y-16 pb-6 sm:pb-12">
       <HeroSection initialSlides={heroSlides} />
-
 
       {/* Section 2: Berita Terkini (Editorial Story Grid per DESIGN.md) */}
       <section
         id="berita-terkini-section"
         aria-labelledby="berita-heading"
-        className="w-full bg-[#ffffff] text-carbony py-16 sm:py-20 px-6 sm:px-12 lg:px-16 max-w-360 mx-auto border-b border-marble"
+        className="w-full bg-[#ffffff] text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-b border-marble"
       >
         {/* Section Heading Block (Two-column row) */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-carbony">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony">
           <div>
             <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
               KABAR & DOKUMENTASI KEGIATAN
             </span>
             <h2
               id="berita-heading"
-              className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
+              className="font-lambo text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
             >
               BERITA TERKINI
             </h2>
@@ -57,28 +55,28 @@ export default async function HomePage() {
         </div>
 
         {/* Four-Column Story Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 pt-8 sm:pt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 pt-5 sm:pt-10">
           {beritaList.slice(0, 4).map((item) => (
             <BeritaCard key={item.id} item={item} />
           ))}
         </div>
       </section>
 
-      {/* Section 3: Wisata Dalisodo (Marble Gray Surface per DESIGN.md) */}
+      {/* Section 3: Wisata Dalisodo (Marble Gray Surface + Subtle Pattern Overlay) */}
       <section
         id="wisata-dalisodo-section"
         aria-labelledby="wisata-heading"
-        className="w-full bg-marble text-carbony py-16 sm:py-20 px-6 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-b border-ash/20"
+        className="w-full bg-marble bg-pattern text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-b border-ash/20"
       >
         {/* Section Heading Block (Two-column row) */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-carbony">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony">
           <div>
             <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
               DESTINASI & POTENSI LERENG KAWI
             </span>
             <h2
               id="wisata-heading"
-              className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
+              className="font-lambo text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
             >
               WISATA DALISODO
             </h2>
@@ -96,7 +94,7 @@ export default async function HomePage() {
         </div>
 
         {/* Four-Column Showcase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 pt-8 sm:pt-10">
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 pt-5 sm:pt-10">
           {wisataList.slice(0, 4).map((item) => (
             <WisataCard key={item.id} item={item} />
           ))}
@@ -108,8 +106,6 @@ export default async function HomePage() {
 
       {/* Section 5: Dokumentasi Foto (4 Columns Desktop Grid) */}
       <DokumentasiSection items={bannerList} />
-
-      <ContactSection />
     </div>
   );
 }

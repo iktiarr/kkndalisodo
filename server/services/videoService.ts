@@ -5,11 +5,54 @@ import { parseVideoUrl } from "@/lib/videoUtils";
 interface RawVideoItem {
   sys: { id: string };
   linkVideo?: string;
+  judul?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  deskripsi?: any;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractTextFromContentfulJson(jsonNode: any): string {
+  if (!jsonNode) return "";
+  if (typeof jsonNode === "string") return jsonNode;
+  if (Array.isArray(jsonNode)) {
+    return jsonNode.map(extractTextFromContentfulJson).join(" ");
+  }
+  if (jsonNode.value && typeof jsonNode.value === "string") {
+    return jsonNode.value;
+  }
+  if (jsonNode.content && Array.isArray(jsonNode.content)) {
+    return jsonNode.content.map(extractTextFromContentfulJson).join("\n");
+  }
+  return "";
 }
 
 export async function getVideoList(): Promise<VideoItem[]> {
-  const query = `
-    query GetVideoList {
+  const queryText = `
+    query GetVideoListText {
+      videoCollection {
+        items {
+          sys { id }
+          linkVideo
+          deskripsi
+        }
+      }
+    }
+  `;
+
+  const queryRich = `
+    query GetVideoListRich {
+      videoCollection {
+        items {
+          sys { id }
+          linkVideo
+          deskripsi { json }
+        }
+      }
+    }
+  `;
+
+  const queryBasic = `
+    query GetVideoListBasic {
       videoCollection {
         items {
           sys { id }
@@ -25,7 +68,14 @@ export async function getVideoList(): Promise<VideoItem[]> {
     };
   }
 
-  const data = await fetchContentful<VideoQueryResponse>(query);
+  let data = await fetchContentful<VideoQueryResponse>(queryText);
+  if (!data || !data.videoCollection) {
+    data = await fetchContentful<VideoQueryResponse>(queryRich);
+  }
+  if (!data || !data.videoCollection) {
+    data = await fetchContentful<VideoQueryResponse>(queryBasic);
+  }
+
   const items = data?.videoCollection?.items || [];
 
   return items
@@ -34,6 +84,19 @@ export async function getVideoList(): Promise<VideoItem[]> {
       const rawLink = (item.linkVideo || "").trim();
       const parsed = parseVideoUrl(rawLink);
 
+      const rawDesc = item.deskripsi;
+      let deskripsiText = "";
+
+      if (typeof rawDesc === "string") {
+        deskripsiText = rawDesc;
+      } else if (rawDesc && typeof rawDesc === "object") {
+        if (rawDesc.json) {
+          deskripsiText = extractTextFromContentfulJson(rawDesc.json);
+        } else {
+          deskripsiText = String(rawDesc);
+        }
+      }
+
       return {
         id: item.sys.id,
         linkVideo: rawLink,
@@ -41,6 +104,9 @@ export async function getVideoList(): Promise<VideoItem[]> {
           parsed.embedUrl ||
           (rawLink.startsWith("http") ? rawLink : `https://${rawLink}`),
         thumbnailUrl: parsed.thumbnailUrl,
+        judul: item.judul || "",
+        deskripsi: deskripsiText,
       };
     });
 }
+

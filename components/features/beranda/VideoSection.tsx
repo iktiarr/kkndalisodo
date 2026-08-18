@@ -49,17 +49,17 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
     <section
       id="video-profil-section"
       aria-labelledby="video-heading"
-      className="w-full bg-[#ffffff] text-carbony py-16 sm:py-20 px-6 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-marble"
+      className="w-full bg-[#ffffff] text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-marble"
     >
       {/* Section Heading Block (Two-column row per DESIGN.md) */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-carbony mb-8 sm:mb-12">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony mb-5 sm:mb-12">
         <div>
           <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
             DOKUMENTASI & PROFIL DESA
           </span>
           <h2
             id="video-heading"
-            className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
+            className="font-lambo text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
           >
             VIDEO PROFIL
           </h2>
@@ -156,6 +156,28 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
               );
             })}
           </div>
+
+          {/* Active Video Title & Text Description Block */}
+          {videos[currentIndex] && (videos[currentIndex].judul || videos[currentIndex].deskripsi) && (
+            <div
+              id={`video-description-${currentIndex}`}
+              className="mt-6 p-6 sm:p-8 rounded-2xl bg-marble/80 border border-ash/20 shadow-xs space-y-3 transition-all duration-300"
+            >
+              {videos[currentIndex].judul && (
+                <h3 className="font-lambo text-lg sm:text-2xl font-bold uppercase tracking-[0.023em] text-carbony flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-giallo shrink-0" />
+                  <span>{videos[currentIndex].judul}</span>
+                </h3>
+              )}
+              {videos[currentIndex].deskripsi && (
+                <div className="font-lambo text-xs sm:text-sm text-steel leading-relaxed uppercase tracking-[0.023em] whitespace-pre-line border-t border-carbony/10 pt-3">
+                  {typeof videos[currentIndex].deskripsi === "string"
+                    ? videos[currentIndex].deskripsi
+                    : String(videos[currentIndex].deskripsi)}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Dots / Tab Indicators if more than 1 video */}
           {totalVideos > 1 && (

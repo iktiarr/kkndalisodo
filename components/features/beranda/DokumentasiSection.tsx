@@ -15,17 +15,17 @@ export default function DokumentasiSection({ items = [] }: DokumentasiSectionPro
     <section
       id="dokumentasi"
       aria-labelledby="dokumentasi-heading"
-      className="w-full bg-marble text-carbony py-16 sm:py-20 px-6 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-b border-ash/20"
+      className="w-full bg-marble bg-pattern text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-b border-ash/20"
     >
       {/* Section Heading Block (Two-column row per DESIGN.md) */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-carbony mb-8 sm:mb-12">
+      <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony mb-5 sm:mb-12">
         <div>
           <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
             GALERI & DOKUMENTASI KEGIATAN
           </span>
           <h2
             id="dokumentasi-heading"
-            className="font-lambo text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
+            className="font-lambo text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.023em] text-carbony"
           >
             DOKUMENTASI FOTO
           </h2>
@@ -39,7 +39,7 @@ export default function DokumentasiSection({ items = [] }: DokumentasiSectionPro
       {items.length === 0 ? (
         <div
           id="dokumentasi-empty-state"
-          className="w-full min-h-60 rounded-2xl bg-white/60 border border-ash/20 flex flex-col items-center justify-center text-center p-8 space-y-3 select-none"
+          className="relative z-10 w-full min-h-60 rounded-2xl bg-white/60 border border-ash/20 flex flex-col items-center justify-center text-center p-8 space-y-3 select-none"
         >
           <div className="w-14 h-14 rounded-2xl bg-white border border-ash/30 flex items-center justify-center text-emerald-dalisodo shadow-xs">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@ export default function DokumentasiSection({ items = [] }: DokumentasiSectionPro
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {items.map((item) => (
             <div
               key={item.id}

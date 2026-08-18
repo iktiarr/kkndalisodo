@@ -23,6 +23,11 @@ const barlowCondensed = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "Desa Dalisodo | Website Resmi & Portal Wisata KKN 10",
   description: "Portal resmi informasi wisata, berita kegiatan, dan profil Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.",
+  icons: {
+    icon: "/assets/image/Logo-kkn10.svg",
+    shortcut: "/assets/image/Logo-kkn10.svg",
+    apple: "/assets/image/Logo-kkn10.svg",
+  },
 };
 
 export default function RootLayout({

@@ -30,65 +30,67 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isHeaderActive = isScrolled || isMenuOpen;
+
   return (
     <header
       id="main-header"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 text-white ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 text-white transition-all duration-300 ${
+        isHeaderActive
           ? "bg-carbon-deep/80 backdrop-blur-xl border-b border-white/10 shadow-2xl py-0"
           : "bg-transparent border-b border-transparent py-2"
       }`}
     >
-      <div className="max-w-360 mx-auto px-6 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between">
+      <div className="max-w-360 mx-auto px-4 sm:px-12 lg:px-16 h-16 sm:h-20 flex items-center justify-between min-w-0">
         
         {/* Top-Left: 3 Logos Side-by-Side (Kabupaten Malang + UNMER + KKN 10) */}
         <Link
           id="navbar-brand-link"
           href="/"
-          className="flex items-center gap-3 group shrink-0"
+          className="flex items-center gap-2 sm:gap-3 group shrink min-w-0"
           aria-label="Kembali ke Beranda Desa Dalisodo"
         >
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             {/* Logo 1: Logo Kabupaten Malang */}
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
+            <div className="relative w-7 h-7 sm:w-9 sm:h-9 shrink-0 bg-white p-0.5 sm:p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo_Kabupaten_Malang.svg"
                 alt="Logo Kabupaten Malang"
                 fill
-                sizes="(max-width: 640px) 32px, 36px"
+                sizes="(max-width: 640px) 28px, 36px"
                 className="object-contain"
               />
             </div>
 
             {/* Logo 2: Logo Universitas Merdeka Malang */}
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
+            <div className="relative w-7 h-7 sm:w-9 sm:h-9 shrink-0 bg-white p-0.5 sm:p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo_Unmer_resmi.svg"
                 alt="Logo Universitas Merdeka Malang"
                 fill
-                sizes="(max-width: 640px) 32px, 36px"
+                sizes="(max-width: 640px) 28px, 36px"
                 className="object-contain"
               />
             </div>
 
             {/* Logo 3: Logo KKN 10 Dalisodo */}
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 bg-white p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
+            <div className="relative w-7 h-7 sm:w-9 sm:h-9 shrink-0 bg-white p-0.5 sm:p-1 border border-white/30 rounded-full overflow-hidden group-hover:border-giallo transition-colors shadow-sm">
               <Image
                 src="/assets/image/Logo-kkn10.svg"
                 alt="Logo KKN 10 Dalisodo"
                 fill
-                sizes="(max-width: 640px) 32px, 36px"
+                sizes="(max-width: 640px) 28px, 36px"
                 className="object-contain"
               />
             </div>
           </div>
 
           {/* Brand Name & Subtitle */}
-          <div className="flex flex-col">
-            <span className="font-lambo font-bold text-sm sm:text-base md:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-giallo transition-colors">
+          <div className="flex flex-col min-w-0 shrink">
+            <span className="font-lambo font-bold text-xs sm:text-base md:text-lg tracking-[0.023em] text-white uppercase leading-none group-hover:text-giallo transition-colors truncate">
               DESA DALISODO
             </span>
-            <span className="font-lambo text-[10px] text-giallo tracking-[0.12em] font-semibold uppercase mt-1">
+            <span className="hidden sm:block font-lambo text-[10px] text-giallo tracking-[0.12em] font-semibold uppercase mt-1 truncate">
               KAB. MALANG • UNIVERSITAS MERDEKA • KKN 10
             </span>
           </div>
@@ -147,7 +149,7 @@ export default function Navbar() {
         <nav
           id="mobile-nav-dropdown"
           aria-label="Navigasi Seluler"
-          className="md:hidden border-t border-anvil bg-carbon-deep px-6 py-4 space-y-2 shadow-2xl"
+          className="md:hidden border-t border-white/10 bg-carbon-deep/80 backdrop-blur-xl px-6 py-4 space-y-2 shadow-2xl"
         >
           {navLinks.map((link) => {
             const isActive = pathname === link.href;

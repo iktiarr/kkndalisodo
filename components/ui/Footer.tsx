@@ -19,8 +19,8 @@ export default async function Footer() {
         {/* 4-Column Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
           
-          {/* Column 1: Brand & Logos (5 cols) */}
-          <div className="lg:col-span-5 space-y-5">
+          {/* Column 1: Brand & Logos (4 cols) */}
+          <div className="lg:col-span-4 space-y-5">
             
             {/* 3 Circular Logos Side-by-Side (Kabupaten Malang + UNMER + KKN 10) */}
             <div className="flex items-center gap-3">
@@ -145,10 +145,10 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 4:  Operasional (3 cols) */}
-          <address className="not-italic lg:col-span-3 space-y-4">
+          {/* Column 4: Kontak & Lokasi Peta (4 cols) */}
+          <address className="not-italic lg:col-span-4 space-y-4">
             <h3 className="font-lambo text-xs font-bold uppercase tracking-[0.15em] text-giallo border-b border-anvil pb-2">
-              KONTAK & OPERASIONAL
+              KONTAK & LOKASI DESA
             </h3>
             <div className="space-y-2 font-lambo text-xs text-slate-300 uppercase tracking-[0.023em]">
               <p className="flex items-center gap-2">
@@ -163,10 +163,22 @@ export default async function Footer() {
                 <span className="text-giallo">✉️</span>
                 <span className="lowercase">kkn10dalisodo2026@gmail.com</span>
               </p>
-              <p className="flex items-center gap-2 pt-2 text-giallo-dark font-semibold">
+              <p className="flex items-center gap-2 pt-1 text-giallo-dark font-semibold">
                 <span className="text-giallo">🕒</span>
                 <span>SENIN - JUMAT (08:00 - 15:30 WIB)</span>
               </p>
+            </div>
+
+            {/* Embedded Interactive Google Map */}
+            <div className="relative w-full h-36 rounded-lg overflow-hidden border border-white/10 mt-3 group hover:border-giallo transition-colors shadow-sm">
+              <iframe
+                id="footer-map-iframe"
+                title="Peta Lokasi Desa Dalisodo Wagir Malang"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15804.85521096782!2d112.51939105!3d-8.012558699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789db8e3bbca7b%3A0xc3b86dbb531cd8d4!2sDalisodo%2C%20Wagir%2C%20Malang%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+                className="w-full h-full border-0 filter contrast-[1.05] opacity-90 group-hover:opacity-100 transition-opacity"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </address>
 
