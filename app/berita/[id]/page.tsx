@@ -8,6 +8,12 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+/**
+ * Menghasilkan metadata SEO dinamis untuk halaman detail berita.
+ *
+ * @param {PageProps} props - Parameter rute berisi ID berita.
+ * @returns {Promise<Metadata>} Objek metadata judul dan deskripsi.
+ */
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const item = await getBeritaById(id);
@@ -19,6 +25,13 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
+/**
+ * Halaman Detail Berita & Kegiatan Desa Dalisodo.
+ * Rute server async yang mengambil data berita berdasarkan ID dan rekomendasi berita terkait.
+ *
+ * @param {PageProps} props - Parameter rute berisi ID berita.
+ * @returns {Promise<JSX.Element>} Elemen halaman detail berita.
+ */
 export default async function DetailBeritaPage({ params }: PageProps) {
   const { id } = await params;
   const item = await getBeritaById(id);
@@ -32,23 +45,23 @@ export default async function DetailBeritaPage({ params }: PageProps) {
 
   return (
     <main id={`berita-detail-${item.id}`} className="w-full bg-marble min-h-screen pb-20">
-      {/* Header Banner Section (Dark Stage per DESIGN.md) */}
+      {/* Header Banner Utama (Dark Stage) */}
       <header className="w-full bg-carbon-deep text-white pt-24 sm:pt-32 pb-12 sm:pb-16 px-6 sm:px-12 lg:px-16 border-b border-anvil relative overflow-hidden">
-        {/* Subtle Background Glow */}
+        {/* Ornamen Pencahayaan Latar Belakang */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-dalisodo/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-giallo/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
         <div className="max-w-7xl mx-auto space-y-3.5 relative z-10">
-          {/* Breadcrumb Navigation */}
+          {/* Tombol Navigasi Kembali */}
           <Link
             href="/berita"
             className="font-lambo text-xs sm:text-sm tracking-[0.15em] text-giallo uppercase font-bold inline-flex items-center gap-2 group hover:text-white transition-colors duration-300 w-fit"
           >
-            <span className="group-hover:-translate-x-1.5 transition-transform duration-300">&larr;</span>
+            <span className="group-hover:-translate-x-1.5 transition-transform duration-300" aria-hidden="true">&larr;</span>
             <span>KEMBALI KE BERITA</span>
           </Link>
 
-          {/* Category Badges */}
+          {/* Lencana Kategori Berita */}
           {item.kategori && (
             <div className="pt-1.5">
               <span className="bg-emerald-dalisodo/20 backdrop-blur-sm text-giallo font-lambo text-xs font-bold uppercase tracking-[0.12em] px-3.5 py-1.5 rounded-md border border-giallo/30 shadow-[0_0_15px_rgba(255,192,0,0.05)] cursor-default">
@@ -57,19 +70,19 @@ export default async function DetailBeritaPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Headline Title (Wide span & perfectly scaled font) */}
+          {/* Judul Utama Artikel Berita */}
           <h1 className="font-lambo text-xl sm:text-2xl md:text-3xl lg:text-3.5xl xl:text-4xl font-bold uppercase tracking-[0.02em] text-white leading-tight w-full max-w-none drop-shadow-md">
             {item.judul}
           </h1>
 
-          {/* Date Stamp & Author Meta */}
+          {/* Tanggal Rilis & Penulis Berita */}
           <div className="flex flex-wrap items-center gap-3 pt-1.5 font-lambo text-xs sm:text-sm text-slate-300 uppercase tracking-wider">
             <time dateTime={item.tanggalwaktu} className="text-emerald-dalisodo font-bold">
               {formattedDate || item.tanggalwaktu}
             </time>
             {item.penulis && (
               <>
-                <span className="text-anvil">•</span>
+                <span className="text-anvil" aria-hidden="true">•</span>
                 <span className="text-slate-400">OLEH: {item.penulis.toUpperCase()}</span>
               </>
             )}
@@ -77,10 +90,10 @@ export default async function DetailBeritaPage({ params }: PageProps) {
         </div>
       </header>
 
-      {/* Article Body Container (Wide spacious layout) */}
+      {/* Kontainer Isi Artikel Berita */}
       <div className="max-w-7xl mx-auto pt-8 sm:pt-12 px-6 sm:px-12 lg:px-16 space-y-12 sm:space-y-16">
         
-        {/* Cover Image Visual */}
+        {/* Gambar Sampul Berita */}
         {item.coverUrl && (
           <div className="relative w-full aspect-21/9 max-h-125 rounded-xl overflow-hidden bg-carbony border border-ash/20 shadow-md">
             <Image
@@ -94,13 +107,13 @@ export default async function DetailBeritaPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Article Content Card */}
+        {/* Kartu Konten Utama Artikel */}
         <article className="bg-white rounded-xl border border-ash/20 p-6 sm:p-10 lg:p-14 shadow-sm space-y-8">
           <div className="prose prose-slate max-w-none prose-img:rounded-xl prose-headings:font-lambo prose-headings:uppercase prose-headings:text-carbony prose-a:text-emerald-dalisodo prose-p:text-slate-700 prose-p:leading-relaxed font-sans text-base sm:text-lg text-anvil leading-relaxed space-y-4">
             <RichContentRenderer content={item.isi} />
           </div>
 
-          {/* Article Footer */}
+          {/* Catatan Kaki Artikel */}
           <div className="pt-6 border-t border-marble">
             <div className="font-lambo text-xs text-steel uppercase tracking-wider">
               DITERBITKAN OLEH PEMERINTAH DESA DALISODO & TIM KKN 10
@@ -108,9 +121,8 @@ export default async function DetailBeritaPage({ params }: PageProps) {
           </div>
         </article>
 
-        {/* 2-Column, 4-Card Compact Other News Section */}
+        {/* Seksi Rekomendasi Berita Lainnya */}
         <section id="berita-rekomendasi" aria-label="Berita Lainnya" className="space-y-6 pt-4">
-          {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-carbony">
             <div>
               <h2 className="font-lambo text-2xl sm:text-3xl font-bold uppercase tracking-[0.023em] text-carbony">

@@ -2,24 +2,33 @@ import ProfilSection from "@/components/features/profil/ProfilSection";
 import { getProfilDesa } from "@/server/services/profilService";
 import Link from "next/link";
 
+// Meta data halaman Profil Desa (SEO)
 export const metadata = {
   title: "Profil Desa Dalisodo | Kecamatan Wagir Kabupaten Malang",
   description:
     "Profil resmi Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang. Informasi geografis lereng Gunung Kawi, 7 dusun, demografi, potensi ekonomi, dan tata kelola desa.",
 };
 
+/**
+ * Halaman Profil Desa (ProfilPage)
+ * 
+ * Menampilkan halaman profil lengkap Desa Dalisodo, Kecamatan Wagir, Kabupaten Malang.
+ * Mengambil data profil desa secara asinkron dari server service data.
+ *
+ * @returns {Promise<JSX.Element>} Halaman profil desa.
+ */
 export default async function ProfilPage() {
   const data = await getProfilDesa();
 
   return (
     <main id="profil-main-page" className="w-full bg-marble min-h-screen">
-      {/* Hero Banner Section (Dark Stage per DESIGN.md) */}
+      {/* Banner Header Halaman (Dark Hero Stage) */}
       <header
         id="profil-header-banner"
         className="w-full bg-carbon-deep text-white pt-28 sm:pt-36 pb-16 sm:pb-20 px-6 sm:px-12 lg:px-16 border-b border-anvil relative overflow-hidden"
       >
         <div className="max-w-360 mx-auto space-y-6 relative z-10">
-          {/* Breadcrumb Navigation */}
+          {/* Navigasi Jejak Halaman (Breadcrumb) */}
           <nav
             aria-label="Breadcrumb"
             className="font-lambo text-xs tracking-[0.15em] text-giallo uppercase font-bold flex items-center gap-2"
@@ -31,7 +40,7 @@ export default async function ProfilPage() {
             <span className="text-slate-400">PROFIL DESA</span>
           </nav>
 
-          {/* Page Headline & Subtitle */}
+          {/* Judul & Subtitle Halaman */}
           <div className="space-y-3">
             <span className="inline-block bg-giallo text-black font-lambo text-xs sm:text-sm font-bold uppercase tracking-[0.12em] px-3.5 py-1.5 rounded-lg">
               KECAMATAN WAGIR • KABUPATEN MALANG
@@ -46,7 +55,7 @@ export default async function ProfilPage() {
         </div>
       </header>
 
-      {/* Main Content Section with full-width sticky navigation */}
+      {/* Komponen Utama Profil Desa (Dengan Navigasi Sticky Sub-Seksi) */}
       <ProfilSection data={data} />
     </main>
   );

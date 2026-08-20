@@ -1,3 +1,5 @@
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Image from "next/image";
@@ -6,11 +8,22 @@ interface RichContentRendererProps {
   content: any;
 }
 
+/**
+ * Komponen RichContentRenderer
+ * 
+ * Pengolah dan penyaji dokumen Rich Text dari Contentful ke elemen-elemen HTML/React yang dinamis.
+ * Mendukung paragraf, judul (H1-H6), daftar (ul/ol), kutipan (blockquote), gambar bersampul,
+ * tabel interaktif, format teks (tebal, miring, garis bawah, kode), serta tautan aman.
+ *
+ * @param {RichContentRendererProps} props - Properti komponen berisi objek konten Rich Text.
+ * @returns {JSX.Element} Elemen terstruktur dokumen berita/artikel.
+ */
 export default function RichContentRenderer({ content }: RichContentRendererProps) {
   if (!content) {
     return <p className="italic opacity-70">Konten tidak tersedia.</p>;
   }
 
+  // Penanganan jika konten dikirim berupa teks biasa (string)
   if (typeof content === "string") {
     const paragraphs = content.split("\n\n").filter(Boolean);
     return (
@@ -24,6 +37,7 @@ export default function RichContentRenderer({ content }: RichContentRendererProp
 
   const richJson = content.json || content;
 
+  // Penanganan jika konten merupakan dokumen Rich Text Contentful
   if (richJson && richJson.nodeType === "document" && Array.isArray(richJson.content)) {
     return (
       <>
@@ -35,12 +49,15 @@ export default function RichContentRenderer({ content }: RichContentRendererProp
   return <p className="italic opacity-70">Format konten tidak dapat ditampilkan.</p>;
 }
 
+/**
+ * Menerjemahkan satu simpul (node) dokumen Rich Text ke komponen React.
+ */
 function renderRichNode(node: any, index: number): React.ReactNode {
   if (!node) return null;
 
   switch (node.nodeType) {
     case "paragraph": {
-      // Ignore completely empty paragraphs created accidentally in Contentful
+      // Abaikan paragraf kosong tanpa teks
       if (!node.content || node.content.length === 0) return null;
       const allEmpty = node.content.every(
         (c: any) => c.nodeType === "text" && (!c.value || c.value.trim() === "")
@@ -152,6 +169,9 @@ function renderRichNode(node: any, index: number): React.ReactNode {
   }
 }
 
+/**
+ * Validasi dan sanitisasi URL agar aman dari bahaya XSS / tautan berbahaya.
+ */
 function sanitizeUri(uri?: string): string {
   if (!uri) return "#";
   const clean = uri.trim();
@@ -168,6 +188,9 @@ function sanitizeUri(uri?: string): string {
   return "#";
 }
 
+/**
+ * Penyaji isi di dalam sel tabel.
+ */
 function renderCellContent(content: any[]): React.ReactNode {
   if (!Array.isArray(content)) return null;
 
@@ -182,6 +205,9 @@ function renderCellContent(content: any[]): React.ReactNode {
   });
 }
 
+/**
+ * Penyaji teks inline beserta format penekanan (bold, italic, underline, code, hyperlink).
+ */
 function renderNodeContent(content: any[]): React.ReactNode {
   if (!Array.isArray(content)) return null;
 

@@ -1,3 +1,4 @@
+
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { BannerItem } from "@/types/banner";
 
@@ -7,6 +8,11 @@ interface RawBannerItem {
   media?: { url?: string; title?: string } | null;
 }
 
+/**
+ * Mengambil daftar item foto galeri/dokumentasi banner dari Contentful GraphQL API.
+ *
+ * @returns {Promise<BannerItem[]>} Larik item banner foto terformat.
+ */
 export async function getBannerList(): Promise<BannerItem[]> {
   const query = `
     query GetBannerList {

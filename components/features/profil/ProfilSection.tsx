@@ -26,10 +26,20 @@ const NAVIGATION_TABS = [
   { id: "sosbud", label: "SOSIAL & BUDAYA" },
 ];
 
+/**
+ * Komponen ProfilSection
+ * 
+ * Pengelola utama halaman Profil Desa Dalisodo.
+ * Menyediakan bilah navigasi lengket (sticky nav) dengan fitur pelacakan posisi gulir (ScrollSpy),
+ * serta menggabungkan 8 seksi modular (Gambaran Umum, Geografi, Dusun, Pemerintahan, Demografi, Fasilitas, Ekonomi, Sosial Budaya).
+ *
+ * @param {ProfilSectionProps} props - Data komprehensif profil desa Dalisodo.
+ * @returns {JSX.Element} Elemen halaman profil desa terintegrasi.
+ */
 export default function ProfilSection({ data }: ProfilSectionProps) {
   const [activeSection, setActiveSection] = useState<string>("gambaran-umum");
 
-  // ScrollSpy with IntersectionObserver
+  // Pelacak posisi gulir (ScrollSpy) menggunakan IntersectionObserver
   useEffect(() => {
     const handleObserver = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -65,7 +75,7 @@ export default function ProfilSection({ data }: ProfilSectionProps) {
 
   return (
     <div className="w-full">
-      {/* ── STICKY NAVIGATION BAR (Edge-to-Edge, Clean, Clear) ── */}
+      {/* Bilah Navigasi Sticky Sub-Seksi Profil (ScrollSpy Tab Bar) */}
       <nav
         aria-label="Navigasi Profil Desa"
         className="sticky top-16 sm:top-20 z-40 w-full bg-carbon-deep/95 backdrop-blur-md border-y border-anvil shadow-xl"
@@ -91,7 +101,7 @@ export default function ProfilSection({ data }: ProfilSectionProps) {
         </div>
       </nav>
 
-      {/* ── MODULAR SECTIONS CONTAINER ── */}
+      {/* Kontainer Seksi-Seksi Modular Profil Desa */}
       <div className="max-w-360 mx-auto px-6 sm:px-12 lg:px-16 py-12 sm:py-16 space-y-16 sm:space-y-24">
         {/* 1. Gambaran Umum & Visi Misi */}
         <GambaranUmumSection data={data} />
@@ -102,13 +112,13 @@ export default function ProfilSection({ data }: ProfilSectionProps) {
         {/* 3. 7 Wilayah Dusun */}
         <DusunSection data={data} />
 
-        {/* 4. Pemerintahan Desa (Bagan Struktur Organisasi) */}
+        {/* 4. Pemerintahan Desa & Bagan Organisasi */}
         <PemerintahanSection data={data} />
 
-        {/* 5. Demografi & Kependudukan (Dynamic Percentage Bars) */}
+        {/* 5. Demografi & Statistik Kependudukan */}
         <DemografiSection data={data} />
 
-        {/* 6. Sarana & Prasarana */}
+        {/* 6. Sarana & Prasarana Desa */}
         <FasilitasSection data={data} />
 
         {/* 7. Potensi Ekonomi & Pertanian */}
@@ -117,10 +127,10 @@ export default function ProfilSection({ data }: ProfilSectionProps) {
         {/* 8. Sosial, Budaya & Kelembagaan */}
         <SosialBudayaSection data={data} />
 
-        {/* ── FOOTNOTE & SUMBER DATA ── */}
+        {/* Catatan Kaki & Sumber Data Resmi */}
         <footer className="bg-marble p-6 sm:p-8 rounded-lg border border-ash/20 text-slate-500 text-sm italic leading-relaxed space-y-2.5">
           <div className="flex items-center gap-2.5">
-            <svg className="w-5 h-5 text-steel" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-steel" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" strokeLinejoin="miter" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" />
               <path d="M14 2V8H20M16 13H8M16 17H8M10 9H8" />
             </svg>

@@ -1,7 +1,12 @@
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { BeritaItem } from "@/types/berita";
 
-// Helper: Format tanggal & waktu dari Contentful ISO string ke format Indonesia
+/**
+ * Format tanggal & waktu dari Contentful (ISO string) ke format bahasa Indonesia.
+ *
+ * @param {string} rawDateStr - String tanggal ISO.
+ * @returns {string} Tanggal terformat (contoh: 19 Agustus 2026, 14:30).
+ */
 export function formatTanggalWaktu(rawDateStr: string): string {
   if (!rawDateStr) return "";
   try {
@@ -20,17 +25,20 @@ export function formatTanggalWaktu(rawDateStr: string): string {
   }
 }
 
-// Helper: Ekstrak teks bersih dari field `isi`
+/**
+ * Ekstrak teks bersih dari bidang `isi` (String Markdown / Contentful RichText JSON).
+ *
+ * @param {any} isi - Konten teks atau RichText.
+ * @returns {string} Teks polos tanpa simbol markdown/tag HTML.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function extractTextFromIsi(isi: any): string {
   if (!isi) return "";
 
-  // Jika string biasa / Markdown
   if (typeof isi === "string") {
     return isi.replace(/[#*`_~\[\]()]/g, "").trim();
   }
 
-  // Jika berupa object Rich Text JSON dari Contentful (isi.json atau isi)
   const richTextObj = isi.json || isi;
   if (richTextObj && Array.isArray(richTextObj.content)) {
     return extractTextFromRichNodes(richTextObj.content);
@@ -52,7 +60,13 @@ function extractTextFromRichNodes(nodes: any[]): string {
   return text.trim();
 }
 
-// Helper ringkasan
+/**
+ * Buat cuplikan ringkasan teks singkat dengan batas karakter maksimum.
+ *
+ * @param {any} isi - Konten teks asli.
+ * @param {number} [maxLength=140] - Panjang teks maksimum.
+ * @returns {string} Teks ringkasan berakhiran "..." jika terpotong.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createRingkasan(isi: any, maxLength = 140): string {
   const fullText = extractTextFromIsi(isi);
@@ -69,7 +83,11 @@ interface RawContentfulPost {
   tanggalwaktu?: string;
 }
 
-// Ambil daftar postingan dari Contentful
+/**
+ * Mengambil daftar berita kegiatan dari Contentful GraphQL API.
+ *
+ * @returns {Promise<BeritaItem[]>} Larik item berita terformat.
+ */
 export async function getBeritaList(): Promise<BeritaItem[]> {
   const query = `query GetPostinganList {
     postinganCollection {
@@ -91,19 +109,33 @@ export async function getBeritaList(): Promise<BeritaItem[]> {
   return [];
 }
 
-// Ambil postingan berdasarkan ID
+/**
+ * Mengambil satu berita berdasarkan ID unik.
+ *
+ * @param {string} id - ID berita.
+ * @returns {Promise<BeritaItem | null>} Objek berita atau null jika tidak ditemukan.
+ */
 export async function getBeritaById(id: string): Promise<BeritaItem | null> {
   const allPosts = await getBeritaList();
   const found = allPosts.find((p) => p.id === id);
   return found || null;
 }
 
-// Ambil daftar postingan lain untuk rekomendasi (hanya data asli Contentful)
+/**
+ * Mengambil daftar berita rekomendasi lainnya (mengecualikan ID berita yang sedang dibuka).
+ *
+ * @param {string} excludeId - ID berita yang dikecualikan.
+ * @param {number} [limit=4] - Jumlah berita rekomendasi yang diambil.
+ * @returns {Promise<BeritaItem[]>} Larik berita rekomendasi.
+ */
 export async function getOtherBeritaList(excludeId: string, limit = 4): Promise<BeritaItem[]> {
   const allPosts = await getBeritaList();
   return allPosts.filter((p) => p.id !== excludeId).slice(0, limit);
 }
 
+/**
+ * Konversi mentah entri Contentful menjadi objek BeritaItem siap pakai.
+ */
 function parseRawPostToBeritaItem(item: RawContentfulPost): BeritaItem {
   const rawCoverUrl = item.cover?.url;
   const coverUrl = rawCoverUrl ? optimizeContentfulAsset(rawCoverUrl, 800) : "";

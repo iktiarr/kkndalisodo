@@ -1,6 +1,12 @@
+
 import { fetchContentful, optimizeContentfulAsset } from "@/lib/contentful";
 import { HeroSlideItem } from "@/types/hero";
 
+/**
+ * Mengambil daftar item slide hero banner utama dari gabungan Contentful (Banner, Postingan Berita, dan Wisata).
+ *
+ * @returns {Promise<HeroSlideItem[]>} Larik item slide hero terformat.
+ */
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {
   const query = `
     query GetHeroData {
@@ -43,7 +49,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
   const data = await fetchContentful<HeroQueryResponse>(query);
   const slides: HeroSlideItem[] = [];
 
-  // 1. 2 Banner / Dokumentasi terbaru (arahkan ke #dokumentasi)
+  // 1. Ambil 2 Banner / Dokumentasi terbaru (CTA mengarah ke seksi #dokumentasi)
   const bannerItems = data?.bannerCollection?.items || [];
   for (const item of bannerItems) {
     const rawUrl = item.media?.url || "";
@@ -57,7 +63,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
     });
   }
 
-  // 2. 2 Berita terbaru
+  // 2. Ambil 2 Berita kegiatan terbaru (CTA mengarah ke /berita)
   const beritaItems = data?.postinganCollection?.items || [];
   for (const item of beritaItems) {
     const rawUrl = item.cover?.url || "";
@@ -71,7 +77,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
     });
   }
 
-  // 3. 2 Wisata terbaru
+  // 3. Ambil 2 Wisata unggulan terbaru (CTA mengarah ke /wisata/[slug])
   const wisataItems = data?.wisataCollection?.items || [];
   for (const item of wisataItems) {
     const rawUrl = item.thumbnail?.url || "";

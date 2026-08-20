@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * Komponen BackToTopButton
+ * 
+ * Tombol untuk menggulir halaman kembali ke bagian paling atas secara halus (smooth scroll).
+ *
+ * @returns {JSX.Element} Elemen tombol navigasi ke atas.
+ */
 export default function BackToTopButton() {
   return (
     <button
@@ -9,7 +16,7 @@ export default function BackToTopButton() {
       aria-label="Kembali ke bagian atas halaman"
     >
       <span>KEMBALI KE ATAS</span>
-      <span className="group-hover:-translate-y-1 transition-transform duration-300">&uarr;</span>
+      <span className="group-hover:-translate-y-1 transition-transform duration-300" aria-hidden="true">&uarr;</span>
     </button>
   );
 }

@@ -7,6 +7,16 @@ interface VideoSectionProps {
   videos?: VideoItem[];
 }
 
+/**
+ * Komponen VideoSection
+ * 
+ * Menampilkan seksi video profil dan dokumentasi Desa Dalisodo dengan iframe embed (misal YouTube/Vimeo).
+ * Dilengkapi kontrol navigasi slide video, indikator posisi, penanganan gestur sentuh,
+ * serta blok judul dan deskripsi video.
+ *
+ * @param {VideoSectionProps} props - Properti komponen berisi daftar item video.
+ * @returns {JSX.Element} Elemen seksi video profil.
+ */
 export default function VideoSection({ videos = [] }: VideoSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -51,7 +61,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
       aria-labelledby="video-heading"
       className="w-full bg-[#ffffff] text-carbony py-8 sm:py-20 px-4 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-marble"
     >
-      {/* Section Heading Block (Two-column row per DESIGN.md) */}
+      {/* Header Seksi: Judul & Navigasi Tombol Video */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 sm:pb-6 border-b border-carbony mb-5 sm:mb-12">
         <div>
           <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -65,6 +75,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
           </h2>
         </div>
 
+        {/* Indikator Angka & Tombol Navigasi Panah */}
         {totalVideos > 1 && (
           <div className="flex items-center gap-3 self-start sm:self-end">
             <span className="font-lambo text-xs font-bold text-steel tracking-widest mr-2 select-none">
@@ -80,7 +91,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
               aria-label="Video Sebelumnya"
               className="p-2.5 rounded-lg border border-carbony/20 bg-white hover:bg-giallo hover:text-pure-black text-carbony transition-all duration-200 cursor-pointer shadow-xs"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -92,7 +103,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
               aria-label="Video Selanjutnya"
               className="p-2.5 rounded-lg border border-carbony/20 bg-white hover:bg-giallo hover:text-pure-black text-carbony transition-all duration-200 cursor-pointer shadow-xs"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -100,14 +111,15 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
         )}
       </div>
 
-      {/* Main Video Display Area */}
+      {/* Area Pemutar Video Utama & State Kosong */}
       {totalVideos === 0 ? (
+        /* Tampilan Kosong (Empty State) */
         <div
           id="video-empty-state"
           className="w-full min-h-80 sm:min-h-105 rounded-2xl bg-marble/60 border border-ash/20 flex flex-col items-center justify-center text-center p-8 space-y-4 select-none"
         >
           <div className="w-16 h-16 rounded-2xl bg-white border border-ash/30 flex items-center justify-center text-emerald-dalisodo shadow-xs">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -130,7 +142,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Active Video Player Container (16:9 Aspect Ratio) */}
+          {/* Kontainer Pemutar Video (Rasio 16:9) */}
           <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-carbony shadow-lg border border-carbony/10">
             {videos.map((video, idx) => {
               const isActive = idx === currentIndex;
@@ -157,7 +169,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
             })}
           </div>
 
-          {/* Active Video Title & Text Description Block */}
+          {/* Blok Judul & Deskripsi Teks Video Aktif */}
           {videos[currentIndex] && (videos[currentIndex].judul || videos[currentIndex].deskripsi) && (
             <div
               id={`video-description-${currentIndex}`}
@@ -165,7 +177,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
             >
               {videos[currentIndex].judul && (
                 <h3 className="font-lambo text-lg sm:text-2xl font-bold uppercase tracking-[0.023em] text-carbony flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-giallo shrink-0" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-giallo shrink-0" aria-hidden="true" />
                   <span>{videos[currentIndex].judul}</span>
                 </h3>
               )}
@@ -179,7 +191,7 @@ export default function VideoSection({ videos = [] }: VideoSectionProps) {
             </div>
           )}
 
-          {/* Dots / Tab Indicators if more than 1 video */}
+          {/* Indikator Titik (Dot Navigation) */}
           {totalVideos > 1 && (
             <div className="flex items-center justify-center gap-2 mt-6">
               {videos.map((_, idx) => (

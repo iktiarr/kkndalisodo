@@ -10,6 +10,9 @@ interface RawVideoItem {
   deskripsi?: any;
 }
 
+/**
+ * Ekstrak teks biasa dari node JSON Contentful RichText.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTextFromContentfulJson(jsonNode: any): string {
   if (!jsonNode) return "";
@@ -26,6 +29,12 @@ function extractTextFromContentfulJson(jsonNode: any): string {
   return "";
 }
 
+/**
+ * Mengambil daftar video profil desa dari Contentful GraphQL API.
+ * Mendukung pembacaan bertahap (fallback queries) untuk fleksibilitas skema Contentful.
+ *
+ * @returns {Promise<VideoItem[]>} Larik item video terformat.
+ */
 export async function getVideoList(): Promise<VideoItem[]> {
   const queryText = `
     query GetVideoListText {
@@ -68,6 +77,7 @@ export async function getVideoList(): Promise<VideoItem[]> {
     };
   }
 
+  // Coba ambil dengan variasi struktur bidang GraphQL yang didukung
   let data = await fetchContentful<VideoQueryResponse>(queryText);
   if (!data || !data.videoCollection) {
     data = await fetchContentful<VideoQueryResponse>(queryRich);

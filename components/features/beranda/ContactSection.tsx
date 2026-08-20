@@ -1,3 +1,12 @@
+/**
+ * Komponen ContactSection
+ * 
+ * Menampilkan seksi informasi kontak Balai Desa Dalisodo dan peta lokasi interaktif (Google Maps).
+ * Seksi ini mencakup alamat resmi, nomor telepon hotline, email pelayanan, jam operasional,
+ * serta peta embed lokasi Desa Dalisodo.
+ *
+ * @returns {JSX.Element} Elemen seksi kontak yang responsif dan teraksesibilitas.
+ */
 export default function ContactSection() {
   return (
     <section
@@ -5,7 +14,7 @@ export default function ContactSection() {
       aria-labelledby="kontak-heading"
       className="w-full bg-[#ffffff] text-carbony py-16 sm:py-20 px-6 sm:px-12 lg:px-16 max-w-360 mx-auto border-t border-marble"
     >
-      {/* Section Heading Block (Two-column row per DESIGN.md) */}
+      {/* Header Seksi: Judul & Deskripsi Singkat */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-carbony mb-8 sm:mb-12">
         <div>
           <span className="font-lambo text-xs tracking-[0.15em] text-emerald-dalisodo font-bold uppercase block mb-1">
@@ -23,15 +32,15 @@ export default function ContactSection() {
         </p>
       </div>
 
-      {/* Main Layout: Clean Open Editorial List + Map */}
+      {/* Tata Letak Utama: Daftar Informasi Kontak (Kiri) & Peta Lokasi (Kanan) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
         
-        {/* Contact Info List (Left Column - 5 cols, Open & Elegant without heavy boxes) */}
+        {/* Kolom Informasi Kontak */}
         <address className="not-italic lg:col-span-5 space-y-6">
           
-          {/* Item 1: Alamat Balai Desa */}
+          {/* Alamat Balai Desa */}
           <div className="flex items-start gap-4 pb-5 border-b border-marble group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5">📍</span>
+            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">📍</span>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 ALAMAT BALAI DESA
@@ -42,9 +51,9 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Item 2: Telepon & Hotline */}
+          {/* Telepon & Hotline */}
           <div className="flex items-start gap-4 pb-5 border-b border-marble group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5">📞</span>
+            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">📞</span>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 TELEPON / HOTLINE
@@ -58,9 +67,9 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Item 3: Email Resmi */}
+          {/* Email Resmi */}
           <div className="flex items-start gap-4 pb-5 border-b border-marble group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5">✉️</span>
+            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">✉️</span>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 EMAIL RESMI
@@ -74,9 +83,9 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Item 4: Jam Operasional Kantor */}
+          {/* Jam Operasional */}
           <div className="flex items-start gap-4 pt-1 group hover:translate-x-1.5 transition-transform duration-300 cursor-default">
-            <span className="text-xl text-giallo shrink-0 pt-0.5">🕒</span>
+            <span className="text-xl text-giallo shrink-0 pt-0.5" aria-hidden="true">🕒</span>
             <div className="space-y-1">
               <h3 className="font-lambo text-sm sm:text-base font-bold uppercase text-carbony tracking-[0.023em] group-hover:text-giallo-dark transition-colors">
                 JAM PELAYANAN BALAI DESA
@@ -92,7 +101,7 @@ export default function ContactSection() {
 
         </address>
 
-        {/* Map Embed Container (Right Column - 7 cols, Clean 8px Rounded) */}
+        {/* Kolom Peta Google Maps Embed */}
         <div className="lg:col-span-7 min-h-[380px] lg:min-h-[460px] rounded-lg overflow-hidden bg-carbony relative border border-ash/20 shadow-sm hover:shadow-xl hover:border-giallo/50 transition-all duration-500">
           <iframe
             id="kontak-map-iframe"
@@ -110,4 +119,5 @@ export default function ContactSection() {
     </section>
   );
 }
+
 

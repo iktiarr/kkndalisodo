@@ -1,9 +1,15 @@
+/**
+ * Informasi dusun di Desa Dalisodo.
+ */
 export interface DusunInfo {
   no: number;
   nama: string;
   keterangan?: string;
 }
 
+/**
+ * Data anggota perangkat Desa Dalisodo.
+ */
 export interface PerangkatDesa {
   id: string;
   nama: string;
@@ -11,12 +17,18 @@ export interface PerangkatDesa {
   fotoUrl?: string;
 }
 
+/**
+ * Struktur item statistik jumlah dan kategori.
+ */
 export interface KategoriJumlah {
   kategori: string;
   jumlah: string | number;
   satuan?: string;
 }
 
+/**
+ * Struktur data demografi dan statistik kependudukan desa.
+ */
 export interface DataKependudukan {
   ringkasan: {
     kk: string;
@@ -30,6 +42,9 @@ export interface DataKependudukan {
   agama: KategoriJumlah[];
 }
 
+/**
+ * Informasi geografis dan batas wilayah administrasi desa.
+ */
 export interface BatasWilayah {
   utara: string;
   selatan: string;
@@ -44,11 +59,17 @@ export interface BatasWilayah {
   catatanLongsor: string;
 }
 
+/**
+ * Sarana dan prasarana umum desa.
+ */
 export interface SaranaPrasarana {
   fasilitasUmum: string[];
   infrastrukturDasar: string[];
 }
 
+/**
+ * Sektor komoditas dan potensi ekonomi desa.
+ */
 export interface PotensiEkonomi {
   kehutanan: string;
   palawija: string;
@@ -59,17 +80,26 @@ export interface PotensiEkonomi {
   inisiatifTambahan: string;
 }
 
+/**
+ * Aspek sosial, budaya, dan kelembagaan masyarakat.
+ */
 export interface SosialBudaya {
   keagamaan: string;
   kelembagaan: string[];
 }
 
+/**
+ * Data kerawanan dan mitigasi bencana alam.
+ */
 export interface KerawananBencana {
   areaRawan: string;
   sejarahKejadian: string[];
   mitigasiCatatan: string;
 }
 
+/**
+ * Struktur data lengkap Profil Desa Dalisodo.
+ */
 export interface ProfilDesa {
   namaDesa: string;
   kecamatan: string;
